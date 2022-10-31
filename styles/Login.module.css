@@ -1,0 +1,27 @@
+#login{
+    @apply flex lg:flex-row relative h-screen w-full  mx-auto;
+}
+
+.right_content{
+    @apply block font-roboto w-full lg:w-1/2 bg-keytaGrayDarker lg:absolute right-0;
+}
+
+.right_content_inner{
+    @apply py-16 px-8 lg:px-[125px] lg:py-[70px];
+}
+
+.right_content_inner > h1 {
+    @apply mt-[70px] text-2xl font-[600];
+}
+
+.right_content_inner > h4 {
+    @apply text-[14px] font-[700] my-2 text-keytaDark;
+}
+
+.right_content_inner > h5 {
+    @apply text-[13px] text-keytaGrayMedium;
+}
+
+.right_content_inner > h6 {
+    @apply text-[12px] text-keytaGrayMedium;
+}

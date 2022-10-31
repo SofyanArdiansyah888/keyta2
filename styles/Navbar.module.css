@@ -1,0 +1,10 @@
+
+.keytaLandingUl{
+    @apply flex flex-col p-4 mt-4 rounded-lg border  md:flex-row md:space-x-8 md:mt-0 md:text-sm md:font-medium md:border-0 ;
+}
+.keytaLandingUl>li>a{
+    @apply font-inter block py-2 pr-4 pl-3 text-keytaBlack rounded  md:hover:bg-transparent md:hover:text-keytaSecondary md:p-0;
+    font-style: normal;
+    font-weight: 550;
+    font-size: 13px;
+}
