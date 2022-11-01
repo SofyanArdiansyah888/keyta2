@@ -1,10 +1,9 @@
-FROM node:16-bullseye
+FROM node:16-alpine
 
 RUN mkdir -p /src/app
 WORKDIR /src/app
-COPY . /src/app/
-RUN npm install
-COPY . .
-RUN npm run build
+COPY . /src/app
+RUN yarn install --frozen-lockfile
+RUN yarn build
 EXPOSE 3000
-CMD npm run start
+CMD ["yarn", "start"]
