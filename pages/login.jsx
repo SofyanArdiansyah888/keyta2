@@ -50,7 +50,6 @@ export default function Login() {
         ...data,
       });
 
-  
       setIsLogin(true);
       // IF USER ALREADY REGISTERED
       if (result.data.user.shop_id) {
