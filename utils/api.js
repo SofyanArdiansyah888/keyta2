@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const token = "";
 const defaults = {
-  baseURL: `https://sandbox.keyta.id/api/`,
+  baseURL: `https://sandbox.keyta.app/api/`,
   headers: () => ({
     'Content-Type': 'application/json',
     Authorization: `Bearer ${token}`//getStoredAuthToken() ? `Bearer ${getStoredAuthToken()}` : undefined,
