@@ -18,9 +18,10 @@ const schema = yup.object({
 });
 
 export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
+  const timer = Date.now() + 60000;
   const [isSMS, setIsSMS] = useState(false);
-
-
+  const [isCountdown, setIsCountdown] = useState(false);
+  const [countdown, setCountdown] =  useState(timer)
   const {
     register,
     handleSubmit,
@@ -45,7 +46,7 @@ export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
           token,
         });
       }
-      console.log(result.data);
+      
       setAuthData(result.data);
       setIsOTPVerify(true);
     } catch (error) {
@@ -60,7 +61,10 @@ export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
         country_code: COUNTRY_CODE,
         phone: user.phone,
       });
+      console.log(result.data,`hasil dari result data`)
       setAuthData(result.data);
+      setCountdown(timer)
+      setIsCountdown(true)
     } catch (error) {
       console.log(error);
     }
@@ -69,12 +73,16 @@ export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
   const handleSendSMS = async () => {
     const { user } = authData;
     try {
-      setIsSMS(true);
+      
       const result = await api.post("v2/sign_with_phone_number", {
         country_code: COUNTRY_CODE,
         phone: user.phone,
       });
+      
       setAuthData(result.data);
+      setCountdown(timer)
+      setIsCountdown(true)
+      setIsSMS(true);
     } catch (error) {
       console.log(error);
     }
@@ -176,28 +184,34 @@ export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
 
           <div className="text-[13px] mt-8">
             Belum dapat kode ?{" "}
-            <span
-              className="underline cursor-pointer mr-1"
-              onClick={isSMS ? handleSendSMS : handleSendWhatsapp}
-            >
-              Kirim Ulang Kode
+            <span onClick={isSMS ? handleSendSMS : handleSendWhatsapp}>
+              <a
+                className={`underline  mr-1 ${isCountdown ? "text-gray-300 " : "cursor-pointer" } `}
+                disabled={isCountdown}
+              >
+                Kirim Ulang Kode
+              </a>
             </span>
             {/* <Countdown date={Date.now() + 10000} /> */}
             <Countdown
-              date={Date.now() + 60000}
-              renderer={
-                ({ hours, minutes, seconds, completed }) => {
-                  let second = String(seconds).padStart(2, '0')
-                  let minute = String(minutes).padStart(2, '0')
-                  if (completed) {
-                    // Render a completed state
-                    return "";
-                  } else {
-                    // Render a countdown
-                    return <span>{minute}:{second}</span>;
-                  }
+              date={countdown}
+              renderer={({ hours, minutes, seconds, completed }) => {
+                let second = String(seconds).padStart(2, "0");
+                let minute = String(minutes).padStart(2, "0");
+                if (completed) {
+                  setIsCountdown(false)
+                  // Render a completed state
+                  return "";
+                } else {
+                  setIsCountdown(true)
+                  // Render a countdown
+                  return (
+                    <span>
+                      {minute}:{second}
+                    </span>
+                  );
                 }
-              }
+              }}
             />
           </div>
           {!isSMS && (
@@ -208,6 +222,7 @@ export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
               <div
                 className="text-[16px] mt-2 cursor-pointer text-keytaDarkBlue font-[600]"
                 onClick={handleSendSMS}
+                disabled={isCountdown}
               >
                 Kirim melalui SMS
               </div>

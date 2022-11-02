@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const token = "";
-const defaults = {
+export const defaults = {
   baseURL: `https://sandbox.keyta.app/api/`,
   headers: () => ({
     'Content-Type': 'application/json',

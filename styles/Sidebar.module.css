@@ -1,0 +1,15 @@
+
+.list {
+}
+
+.list > a {
+  @apply flex items-center py-3 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100;
+}
+
+.list > a > span{
+    @apply ml-5 font-inter text-[#A1A9B3] text-[13px]
+}
+
+.header{
+    @apply font-roboto text-[#A1A9B3] text-[15px] font-semibold
+}

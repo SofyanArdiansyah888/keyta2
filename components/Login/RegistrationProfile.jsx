@@ -4,20 +4,25 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import styles from "../../styles/Login.module.css";
 import * as yup from "yup";
-import { useState } from "react";
-import api from "../../utils/api";
+import { useContext, useState } from "react";
+import api,{defaults} from "../../utils/api";
+import { AuthContext } from "../../pages/login";
+import { useRouter } from "next/router";
+import axios from "axios";
 
 const schema = yup.object({
-  user: yup.string().required("Nama Pengguna harus diisi"),
-  shop: yup.string().required("Nama Toko harus diisi"),
+  user: yup.string().required("Nama Pengguna Harus Diisi"),
+  shop: yup.string().required("Nama Toko Harus Diisi"),
   referrer: yup.string().nullable(true),
 });
 
 export default function RegistrationProfile({ authData }) {
+  let auth = useContext(AuthContext)
   const [userReset, setUserReset] = useState(false);
   const [shopReset, setShopReset] = useState(false);
   const [refererReset, setRefererReset] = useState(false);
   const [isReferer, setIsReferer] = useState(false);
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -30,14 +35,19 @@ export default function RegistrationProfile({ authData }) {
   const handleUpdate = async (data) => {
     let { user, shop, referer } = data;
     try {
-      const result = await api.post("v2/shops", {
-        name: user,
-        referer: "",
+      axios.post(`${defaults.baseURL}v2/shops`,{
+        name: shop,
+        referer,
         user_attributes: {
-          id: 2,
-          name: "keyta",
+          id: auth.user.id,
+          name: user,
         },
-      });
+      },{
+        headers:{Authorization : `Bearer ${auth.token}`}
+      })
+      
+      router.push('/dashboard')
+      
     } catch (error) {
       console.log(error);
     }
@@ -141,7 +151,7 @@ export default function RegistrationProfile({ authData }) {
               )}
             </div>
           </div>
-          <div className="w-full mt-8">
+          <div className="w-max lg:w-full mt-8">
             <div className="float-right">
               <Image src="/images/maskot_group.svg" height="60" width="131" />
             </div>

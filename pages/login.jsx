@@ -3,7 +3,7 @@ import MaskotScreen from "../components/Login/MaskotScreen";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import PrivacyConsent from "../components/Login/PrivacyConsent";
 import api from "../utils/api";
 import OTP from "../components/Login/OTP";
@@ -19,7 +19,7 @@ const schema = yup.object({
     .required("Nomor Telepon harus diisi")
     .typeError("Nomor Telepon tidak valid"),
 });
-
+export const AuthContext = createContext();
 export default function Login() {
   const [isLogin, setIsLogin] = useState(false);
   const [isUserHasShop, setIsUserHasShop] = useState(false);
@@ -27,18 +27,18 @@ export default function Login() {
   const [isOTPVerify, setIsOTPVerify] = useState(false);
   const [authData, setAuthData] = useState();
   const [isReset, setIsReset] = useState(false);
-  
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     reset,
-    values
+    values,
   } = useForm({
     resolver: yupResolver(schema),
   });
-
+  console.log(authData);
   const handleLogin = async (data) => {
     try {
       // setIsLogin(true)
@@ -60,7 +60,7 @@ export default function Login() {
       console.log(error);
     }
   };
-  
+
   return (
     <>
       <div id={styles.login}>
@@ -80,14 +80,14 @@ export default function Login() {
                     Nomor Telepon
                   </label>
                   <div className="relative w-max">
-                    <span className="mr-2 text-[11px] bg-[#F1F2F5] rounded-[4px] h-16 w-32">
+                    <span className="mr-2 text-[11px] bg-[#F1F2F5] rounded-[4px] h-16 w-32 p-1 border-[#CED2D9]">
                       +{COUNTRY_CODE}
                     </span>
                     <input
                       type="number"
                       {...register("phone")}
                       onChange={(event) => {
-                        event.target.value === "" && setIsReset(false)
+                        event.target.value === "" && setIsReset(false);
                         !isReset && setIsReset(true);
                       }}
                       className={`p-2 mt-4 text-xs w-[260px] lg:w-[300px]  ${
@@ -149,10 +149,12 @@ export default function Login() {
               setIsOTPVerify={setIsOTPVerify}
             />
           )}
-        
-          {isOTPVerify && !isUserHasShop && (
-            <RegistrationProfile {...authData} />
-          )}
+
+          <AuthContext.Provider value={authData}>
+            {isOTPVerify && !isUserHasShop && (
+              <RegistrationProfile {...authData} />
+            )}
+          </AuthContext.Provider>
         </div>
       </div>
     </>
