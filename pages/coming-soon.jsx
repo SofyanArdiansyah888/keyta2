@@ -1,18 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import Navbar from "../components/Layout/Navbar";
-import Sidebar from "../components/Layout/Sidebar";
+import Layout from "../components/Layout/Layout";
 
-export default function Dashboard() {
+export default function ComingSoon() {
   return (
     <>
-      <div className="flex">
-        <Sidebar />
-
-        <div className="container mx-auto ml-[255px]">
-          <Navbar />
-
           {/* CONTENT */}
-            <div className="w-full text-center">
+          <div className="w-full text-center">
               <img className="mx-auto mt-12" src="/images/keyta.svg" alt="Logo keyta" />
               <h1 className="mt-8 text-2xl font-bold">Website Keyta Akan Segera Hadir!</h1>
               <h3 className="mt-2 text-md">Kami akan menghubungi Anda saat website Keyta siap digunakan.</h3>
@@ -27,8 +20,14 @@ export default function Dashboard() {
               </div>
             
           </div>
-        </div>
-      </div>
     </>
   );
+}
+
+ComingSoon.getLayout = function getLayout(page) {
+  return (
+    <Layout>
+      {page}
+    </Layout>
+  )
 }

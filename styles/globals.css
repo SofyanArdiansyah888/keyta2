@@ -8,35 +8,46 @@
     -webkit-appearance: none;
     margin: 0;
   }
-}
 
-body {
-  @apply bg-keytaGray;
-}
+  body {
+    @apply bg-keytaGray;
+  }
 
-.keyta-button {
-  @apply rounded-sm  px-5 py-2.5 text-center min-w-[150px] bg-keytaSecondary text-keytaDark;
-  font-family: "Roboto";
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 20px;
-}
+  .btn-outline-gray {
+    @apply h-auto px-4 py-2 font-roboto  border-gray-300 border-[1px] rounded-md bg-white;
+  }
 
-.material-input {
-  @apply text-keytaDark;
-  background-color: rgba(0, 0, 0, 0);
-  border-bottom: 1px solid #CED2D9;
-  outline: 0;
-  background-size: 100% 100%, 100% 100%;
-  transition-duration: 0.3s;
-  box-shadow: none;
-}
-.material-input:focus{
+  .rouded-card{
+    @apply bg-white shadow-sm border-[1px] border-gray-200 rounded-xl;
+  }
+
+  .keyta-button {
+    @apply rounded-sm  px-5 py-2.5 text-center min-w-[150px] bg-keytaSecondary text-keytaDark;
+    font-family: "Roboto";
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  
+
+  .material-input {
+    @apply text-keytaDark;
+    background-color: rgba(0, 0, 0, 0);
+    border-bottom: 1px solid #ced2d9;
+    outline: 0;
+    background-size: 100% 100%, 100% 100%;
+    transition-duration: 0.3s;
+    box-shadow: none;
+  }
+  .material-input:focus {
     border-bottom: 1px solid #000000;
     background-color: rgba(0, 0, 0, 0);
-}
+  }
 
-.material-input-error, .material-input-error:focus {
+  .material-input-error,
+  .material-input-error:focus {
     border-bottom: 1px solid red !important;
     background-color: rgba(0, 0, 0, 0);
+  }
 }

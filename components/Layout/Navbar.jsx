@@ -2,7 +2,7 @@ export default function Navbar() {
   return (
     <>
       <nav
-        class="pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg;"
+        class="pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg "
       >
         <div class=" container flex flex-wrap justify-between items-center mx-auto">
           <span class="text-xl font-semibold">DASHBOARD</span>

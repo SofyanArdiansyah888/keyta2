@@ -2,7 +2,7 @@ import styles from "../../styles/Sidebar.module.css";
 export default function Sidebar() {
   return (
     <>
-      <div className="fixed shadow-xl h-screen">
+      <div className="hidden lg:flex fixed shadow-xl h-screen">
         {/* SIDEBAR */}
         <aside className="w-64 px-4">
           <div className="overflow-y-auto py-4 px-3 gray-50">
@@ -32,6 +32,27 @@ export default function Sidebar() {
                     />
                     <span class="ml-3">Dashboard</span>
                   </a>
+                  {/* <DropDownMenu
+                    submenus={[
+                      {
+                        name: "Template Pesan",
+                        url: "",
+                      },
+                      {
+                        name: "Metode Pembayaran",
+                        url: "",
+                      },
+                      {
+                        name: "Pengingat Transaksi",
+                        url: "",
+                      },
+                      {
+                        name: "Laporan Transaksi",
+                        url: "",
+                      },
+                    ]}
+
+                  /> */}
                 </li>
 
                 <li className={styles.list}>
@@ -142,6 +163,21 @@ export default function Sidebar() {
           </div>
         </aside>
       </div>
+    </>
+  );
+}
+
+function DropDownMenu({ submenus }) {
+  console.log(submenus);
+  return (
+    <>
+      <ul className={styles.dropdown}>
+        {submenus.map((item) => (
+          <>
+            <li className={styles.dropdownList}>{item.name}</li>
+          </>
+        ))}
+      </ul>
     </>
   );
 }

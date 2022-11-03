@@ -13,3 +13,9 @@
 .header{
     @apply font-roboto text-[#A1A9B3] text-[15px] font-semibold
 }
+.dropdown{
+  list-style: none;
+}
+.dropdownList{
+  @apply font-inter text-[#A1A9B3] text-[14px] my-4;
+}
