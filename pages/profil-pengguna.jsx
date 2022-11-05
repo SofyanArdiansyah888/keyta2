@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Layout from "../components/Layout/Layout";
-import { COUNTRY_CODE } from "../utils/constant";
+import { COUNTRY_CODE } from "../app/constant";
 import { useState } from "react";
 
 export default function ProfilPengguna() {

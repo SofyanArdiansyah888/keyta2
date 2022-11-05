@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
-import Layout from "../components/Layout/Layout";
-import PaymentCard from "../components/Shared/PaymentCard";
+import Layout from "../../components/Layout/Layout";
+import PaymentCard from "../../components/Shared/PaymentCard";
 
 export default function Toko() {
   const tabMenus = [

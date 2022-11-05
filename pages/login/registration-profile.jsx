@@ -5,24 +5,33 @@ import { useForm } from "react-hook-form";
 import styles from "../../styles/Login.module.css";
 import * as yup from "yup";
 import { useContext, useState } from "react";
-import api,{defaults} from "../../utils/api";
-import { AuthContext } from "../../pages/login";
+import api, { defaults } from "../../utils/api";
+import { AuthContext } from ".";
 import { useRouter } from "next/router";
 import axios from "axios";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useVerifySmsMutation,
+  useVerifyWhatsappMutation,
+} from "../../services/auth.service";
+import { useCreateShopMutation } from "../../services/shop.service";
 const schema = yup.object({
   user: yup.string().required("Nama Pengguna Harus Diisi"),
   shop: yup.string().required("Nama Toko Harus Diisi"),
   referrer: yup.string().nullable(true),
 });
 
-export default function RegistrationProfile({ authData }) {
-  let auth = useContext(AuthContext)
+export default function RegistrationProfile() {
   const [userReset, setUserReset] = useState(false);
   const [shopReset, setShopReset] = useState(false);
   const [refererReset, setRefererReset] = useState(false);
   const [isReferer, setIsReferer] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
+
+  const [createShop, { isLoading, data }] = useCreateShopMutation();
+  const dispatch = useDispatch();
+  let authenticate = useSelector((state) => state.authSlice?.authenticate);
+
   const {
     register,
     handleSubmit,
@@ -32,22 +41,14 @@ export default function RegistrationProfile({ authData }) {
     resolver: yupResolver(schema),
   });
 
-  const handleUpdate = async (data) => {
-    let { user, shop, referer } = data;
+  const handleCreate = async (data) => {
     try {
-      axios.post(`${defaults.baseURL}v2/shops`,{
-        name: shop,
-        referer,
-        user_attributes: {
-          id: auth.user.id,
-          name: user,
-        },
-      },{
-        headers:{Authorization : `Bearer ${auth.token}`}
-      })
-      
-      router.push('/dashboard')
-      
+      createShop({
+        ...data,
+        token: authenticate?.data?.token,
+      });
+
+      router.push("registration-success", undefined, { shallow: true });
     } catch (error) {
       console.log(error);
     }
@@ -57,7 +58,7 @@ export default function RegistrationProfile({ authData }) {
       <div className={styles.right_content_inner}>
         <Image src="/images/keyta.svg" height="30" width="117" alt="Logo" />
         <h1>Masukkan Data Profil</h1>
-        <form onSubmit={handleSubmit(handleUpdate)}>
+        <form onSubmit={handleSubmit(handleCreate)}>
           {/* INPUT USER */}
           <div className="mt-12">
             <label className="font-[600] text-[13px] ">Nama Pengguna</label>

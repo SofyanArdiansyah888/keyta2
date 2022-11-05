@@ -1,12 +1,21 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import styles from "../../styles/Login.module.css";
-import api from "../../utils/api";
-import { COUNTRY_CODE } from "../../utils/constant";
 import Countdown from "react-countdown";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import * as yup from "yup";
+import { useRouter } from "next/router";
+import {
+  useSendSmsMutation,
+  useSendWhatsappMutation,
+  useVerifySmsMutation,
+  useVerifyWhatsappMutation,
+} from "../../services/auth.service";
+import { setAuthenticate } from "../../services/auth.slice";
+import styles from "../../styles/Login.module.css";
+import { COUNTRY_CODE } from "../../app/constant";
 const schema = yup.object({
   number1: yup.number().required().typeError(),
   number2: yup.number().required().typeError(),
@@ -17,11 +26,46 @@ const schema = yup.object({
   number7: yup.number().required().typeError(),
 });
 
-export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
+export default function OTP() {
   const timer = Date.now() + 60000;
   const [isSMS, setIsSMS] = useState(false);
   const [isCountdown, setIsCountdown] = useState(false);
-  const [countdown, setCountdown] =  useState(timer)
+  const [countdown, setCountdown] = useState(timer);
+  const [sendWhatsapp, { data: whatsappData, isLoading: sendWhatsappLoading }] =
+    useSendWhatsappMutation({
+      fixedCacheKey: "send-whatsapp-otp",
+    });
+  const [sendSms, { data: smsData, loading: sendSmsLoading }] =
+    useSendSmsMutation();
+  const [verifySms, { data: verifySmsData, isLoading: verifySmsLoading }] =
+    useVerifySmsMutation();
+  const [
+    verifyWhatsapp,
+    { data: verifyWhatsappData, isLoading: verifyWhatsappLoading },
+  ] = useVerifyWhatsappMutation({
+    fixedCacheKey: "verify-whatsapp-otp",
+  });
+
+  const router = useRouter();
+
+  const dispatch = useDispatch();
+  let authenticate = useSelector((state) => state.authSlice?.authenticate);
+
+  useEffect(() => {
+    if (whatsappData) dispatch(setAuthenticate(whatsappData));
+    if (smsData) dispatch(setAuthenticate(smsData));
+    return () => {};
+  }, [sendWhatsappLoading, sendSmsLoading]);
+
+  useEffect(() => {
+    if (verifyWhatsappData) dispatch(setAuthenticate(verifyWhatsappData));
+    if (verifySmsData) dispatch(setAuthenticate(verifySmsData));
+    if (verifySmsData || verifyWhatsappData) {
+      router.push("registration-profile", undefined, { shallow: true });
+    }
+    return () => {};
+  }, [verifySmsLoading, verifyWhatsappLoading]);
+
   const {
     register,
     handleSubmit,
@@ -31,57 +75,48 @@ export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
   });
 
   const handleVerify = async (data) => {
-    const { authy_id } = authData.user;
+    const authyId = authenticate?.data?.user?.authy_id;
     const token = Object.values(data).reverse().toString().replaceAll(",", "");
     try {
-      let result = null;
       if (isSMS) {
-        result = await api.post("v2/request_otps/verify", {
-          authy_id,
+        verifySms({
+          authy_id: authyId,
           token,
         });
       } else {
-        result = await api.post("v2/request_otps/verify_wa", {
-          authy_id,
+        verifyWhatsapp({
+          authy_id: authyId,
           token,
         });
       }
-      
-      setAuthData(result.data);
-      setIsOTPVerify(true);
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleSendWhatsapp = async () => {
-    const { user } = authData;
     try {
-      const result = await api.post("v2/sign_with_wa_number", {
+      const user = authenticate?.data?.user;
+      sendWhatsapp({
         country_code: COUNTRY_CODE,
         phone: user.phone,
       });
-      console.log(result.data,`hasil dari result data`)
-      setAuthData(result.data);
-      setCountdown(timer)
-      setIsCountdown(true)
+      setCountdown(timer);
+      setIsCountdown(true);
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleSendSMS = async () => {
-    const { user } = authData;
     try {
-      
-      const result = await api.post("v2/sign_with_phone_number", {
+      const user = authenticate?.data?.user;
+      sendSms({
         country_code: COUNTRY_CODE,
         phone: user.phone,
       });
-      
-      setAuthData(result.data);
-      setCountdown(timer)
-      setIsCountdown(true)
+      setCountdown(timer);
+      setIsCountdown(true);
       setIsSMS(true);
     } catch (error) {
       console.log(error);
@@ -102,7 +137,7 @@ export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
         </h4>
         <h5>
           Kode verifikasi telah kami kirim melalui {isSMS ? "SMS" : "Whatsapp"}{" "}
-          ke <strong>+62{authData.user.phone}</strong>
+          ke <strong>+62{authenticate?.data?.user?.phone}</strong>
         </h5>
 
         <form onSubmit={handleSubmit(handleVerify)}>
@@ -186,7 +221,9 @@ export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
             Belum dapat kode ?{" "}
             <span onClick={isSMS ? handleSendSMS : handleSendWhatsapp}>
               <a
-                className={`underline  mr-1 ${isCountdown ? "text-gray-300 " : "cursor-pointer" } `}
+                className={`underline  mr-1 ${
+                  isCountdown ? "text-gray-300 " : "cursor-pointer"
+                } `}
                 disabled={isCountdown}
               >
                 Kirim Ulang Kode
@@ -199,11 +236,11 @@ export default function OTP({ setIsOTPVerify, authData, setAuthData }) {
                 let second = String(seconds).padStart(2, "0");
                 let minute = String(minutes).padStart(2, "0");
                 if (completed) {
-                  setIsCountdown(false)
+                  setIsCountdown(false);
                   // Render a completed state
                   return "";
                 } else {
-                  setIsCountdown(true)
+                  setIsCountdown(true);
                   // Render a countdown
                   return (
                     <span>

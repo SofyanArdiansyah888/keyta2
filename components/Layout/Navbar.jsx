@@ -1,11 +1,18 @@
+import { useRouter } from "next/router";
 export default function Navbar() {
+  const { pathname } = useRouter();
+  const getMenuName = () => {
+    const result = pathname.split('/');
+    if(result.length > 0){
+      return result[result.length - 1].replace('-',' ')
+    }
+    return "Dashboard";
+  };
   return (
     <>
-      <nav
-        class="pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg "
-      >
+      <nav class="pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg ">
         <div class=" container flex flex-wrap justify-between items-center mx-auto">
-          <span class="text-xl font-semibold">DASHBOARD</span>
+          <span class="text-xl font-semibold capitalize ">{getMenuName()}</span>
           <div class="flex items-center md:order-2">
             <button
               type="button"

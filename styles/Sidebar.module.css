@@ -1,21 +1,27 @@
-
 .list {
+  @apply -ml-3 pl-3 py-0;
+}
+.activeList {
+  @apply bg-[#FFF7E8]  rounded-xl;
+}
+.activeList > a > span {
+  color: #f5b22d !important;
 }
 
 .list > a {
-  @apply flex items-center py-3 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100;
+  @apply flex items-center py-3 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100 hover:rounded-xl;
 }
 
-.list > a > span{
-    @apply ml-5 font-inter text-[#A1A9B3] text-[13px]
+.list > a > span {
+  @apply ml-5 font-inter text-[#A1A9B3] text-[13px];
 }
 
-.header{
-    @apply font-roboto text-[#A1A9B3] text-[15px] font-semibold
+.header {
+  @apply font-roboto text-[#A1A9B3] text-[15px] font-semibold;
 }
-.dropdown{
+.dropdown {
   list-style: none;
 }
-.dropdownList{
+.dropdownList {
   @apply font-inter text-[#A1A9B3] text-[14px] my-4;
 }

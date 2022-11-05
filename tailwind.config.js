@@ -1,11 +1,28 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const withMT = require("@material-tailwind/react/utils/withMT");
+module.exports = withMT ({
   content: [
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   
   theme: {
+    colors:{
+     
+      "blue": {
+        "50": "#555e76",
+        "100": "#4b546c",
+        "200": "#414a62",
+        "300": "#374058",
+        "400": "#2d364e",
+        "500": "#232c44",
+        "600": "#19223a",
+        "700": "#0f1830",
+        "800": "#050e26",
+        "900": "#00041c"
+      }
+      
+    },
     extend: {
       colors: {
         keytaPrimary:"#232C44",
@@ -32,4 +49,4 @@ module.exports = {
     }
   },
   plugins: [],
-}
+})

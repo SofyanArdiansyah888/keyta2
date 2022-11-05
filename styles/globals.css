@@ -17,7 +17,11 @@
     @apply h-auto px-4 py-2 font-roboto  border-gray-300 border-[1px] rounded-md bg-white;
   }
 
-  .rouded-card{
+  .yellow-box {
+    @apply bg-[#FFF7E8] w-full rounded-md;
+  }
+
+  .rouded-card {
     @apply bg-white shadow-sm border-[1px] border-gray-200 rounded-xl;
   }
 
@@ -29,7 +33,10 @@
     line-height: 20px;
   }
 
-  
+  .keyta-button:disabled,
+  .keyta-button[disabled] {
+    opacity: 0.5;
+  }
 
   .material-input {
     @apply text-keytaDark;
@@ -41,13 +48,18 @@
     box-shadow: none;
   }
   .material-input:focus {
-    border-bottom: 1px solid #000000;
+    border-bottom: 2px solid #000000;
     background-color: rgba(0, 0, 0, 0);
   }
 
   .material-input-error,
   .material-input-error:focus {
-    border-bottom: 1px solid red !important;
+    border-bottom: 2px solid red !important;
     background-color: rgba(0, 0, 0, 0);
   }
+
+  .material-select > div > label {
+    @apply font-roboto font-[900] text-keytaDark;
+  }
+ 
 }

@@ -1,10 +1,16 @@
-/* eslint-disable @next/next/no-img-element */
-import Layout from "../components/Layout/Layout";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
-export default function ComingSoon() {
+export default function ComingSoonLayout({children}) {
   return (
     <>
-          {/* CONTENT */}
+      <div className="flex">
+        <Sidebar />
+
+        <div className="container mx-auto lg:ml-[255px]">
+          <Navbar />
+         
+
           <div className="w-full text-center">
               <img className="mx-auto mt-12" src="/images/keyta.svg" alt="Logo keyta" />
               <h1 className="mt-8 text-2xl font-bold">Website Keyta Akan Segera Hadir!</h1>
@@ -20,14 +26,8 @@ export default function ComingSoon() {
               </div>
             
           </div>
+        </div>
+      </div>
     </>
   );
-}
-
-ComingSoon.getLayout = function getLayout(page) {
-  return (
-    <Layout>
-      {page}
-    </Layout>
-  )
 }
