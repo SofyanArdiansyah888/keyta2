@@ -6,8 +6,8 @@ import Link from "next/link";
 import GroupPersonIcon from "../../public/icons/group_person.svg";
 import GroupPersonIcon2 from "../../public/icons/group_person2.svg";
 import LogoutIcon from "../../public/icons/logout.svg";
-import TokoIcon from "../../public/icons/icon_store.svg";
-import PersonIcon from "../../public/icons/icon_user.svg";
+import TokoIcon from "../../public/icons/Icon_store.svg";
+import PersonIcon from "../../public/icons/Icon_user.svg";
 import RightIcon from "../../public/icons/right_icon.svg";
 import ConfirmModal from "../shared/ConfirmModal";
 
