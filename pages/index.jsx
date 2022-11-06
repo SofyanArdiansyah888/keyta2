@@ -37,7 +37,7 @@ export default function Home() {
             {/* PHONE IMAGE */}
             <div className="flex lg:mt-0">
               <div className="relative w-auto">
-                <img
+                <Image
                   fill="true"
                   layout="fill"
                   priority
