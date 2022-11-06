@@ -9,7 +9,7 @@ import LogoutIcon from "../../public/icons/logout.svg";
 import TokoIcon from "../../public/icons/Icon_store.svg";
 import PersonIcon from "../../public/icons/Icon_user.svg";
 import RightIcon from "../../public/icons/right_icon.svg";
-import ConfirmModal from "../shared/ConfirmModal";
+import ConfirmModal from "../Shared/ConfirmModal";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
