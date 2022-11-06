@@ -36,10 +36,11 @@ export default function Home() {
 
             {/* PHONE IMAGE */}
             <div className="flex lg:mt-0">
-              <div className="relative w-auto">
+              <div className="relative ">
                 <Image
                   fill="true"
-                  layout="fill"
+                  height={500}
+                  width={500}
                   priority
                   src="/images/phone.svg"
                   alt="Phone Image"
