@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import ComingSoonLayout from "../components/layout/ComingSoonLayout";
+import ComingSoonLayout from "../components/Layout/ComingSoonLayout";
 
 export default function AnalitikToko() {
   return (
