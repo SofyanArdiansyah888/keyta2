@@ -21,7 +21,7 @@ export default function RegistrationProfile() {
   const [isReferer, setIsReferer] = useState(false);
   const router = useRouter();
 
-  const [createShop, { isLoading, data }] = useCreateShopMutation();
+  const [createShop] = useCreateShopMutation();
   const dispatch = useDispatch();
   let authenticate = useSelector((state) => state.authSlice?.authenticate);
 
@@ -89,7 +89,7 @@ export default function RegistrationProfile() {
                   }}
                 >
                   <Image
-                    src="/images/icon_close.svg"
+                    src="/icons/icon_close.svg"
                     height="18"
                     width="18"
                     alt="Logo"
@@ -136,7 +136,7 @@ export default function RegistrationProfile() {
                   }}
                 >
                   <Image
-                    src="/images/icon_close.svg"
+                    src="/icons/icon_close.svg"
                     height="18"
                     width="18"
                     alt="Logo"
@@ -197,7 +197,7 @@ export default function RegistrationProfile() {
                         }}
                       >
                         <Image
-                          src="/images/icon_close.svg"
+                          src="/icons/icon_close.svg"
                           height="18"
                           width="18"
                           alt="Logo"

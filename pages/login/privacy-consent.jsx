@@ -8,7 +8,7 @@ import * as TERMS from "../../app/constant";
 export default function PrivacyConsent() {
   const router = useRouter();
   const [isRead, setIsRead] = useState(false);
-  const [sendWhatsapp, { data }] = useSendWhatsappMutation({
+  const [sendWhatsapp] = useSendWhatsappMutation({
     fixedCacheKey: "send-whatsapp-otp",
   });
 

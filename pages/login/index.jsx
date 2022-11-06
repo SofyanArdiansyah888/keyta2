@@ -33,11 +33,10 @@ export default function Login() {
   });
 
   const handleLogin = async (data) => {
-    alert(data)
-    // router.push({
-    //   pathname: "login/privacy-consent",
-    //   query: { ...data },
-    // });
+    router.push({
+      pathname: "login/privacy-consent",
+      query: { ...data },
+    });
   };
 
   return (
@@ -89,7 +88,7 @@ export default function Login() {
                       }}
                     >
                       <Image
-                        src="/images/icon_close.svg"
+                        src="/icons/icon_close.svg"
                         height="18"
                         width="18"
                         alt="Logo"

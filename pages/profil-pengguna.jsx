@@ -59,7 +59,7 @@ export default function ProfilPengguna() {
               }}
             >
               <Image
-                src="/images/icon_close.svg"
+                src="/icons/icon_close.svg"
                 height="18"
                 width="18"
                 alt="Logo"

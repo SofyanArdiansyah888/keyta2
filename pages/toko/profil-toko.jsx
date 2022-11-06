@@ -51,7 +51,7 @@ export default function ProfilToko() {
                   }}
                 >
                   <Image
-                    src="/images/icon_close.svg"
+                    src="/icons/icon_close.svg"
                     height="18"
                     width="18"
                     alt="Logo"
@@ -93,7 +93,7 @@ export default function ProfilToko() {
                   }}
                 >
                   <Image
-                    src="/images/icon_close.svg"
+                    src="/icons/icon_close.svg"
                     height="18"
                     width="18"
                     alt="Logo"
@@ -138,7 +138,7 @@ export default function ProfilToko() {
                   }}
                 >
                   <Image
-                    src="/images/icon_close.svg"
+                    src="/icons/icon_close.svg"
                     height="18"
                     width="18"
                     alt="Logo"

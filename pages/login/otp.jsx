@@ -31,18 +31,12 @@ export default function OTP() {
   const [isSMS, setIsSMS] = useState(false);
   const [isCountdown, setIsCountdown] = useState(false);
   const [countdown, setCountdown] = useState(timer);
-  const [sendWhatsapp, { data: whatsappData, isLoading: sendWhatsappLoading }] =
-    useSendWhatsappMutation({
-      fixedCacheKey: "send-whatsapp-otp",
-    });
-  const [sendSms, { data: smsData, loading: sendSmsLoading }] =
-    useSendSmsMutation();
-  const [verifySms, { data: verifySmsData, isLoading: verifySmsLoading }] =
-    useVerifySmsMutation();
-  const [
-    verifyWhatsapp,
-    { data: verifyWhatsappData, isLoading: verifyWhatsappLoading },
-  ] = useVerifyWhatsappMutation({
+  const [sendWhatsapp, waData] = useSendWhatsappMutation({
+    fixedCacheKey: "send-whatsapp-otp",
+  });
+  const [sendSms, smsData] = useSendSmsMutation();
+  const [verifySms, verifySmsData] = useVerifySmsMutation();
+  const [verifyWhatsapp, verifyWaData] = useVerifyWhatsappMutation({
     fixedCacheKey: "verify-whatsapp-otp",
   });
 
@@ -52,19 +46,19 @@ export default function OTP() {
   let authenticate = useSelector((state) => state.authSlice?.authenticate);
 
   useEffect(() => {
-    if (whatsappData) dispatch(setAuthenticate(whatsappData));
-    if (smsData) dispatch(setAuthenticate(smsData));
+    if (waData.data) dispatch(setAuthenticate(waData.data));
+    if (smsData.data) dispatch(setAuthenticate(smsData.data));
     return () => {};
-  }, [sendWhatsappLoading, sendSmsLoading]);
+  }, [waData.isLoading, smsData.isLoading]);
 
   useEffect(() => {
-    if (verifyWhatsappData) dispatch(setAuthenticate(verifyWhatsappData));
-    if (verifySmsData) dispatch(setAuthenticate(verifySmsData));
-    if (verifySmsData || verifyWhatsappData) {
+    if (verifyWaData.data) dispatch(setAuthenticate(verifyWaData.data));
+    if (verifySmsData.data) dispatch(setAuthenticate(verifySmsData.data));
+    if (verifySmsData.data || verifyWaData.data) {
       router.push("registration-profile", undefined, { shallow: true });
     }
     return () => {};
-  }, [verifySmsLoading, verifyWhatsappLoading]);
+  }, [verifySmsData.isLoading, verifyWhatsapp.isLoading]);
 
   const {
     register,
