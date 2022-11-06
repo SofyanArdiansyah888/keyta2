@@ -1,20 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
-import { useForm } from "react-hook-form";
-import styles from "../../styles/Login.module.css";
-import * as yup from "yup";
-import { useContext, useState } from "react";
-import api, { defaults } from "../../utils/api";
-import { AuthContext } from ".";
 import { useRouter } from "next/router";
-import axios from "axios";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  useVerifySmsMutation,
-  useVerifyWhatsappMutation,
-} from "../../services/auth.service";
+import * as yup from "yup";
 import { useCreateShopMutation } from "../../services/shop.service";
+import styles from "../../styles/Login.module.css";
 const schema = yup.object({
   user: yup.string().required("Nama Pengguna Harus Diisi"),
   shop: yup.string().required("Nama Toko Harus Diisi"),
