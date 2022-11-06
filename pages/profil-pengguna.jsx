@@ -2,7 +2,7 @@ import Image from "next/image";
 import Layout from "../components/Layout/Layout";
 import { COUNTRY_CODE } from "../app/constant";
 import { useState } from "react";
-import InputPhone from "../components/shared/InputPhone";
+import InputPhone from "../components/Shared/InputPhone";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";

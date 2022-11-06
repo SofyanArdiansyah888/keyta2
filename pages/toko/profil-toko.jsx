@@ -4,9 +4,9 @@ import Image from "next/image";
 import { useState } from "react";
 import { COUNTRY_CODE } from "../../app/constant";
 import Layout from "../../components/Layout/Layout";
-import KategoriModal from "../../components/shared/KategoriModal";
-import Modal from "../../components/shared/Modal";
-import SumberModal from "../../components/shared/SumberModal";
+import KategoriModal from "../../components/Shared/KategoriModal";
+import Modal from "../../components/Shared/Modal";
+import SumberModal from "../../components/Shared/SumberModal";
 export default function ProfilToko() {
   const [showModal, setShowModal] = useState(false)
   return (

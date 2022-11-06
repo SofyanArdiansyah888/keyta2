@@ -9,7 +9,7 @@ import styles from "../../styles/Login.module.css";
 import { COUNTRY_CODE } from "../../app/constant";
 
 import { useRouter } from "next/router";
-import InputPhone from "../../components/shared/InputPhone";
+import InputPhone from "../../components/Shared/InputPhone";
 const schema = yup.object({
   phone: yup
     .number()
