@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 
 export default function MaskotScreen() {
@@ -8,11 +9,11 @@ export default function MaskotScreen() {
           #JualanOnlineLebihPraktis
         </h1>
         <div className="left-[30%] absolute bottom-0">
-          <Image
+          <img
             className="mb-[-5px] static"
             height={300}
             width={300}
-            src="/images/maskot.svg"
+            src="../images/maskot.svg"
             alt="Maskot"
           />
         </div>

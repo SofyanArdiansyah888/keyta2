@@ -112,7 +112,7 @@ export default function RegistrationProfile() {
             <div className="relative w-max">
               <div className="absolute top-3">
                 <Image
-                  src="/images/icon_user.svg"
+                  src="/icons/icon_user.svg"
                   height="22"
                   width="22"
                   alt="Logo"
