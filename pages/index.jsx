@@ -10,7 +10,7 @@ export default function Home() {
       <section>
         <div className="container mx-auto px-8 mt-14">
           <div className="flex flex-col-reverse  lg:flex-row  md:px-[83px] mx-auto lg:gap-16 xl:gap-16">
-            <div className="font-poppins mr-auto place-self-center">
+            <div className="font-poppins mr-auto self-center">
               <h1 className="max-w-2xl mb-4 text-2xl  md:text-4xl font-extrabold tracking-tight leading-none">
                 #JualanOnlineLebihPraktis
               </h1>
@@ -90,7 +90,7 @@ function LandingNavbar() {
                 <path
                   fillRule="evenodd"
                   d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 ></path>
               </svg>
             </button>

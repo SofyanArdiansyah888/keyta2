@@ -2,9 +2,31 @@ import Image from "next/image";
 import Layout from "../components/Layout/Layout";
 import { COUNTRY_CODE } from "../app/constant";
 import { useState } from "react";
+import InputPhone from "../components/shared/InputPhone";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+const schema = yup.object({
+  phone: yup
+    .number()
+    .positive("Nomor Telepon tidak valid")
+    .required("Nomor Telepon harus diisi")
+    .typeError("Nomor Telepon tidak valid"),
+});
 export default function ProfilPengguna() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isReset, setIsReset] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    reset,
+    values,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
   return (
     <>
       <div className="max-w-md mx-auto mt-12">
@@ -54,49 +76,13 @@ export default function ProfilPengguna() {
 
         {/* NOMOR TELEPON  */}
         <div className="mt-4">
-          <label className="font-[600] text-[14px] w-full ">
-            Nomor Telepon
-          </label>
-          <div className="relative w-full ">
-            <span className="text-[11px] bg-[#F1F2F5] border-[#CED2D9] rounded-[4px]  absolute left-0 top-5 p-1  ">
-              +{COUNTRY_CODE}
-            </span>
-            <input
-              type="number"
-              //   {...register("phone")}
-              //   onChange={(event) => {
-              //     event.target.value === "" && setIsReset(false);
-              //     !isReset && setIsReset(true);
-              //   }}
-              className={`p-2 mt-4 ml-8 text-xs w-[94%] material-input  `}
-              placeholder="Masukkan Nomor Telepon"
-            />
-            {/* ${
-                  errors.phone?.message
-                    ? "material-input-error"
-                    : "material-input"
-                } */}
-            <div
-              className="absolute top-6 right-0"
-              onClick={() => {
-                reset({ phone: "" });
-                setIsReset(false);
-              }}
-            >
-              <Image
-                src="/images/icon_close.svg"
-                height="18"
-                width="18"
-                alt="Logo"
-              />
-            </div>
-
-            {/* {errors.phone?.message && (
-                      <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-6">
-                        {errors.phone?.message}
-                      </a>
-                    )} */}
-          </div>
+          <InputPhone
+            isReset={isReset}
+            setIsReset={setIsReset}
+            register={register("phone")}
+            errors={errors}
+            reset={reset}
+          />
         </div>
 
         <button
@@ -108,7 +94,7 @@ export default function ProfilPengguna() {
       </div>
 
       <>
-        <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+        <div className="hidden justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
           <div className="relative w-auto my-6 mx-auto max-w-sm">
             {/*content*/}
             <div className="border-0 rounded-2xl shadow-lg relative flex flex-col bg-white outline-none focus:outline-none">

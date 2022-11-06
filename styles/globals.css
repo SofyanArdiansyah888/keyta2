@@ -13,6 +13,10 @@
     @apply bg-keytaGray;
   }
 
+  path {
+    fill: currentColor !important;
+  }
+
   .btn-outline-gray {
     @apply h-auto px-4 py-2 font-roboto  border-gray-300 border-[1px] rounded-md bg-white;
   }
@@ -41,11 +45,8 @@
   .material-input {
     @apply text-keytaDark;
     background-color: rgba(0, 0, 0, 0);
-    border-bottom: 1px solid #ced2d9;
+    border-bottom: 2px solid #ced2d9;
     outline: 0;
-    background-size: 100% 100%, 100% 100%;
-    transition-duration: 0.3s;
-    box-shadow: none;
   }
   .material-input:focus {
     border-bottom: 2px solid #000000;
@@ -61,5 +62,4 @@
   .material-select > div > label {
     @apply font-roboto font-[900] text-keytaDark;
   }
- 
 }

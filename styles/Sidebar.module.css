@@ -4,16 +4,23 @@
 .activeList {
   @apply bg-[#FFF7E8]  rounded-xl;
 }
-.activeList > a > span {
+.activeList > a {
   color: #f5b22d !important;
+}
+.activeList > a > svg {
+  fill: #f5b22d;
 }
 
 .list > a {
-  @apply flex items-center py-3 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100 hover:rounded-xl;
+  @apply flex items-center py-3 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100 hover:rounded-xl hover:text-keytaSecondary;
 }
 
-.list > a > span {
-  @apply ml-5 font-inter text-[#A1A9B3] text-[13px];
+.list > a > svg {
+  @apply mr-4;
+}
+
+.list > a {
+  @apply  font-inter text-[#A1A9B3] text-[13px];
 }
 
 .header {

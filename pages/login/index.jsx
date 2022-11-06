@@ -9,6 +9,7 @@ import styles from "../../styles/Login.module.css";
 import { COUNTRY_CODE } from "../../app/constant";
 
 import { useRouter } from "next/router";
+import InputPhone from "../../components/shared/InputPhone";
 const schema = yup.object({
   phone: yup
     .number()
@@ -27,15 +28,16 @@ export default function Login() {
     setValue,
     reset,
     values,
-  } = useForm({
+  }= useForm({
     resolver: yupResolver(schema),
   });
 
   const handleLogin = async (data) => {
-    router.push({
-      pathname: "login/privacy-consent",
-      query: { ...data },
-    });
+    alert(data)
+    // router.push({
+    //   pathname: "login/privacy-consent",
+    //   query: { ...data },
+    // });
   };
 
   return (
@@ -51,8 +53,15 @@ export default function Login() {
             <h1>Masukkan Nomor HP Anda</h1>
             <h6>Kode Verifikasi akan di kirimkan ke nomor Anda</h6>
             <form onSubmit={handleSubmit(handleLogin)}>
-              <div className="form-control mt-12">
-                <label className="font-[600] text-[14px] ">Nomor Telepon</label>
+              <div className="mt-12 max-w-sm">
+                <InputPhone
+                  isReset={isReset}
+                  setIsReset = {setIsReset}
+                  register={register('phone')}
+                  errors={errors}
+                  reset={reset}
+                />
+                {/* <label className="font-[600] text-[14px] ">Nomor Telepon</label>
                 <div className="relative w-max">
                   <span className="mr-2 text-[11px] bg-[#F1F2F5] rounded-[4px] h-16 w-32 p-1 border-[#CED2D9]">
                     +{COUNTRY_CODE}
@@ -92,7 +101,7 @@ export default function Login() {
                       {errors.phone?.message}
                     </a>
                   )}
-                </div>
+                </div> */}
               </div>
 
               <button type="submit" className="keyta-button mt-24">
