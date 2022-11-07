@@ -20,7 +20,7 @@ export default function Navbar() {
   const getMenuName = () => {
     const result = pathname.split("/");
     if (result.length > 0) {
-      return result[result.length - 1].replace("-", " ");
+      return result[result.length - 1].replace(/-/g, " ");
     }
     return "Dashboard";
   };
@@ -30,14 +30,14 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-
+    router.push('/login')
   }
   return (
     <>
       <nav className="pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg ">
         <div className=" container flex flex-wrap justify-between items-center mx-auto">
           {/* DASHBOARD NAME */}
-          <span className="text-xl font-semibold capitalize ">
+          <span className="text-md lg:text-xl font-semibold capitalize ">
             {getMenuName()}
           </span>
 
@@ -48,12 +48,12 @@ export default function Navbar() {
               onClick={() => setIsMenuOpen((value) => !value)}
             >
               <div className="w-10 h-10 rounded-full overflow-hidden ">
-                {/* <Image
-                  src="/icons/avatar.svg"
+                <Image
+                  src="/images/keyta.svg"
                   height={40}
                   width={40}
                   alt="profil"
-                /> */}
+                />
               </div>
               <div className=" text-gray-900 text-md">
                 <div className="cursor-pointer">Profil</div>
@@ -71,7 +71,7 @@ export default function Navbar() {
                 <Link href="/profil-pengguna">
                 <div className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg">
                   <Image
-                    src="/icons/avatar.svg"
+                    src="/images/keyta.svg"
                     height={40}
                     width={40}
                     alt="profil"
@@ -121,11 +121,11 @@ export default function Navbar() {
                   {/* AJAK TEMAN */}
                   <li className="font-medium">
                     <h6 className="my-5 text-xs">Komunitas</h6>
-                    <Link href="ajak-teman">
+                    <Link href="ajak-teman-pakai-keyta">
                       <a
                         href="#"
                         className={`flex items-center ${isActive(
-                          "/ajak-teman"
+                          "/ajak-teman-pakai-keyta"
                         )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       >
                         <div className="mr-5">
@@ -138,9 +138,9 @@ export default function Navbar() {
 
                   {/* GABUNG KOMUNITAS */}
                   <li className="font-medium">
-                    <Link href="gabung-komunitas">
+                    {/* <Link href="gabung-komunitas"> */}
                       <a
-                        href="#"
+                        
                         className={`flex items-center ${isActive(
                           "/gabung-komunitas"
                         )} my-6 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
@@ -150,7 +150,7 @@ export default function Navbar() {
                         </div>
                         Gabung Komunitas
                       </a>
-                    </Link>
+                    {/* </Link> */}
                   </li>
 
                   <hr className="dark:border-gray-700" />

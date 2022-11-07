@@ -35,12 +35,25 @@ export default function RegistrationProfile() {
     resolver: yupResolver(schema),
   });
 
-  const handleCreate = async (data) => {
+  const handleCreate = async ({ user, referer, shop }) => {
     try {
-      createShop({
-        ...data,
+      let temp = {
+        name: shop,
+        referer,
+        user_attributes: {
+          id: authenticate.data.user.id,
+          name: user,
+        },
         token: authenticate?.data?.token,
+      };
+
+      Object.keys(temp).forEach((key) => {
+        if (temp[key] === undefined) {
+          delete temp[key];
+        }
       });
+
+      createShop(temp);
 
       router.push("registration-success", undefined, { shallow: true });
     } catch (error) {
@@ -61,7 +74,7 @@ export default function RegistrationProfile() {
               <div className="relative w-max">
                 <div className="absolute top-3">
                   <Image
-                    src="/icons/icon_store.svg"
+                    src="/icons/Icon_user.svg"
                     height="22"
                     width="22"
                     alt="Logo"
@@ -108,7 +121,7 @@ export default function RegistrationProfile() {
               <div className="relative w-max">
                 <div className="absolute top-3">
                   <Image
-                    src="/icons/icon_user.svg"
+                    src="/icons/Icon_store.svg"
                     height="22"
                     width="22"
                     alt="Logo"

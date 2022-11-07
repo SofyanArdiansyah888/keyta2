@@ -70,10 +70,11 @@ export default function OTP() {
   });
 
   const handleVerify = async (data) => {
-    const authyId = authenticate?.data?.user?.authy_id;
+    
     const token = Object.values(data).reverse().toString().replaceAll(",", "");
     try {
       if (isSMS) {
+        const authyId = authenticate?.data?.user?.authy_id_sms;
         verifySms({
           authy_id: authyId,
           token,
@@ -83,6 +84,7 @@ export default function OTP() {
           return;
         }
       } else {
+        const authyId = authenticate?.data?.user?.authy_id;
         verifyWhatsapp({
           authy_id: authyId,
           token,
