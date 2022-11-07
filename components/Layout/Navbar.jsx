@@ -68,6 +68,7 @@ export default function Navbar() {
                 className="absolute w-[270px] px-5 py-3 z-[9999] text-[#A1A9B3]  font-inter bg-white rounded-lg shadow border top-[53px] right-1"
               >
                 {/* PROFILE NAME & AVATAR */}
+                <Link href="/profil-pengguna">
                 <div className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg">
                   <Image
                     src="/icons/avatar.svg"
@@ -77,16 +78,17 @@ export default function Navbar() {
                   />
                   <h2 className="font-semibold text-[13px]">Toko Sejahtera</h2>
                 </div>
+                </Link>
 
                 <ul className="space-y-3 text-[13px]">
                   {/* PENGGUNA */}
                   <li className="font-medium">
                     <h6 className="my-5 text-xs">Profil</h6>
-                    <Link href="/pengguna">
+                    <Link href="/profil-pengguna">
                       <a
                         href="#"
                         className={`flex items-center ${isActive(
-                          "/pengguna"
+                          "/profil-pengguna"
                         )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       >
                         <div className="mr-5">
@@ -99,11 +101,11 @@ export default function Navbar() {
 
                   {/* TOKO */}
                   <li className="font-medium my-5">
-                    <Link href="toko">
+                    <Link href="/toko/profil-toko">
                       <a
                         href="#"
                         className={`flex items-center my-6 transform ${isActive(
-                          "/toko"
+                          "/toko/profil-toko"
                         )} transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       >
                         <div className="mr-5">

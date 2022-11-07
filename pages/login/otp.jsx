@@ -16,6 +16,7 @@ import {
 import { setAuthenticate } from "../../services/auth.slice";
 import styles from "../../styles/Login.module.css";
 import { COUNTRY_CODE } from "../../app/constant";
+import MaskotScreen from "../../components/Shared/MaskotScreen";
 const schema = yup.object({
   number1: yup.number().required().typeError(),
   number2: yup.number().required().typeError(),
@@ -77,12 +78,21 @@ export default function OTP() {
           authy_id: authyId,
           token,
         });
+        if (smsData.data?.data?.user?.shop_id) {
+          router.push("/dashboard", undefined, { shallow: true });
+          return;
+        }
       } else {
         verifyWhatsapp({
           authy_id: authyId,
           token,
         });
+        if (waData.data?.data?.user?.shop_id) {
+          router.push("/dashboard", undefined, { shallow: true });
+          return;
+        }
       }
+      router.push("registration-profile", undefined, { shallow: true });
     } catch (error) {
       console.log(error);
     }
@@ -123,147 +133,154 @@ export default function OTP() {
   };
   return (
     <>
-      <div className={styles.right_content_inner}>
-        <img src="../images/keyta.svg" alt="Logo" />
-        <h1>Verifikasi Nomor</h1>
-        <h4 className="text-[14px] font-[700] my-2 text-keytaDark">
-          Masukkan kode OTP
-        </h4>
-        <h5>
-          Kode verifikasi telah kami kirim melalui {isSMS ? "SMS" : "Whatsapp"}{" "}
-          ke <strong>+62{authenticate?.data?.user?.phone}</strong>
-        </h5>
+      <div id={styles.login}>
+        {/* JUAL ONLINE SCREEN */}
+        <MaskotScreen />
+        <div className={styles.right_content}>
+          <div className={styles.right_content_inner}>
+            <img src="../images/keyta.svg" alt="Logo" />
+            <h1>Verifikasi Nomor</h1>
+            <h4 className="text-[14px] font-[700] my-2 text-keytaDark">
+              Masukkan kode OTP
+            </h4>
+            <h5>
+              Kode verifikasi telah kami kirim melalui{" "}
+              {isSMS ? "SMS" : "Whatsapp"} ke{" "}
+              <strong>+62{authenticate?.data?.user?.phone}</strong>
+            </h5>
 
-        <form onSubmit={handleSubmit(handleVerify)}>
-          <div className="mt-12 flex flex-row gap-1">
-            <input
-              type="text"
-              maxLength="1"
-              {...register("number1")}
-              className={`text-center w-[30px] ${
-                errors.number1 ? "material-input-error" : "material-input"
-              }`}
-              onChange={(event) => handleChange(event, "number2")}
-            />
-            <input
-              type="text"
-              maxLength={1}
-              {...register("number2")}
-              className={`text-center w-[30px] ${
-                errors.number2 ? "material-input-error" : "material-input"
-              }`}
-              onChange={(event) => handleChange(event, "number3")}
-            />
-            <input
-              type="text"
-              maxLength={1}
-              {...register("number3")}
-              className={`text-center w-[30px] ${
-                errors.number3 ? "material-input-error" : "material-input"
-              }`}
-              onChange={(event) => handleChange(event, "number4")}
-            />
-            <input
-              type="text"
-              maxLength={1}
-              {...register("number4")}
-              className={`text-center w-[30px] ${
-                errors.number4 ? "material-input-error" : "material-input"
-              }`}
-              onChange={(event) => handleChange(event, "number5")}
-            />
-            <input
-              type="text"
-              maxLength={1}
-              {...register("number5")}
-              className={`text-center w-[30px] ${
-                errors.number5 ? "material-input-error" : "material-input"
-              }`}
-              onChange={(event) => handleChange(event, "number6")}
-            />
-            <input
-              type="text"
-              maxLength={1}
-              {...register("number6")}
-              className={`text-center w-[30px] ${
-                errors.number6 ? "material-input-error" : "material-input"
-              }`}
-              onChange={(event) => handleChange(event, "number7")}
-            />
-            <input
-              type="text"
-              maxLength={1}
-              {...register("number7")}
-              className={`text-center w-[30px] ${
-                errors.number7 ? "material-input-error" : "material-input"
-              }`}
-            />
-          </div>
-          {(errors.number1 ||
-            errors.number2 ||
-            errors.number3 ||
-            errors.number4 ||
-            errors.number5 ||
-            errors.number6 ||
-            errors.number7) && (
-            <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ">
-              Kode harus diisi
-            </a>
-          )}
-
-          <div className="text-[13px] mt-8">
-            Belum dapat kode ?{" "}
-            <span onClick={isSMS ? handleSendSMS : handleSendWhatsapp}>
-              <a
-                className={`underline  mr-1 ${
-                  isCountdown ? "text-gray-300 " : "cursor-pointer"
-                } `}
-                disabled={isCountdown}
-              >
-                Kirim Ulang Kode
-              </a>
-            </span>
-            {/* <Countdown date={Date.now() + 10000} /> */}
-            <Countdown
-              date={countdown}
-              renderer={({ hours, minutes, seconds, completed }) => {
-                let second = String(seconds).padStart(2, "0");
-                let minute = String(minutes).padStart(2, "0");
-                if (completed) {
-                  setIsCountdown(false);
-                  // Render a completed state
-                  return "";
-                } else {
-                  setIsCountdown(true);
-                  // Render a countdown
-                  return (
-                    <span>
-                      {minute}:{second}
-                    </span>
-                  );
-                }
-              }}
-            />
-          </div>
-          {!isSMS && (
-            <>
-              <div className="text-[12px] text-keytaPrimary mt-8">
-                Tidak punya Whatsapp?{" "}
+            <form onSubmit={handleSubmit(handleVerify)}>
+              <div className="mt-12 flex flex-row gap-1">
+                <input
+                  type="text"
+                  maxLength="1"
+                  {...register("number1")}
+                  className={`text-center w-[30px] ${
+                    errors.number1 ? "material-input-error" : "material-input"
+                  }`}
+                  onChange={(event) => handleChange(event, "number2")}
+                />
+                <input
+                  type="text"
+                  maxLength={1}
+                  {...register("number2")}
+                  className={`text-center w-[30px] ${
+                    errors.number2 ? "material-input-error" : "material-input"
+                  }`}
+                  onChange={(event) => handleChange(event, "number3")}
+                />
+                <input
+                  type="text"
+                  maxLength={1}
+                  {...register("number3")}
+                  className={`text-center w-[30px] ${
+                    errors.number3 ? "material-input-error" : "material-input"
+                  }`}
+                  onChange={(event) => handleChange(event, "number4")}
+                />
+                <input
+                  type="text"
+                  maxLength={1}
+                  {...register("number4")}
+                  className={`text-center w-[30px] ${
+                    errors.number4 ? "material-input-error" : "material-input"
+                  }`}
+                  onChange={(event) => handleChange(event, "number5")}
+                />
+                <input
+                  type="text"
+                  maxLength={1}
+                  {...register("number5")}
+                  className={`text-center w-[30px] ${
+                    errors.number5 ? "material-input-error" : "material-input"
+                  }`}
+                  onChange={(event) => handleChange(event, "number6")}
+                />
+                <input
+                  type="text"
+                  maxLength={1}
+                  {...register("number6")}
+                  className={`text-center w-[30px] ${
+                    errors.number6 ? "material-input-error" : "material-input"
+                  }`}
+                  onChange={(event) => handleChange(event, "number7")}
+                />
+                <input
+                  type="text"
+                  maxLength={1}
+                  {...register("number7")}
+                  className={`text-center w-[30px] ${
+                    errors.number7 ? "material-input-error" : "material-input"
+                  }`}
+                />
               </div>
-              <div
-                className="text-[16px] mt-2 cursor-pointer text-keytaDarkBlue font-[600]"
-                onClick={handleSendSMS}
-                disabled={isCountdown}
-              >
-                Kirim melalui SMS
-              </div>
-            </>
-          )}
+              {(errors.number1 ||
+                errors.number2 ||
+                errors.number3 ||
+                errors.number4 ||
+                errors.number5 ||
+                errors.number6 ||
+                errors.number7) && (
+                <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ">
+                  Kode harus diisi
+                </a>
+              )}
 
-          <button type="submit" className="keyta-button mt-12">
-            Verifikasi
-          </button>
-        </form>
+              <div className="text-[13px] mt-8">
+                Belum dapat kode ?{" "}
+                <span onClick={isSMS ? handleSendSMS : handleSendWhatsapp}>
+                  <a
+                    className={`underline  mr-1 ${
+                      isCountdown ? "text-gray-300 " : "cursor-pointer"
+                    } `}
+                    disabled={isCountdown}
+                  >
+                    Kirim Ulang Kode
+                  </a>
+                </span>
+                {/* <Countdown date={Date.now() + 10000} /> */}
+                <Countdown
+                  date={countdown}
+                  renderer={({ hours, minutes, seconds, completed }) => {
+                    let second = String(seconds).padStart(2, "0");
+                    let minute = String(minutes).padStart(2, "0");
+                    if (completed) {
+                      setIsCountdown(false);
+                      // Render a completed state
+                      return "";
+                    } else {
+                      setIsCountdown(true);
+                      // Render a countdown
+                      return (
+                        <span>
+                          {minute}:{second}
+                        </span>
+                      );
+                    }
+                  }}
+                />
+              </div>
+              {!isSMS && (
+                <>
+                  <div className="text-[12px] text-keytaPrimary mt-8">
+                    Tidak punya Whatsapp?{" "}
+                  </div>
+                  <div
+                    className="text-[16px] mt-2 cursor-pointer text-keytaDarkBlue font-[600]"
+                    onClick={handleSendSMS}
+                    disabled={isCountdown}
+                  >
+                    Kirim melalui SMS
+                  </div>
+                </>
+              )}
+
+              <button type="submit" className="keyta-button mt-12">
+                Verifikasi
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </>
   );
