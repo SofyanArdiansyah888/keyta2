@@ -59,7 +59,7 @@ export default function OTP() {
       router.push("registration-profile", undefined, { shallow: true });
     }
     return () => {};
-  }, [verifySmsData.isLoading, verifyWhatsapp.isLoading]);
+  }, [verifySmsData.isLoading, verifyWaData.isLoading]);
 
   const {
     register,
