@@ -94,7 +94,6 @@ export default function OTP() {
           return;
         }
       }
-      router.push("registration-profile", undefined, { shallow: true });
     } catch (error) {
       console.log(error);
     }
