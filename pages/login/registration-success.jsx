@@ -5,6 +5,7 @@ import styles from "../../styles/Login.module.css";
 
 import { useRouter } from "next/router";
 import { disableBack } from "../../app/utlis";
+import { useEffect } from "react";
 const schema = yup.object({
   phone: yup
     .number()
