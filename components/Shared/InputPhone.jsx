@@ -6,6 +6,7 @@ export default function InputPhone({
   register,
   errors,
   reset,
+  setValue = null,
   label = "Nomor Telepon",
 }) {
   return (
@@ -19,8 +20,14 @@ export default function InputPhone({
           type="number"
           {...register}
           onChange={(event) => {
-            event.target.value === "" && setIsReset(false);
+            const value = event.target.value;
+            if(value[0] == "0"){
+              setValue('phone',value.substring(1))
+            }
+            value === "" && setIsReset(false);
             !isReset && setIsReset(true);
+         
+          
           }}
           className={`p-2 mt-2  ml-8 text-xs w-[93%] material-input  `}
           placeholder="Masukkan Nomor Telepon"

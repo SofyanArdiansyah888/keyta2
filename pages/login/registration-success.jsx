@@ -4,6 +4,7 @@ import MaskotScreen from "../../components/Shared/MaskotScreen";
 import styles from "../../styles/Login.module.css";
 
 import { useRouter } from "next/router";
+import { disableBack } from "../../app/utlis";
 const schema = yup.object({
   phone: yup
     .number()
@@ -13,9 +14,11 @@ const schema = yup.object({
 });
 
 export default function Login() {
-  
   const router = useRouter();
-  
+  useEffect(() => {
+    disableBack();
+  },[])
+
 
   return (
     <>

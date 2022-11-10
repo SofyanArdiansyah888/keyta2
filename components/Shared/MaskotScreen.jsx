@@ -8,11 +8,11 @@ export default function MaskotScreen() {
         <h1 className="font-poppins  text-keytaPrimary text-4xl font-[900]">
           #JualanOnlineLebihPraktis
         </h1>
-        <div className="left-[30%] absolute bottom-0">
+        <div className="left-[20%] absolute bottom-0">
           <img
             className="mb-[-5px] static"
-            height={300}
-            width={300}
+            height={400}
+            width={400}
             src="../images/maskot.svg"
             alt="Maskot"
           />

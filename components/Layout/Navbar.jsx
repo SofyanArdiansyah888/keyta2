@@ -10,12 +10,15 @@ import TokoIcon from "../../public/icons/Icon_store.svg";
 import PersonIcon from "../../public/icons/Icon_user.svg";
 import RightIcon from "../../public/icons/right_icon.svg";
 import ConfirmModal from "../Shared/ConfirmModal";
+import { useSelector } from "react-redux";
+import { clearTokenCookie } from "../../app/cookies";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
   const { pathname } = useRouter();
+  // let authenticate = useSelector((state) => state.authSlice?.authenticate);
 
   const getMenuName = () => {
     const result = pathname.split("/");
@@ -30,18 +33,19 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    router.push('/login')
-  }
+    clearTokenCookie();
+    setTimeout(() => router.push("/"), 300);
+  };
   return (
     <>
-      <nav className="pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg ">
+      <nav className="pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg mx-auto lg:ml-[255px] ">
         <div className=" container flex flex-wrap justify-between items-center mx-auto">
           {/* DASHBOARD NAME */}
           <span className="text-md lg:text-xl font-semibold capitalize ">
             {getMenuName()}
           </span>
 
-          <div className=" relative  mr-8 lg:mr-24">
+          <div className=" relative  mr-8 lg:mr-12">
             {/* AVATAR ICON */}
             <div
               className="flex justify-center items-center space-x-4 cursor-pointer"
@@ -69,15 +73,17 @@ export default function Navbar() {
               >
                 {/* PROFILE NAME & AVATAR */}
                 <Link href="/profil-pengguna">
-                <div className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg">
-                  <Image
-                    src="/images/keyta.svg"
-                    height={40}
-                    width={40}
-                    alt="profil"
-                  />
-                  <h2 className="font-semibold text-[13px]">Toko Sejahtera</h2>
-                </div>
+                  <div className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg">
+                    <Image
+                      src="/images/keyta.svg"
+                      height={40}
+                      width={40}
+                      alt="profil"
+                    />
+                    <h2 className="font-semibold text-[13px]">
+                      Toko Sejahtera
+                    </h2>
+                  </div>
                 </Link>
 
                 <ul className="space-y-3 text-[13px]">
@@ -139,17 +145,16 @@ export default function Navbar() {
                   {/* GABUNG KOMUNITAS */}
                   <li className="font-medium">
                     {/* <Link href="gabung-komunitas"> */}
-                      <a
-                        
-                        className={`flex items-center ${isActive(
-                          "/gabung-komunitas"
-                        )} my-6 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
-                      >
-                        <div className="mr-5">
-                          <GroupPersonIcon2 />
-                        </div>
-                        Gabung Komunitas
-                      </a>
+                    <a
+                      className={`flex items-center ${isActive(
+                        "/gabung-komunitas"
+                      )} my-6 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
+                    >
+                      <div className="mr-5">
+                        <GroupPersonIcon2 />
+                      </div>
+                      Gabung Komunitas
+                    </a>
                     {/* </Link> */}
                   </li>
 
@@ -158,8 +163,11 @@ export default function Navbar() {
                   {/* LOGOUT */}
                   <li className="font-medium">
                     <a
-                      onClick={() => setIsLogout(true)}
-                      className="flex items-center transform transition-colors duration-200 border-r-4 border-transparent text-red-600"
+                      onClick={() => {
+                        setIsLogout(true)
+                        setIsMenuOpen(false)
+                      }}
+                      className="flex mb-4 mt-5 items-center transform transition-colors duration-200 border-r-4 border-transparent text-red-600"
                     >
                       <div className="mr-3 text-red-600">
                         <LogoutIcon />
@@ -174,12 +182,14 @@ export default function Navbar() {
         </div>
       </nav>
       <ConfirmModal
-       header = {"Konfirmasi Keluar?"}
-       message = {"Anda memiliki perubahan yang belum disimpan. Apakah Anda ingin membatalkan perubahan?"}
-       setShowModal = {setIsLogout}
-       showModal = {isLogout}
-       buttonText = {""}
-       handleConfirm = {handleLogout}
+        header={"Konfirmasi Keluar?"}
+        message={
+          "Anda memiliki perubahan yang belum disimpan. Apakah Anda ingin membatalkan perubahan?"
+        }
+        setShowModal={setIsLogout}
+        showModal={isLogout}
+        buttonText={""}
+        handleConfirm={handleLogout}
       />
     </>
   );

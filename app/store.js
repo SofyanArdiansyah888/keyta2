@@ -12,10 +12,10 @@ export const store = configureStore({
     [shopApi.reducerPath]: shopApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(
+    getDefaultMiddleware().concat([
       authApi.middleware,
       shopApi.middleware,
-      profileApi.middleware
-    ),
+      profileApi.middleware,
+    ]),
   devTools: true,
 });

@@ -1,22 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
-import { useRouter } from "next/router";
+import { COUNTRY_CODE } from "../../app/constant";
+import { setPhoneCookie, setTokenCookie } from "../../app/cookies";
+import { disableBack } from "../../app/utlis";
+import MaskotScreen from "../../components/Shared/MaskotScreen";
 import {
-  useSendSmsMutation,
-  useSendWhatsappMutation,
-  useVerifySmsMutation,
-  useVerifyWhatsappMutation,
+  useSendMessageMutation,
+  useVerifyMessageMutation,
 } from "../../services/auth.service";
 import { setAuthenticate } from "../../services/auth.slice";
 import styles from "../../styles/Login.module.css";
-import { COUNTRY_CODE } from "../../app/constant";
-import MaskotScreen from "../../components/Shared/MaskotScreen";
 const schema = yup.object({
   number1: yup.number().required().typeError(),
   number2: yup.number().required().typeError(),
@@ -32,14 +31,10 @@ export default function OTP() {
   const [isSMS, setIsSMS] = useState(false);
   const [isCountdown, setIsCountdown] = useState(false);
   const [countdown, setCountdown] = useState(timer);
-  const [sendWhatsapp, waData] = useSendWhatsappMutation({
-    fixedCacheKey: "send-whatsapp-otp",
-  });
-  const [sendSms, smsData] = useSendSmsMutation();
-  const [verifySms, verifySmsData] = useVerifySmsMutation();
-  const [verifyWhatsapp, verifyWaData] = useVerifyWhatsappMutation({
-    fixedCacheKey: "verify-whatsapp-otp",
-  });
+  const [sendMessage, messageData] = useSendMessageMutation();
+  const [sendVerify, verifyData] = useVerifyMessageMutation();
+  const [verifyError, setVerifyError] = useState("");
+ 
 
   const router = useRouter();
 
@@ -47,90 +42,99 @@ export default function OTP() {
   let authenticate = useSelector((state) => state.authSlice?.authenticate);
 
   useEffect(() => {
-    if (waData.data) dispatch(setAuthenticate(waData.data));
-    if (smsData.data) dispatch(setAuthenticate(smsData.data));
+    if(!authenticate?.user){
+      router.push('/login')
+    }
+
+    disableBack();
+  },[])
+  useEffect(() => {
+    if (messageData.data && messageData.isSuccess)
+      dispatch(setAuthenticate(messageData.data));
     return () => {};
-  }, [waData.isLoading, smsData.isLoading]);
+  }, [messageData.isSuccess]);
 
   useEffect(() => {
-    if (verifyWaData.data) dispatch(setAuthenticate(verifyWaData.data));
-    if (verifySmsData.data) dispatch(setAuthenticate(verifySmsData.data));
-    if (verifySmsData.data || verifyWaData.data) {
-      router.push("registration-profile", undefined, { shallow: true });
+    if (verifyData.data && verifyData.isSuccess) {
+      dispatch(setAuthenticate(verifyData.data.data));
+      setPhoneCookie(authenticate?.user?.phone);
+
+      if (authenticate?.user?.shop_id) {
+        setTokenCookie(verifyData.data.data.token);
+        router.push("/dashboard");
+        return;
+      }
+      router.push("registration-profile");
     }
     return () => {};
-  }, [verifySmsData.isLoading, verifyWaData.isLoading]);
+  }, [verifyData.isSuccess]);
+
+  useEffect(() => {
+    if (verifyData.isError) {
+      setVerifyError(verifyData.error.data.meta.message)
+    }
+    return () => {};
+  },[verifyData.isError]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
+    trigger,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const handleVerify = async (data) => {
-    
     const token = Object.values(data).reverse().toString().replaceAll(",", "");
-    try {
-      if (isSMS) {
-        const authyId = authenticate?.data?.user?.authy_id_sms;
-        verifySms({
-          authy_id: authyId,
-          token,
-        });
-        if (smsData.data?.data?.user?.shop_id) {
-          router.push("/dashboard", undefined, { shallow: true });
-          return;
-        }
-      } else {
-        const authyId = authenticate?.data?.user?.authy_id;
-        verifyWhatsapp({
-          authy_id: authyId,
-          token,
-        });
-        if (waData.data?.data?.user?.shop_id) {
-          router.push("/dashboard", undefined, { shallow: true });
-          return;
-        }
-      }
-    } catch (error) {
-      console.log(error);
+
+    if (isSMS) {
+      const authyId = authenticate?.authy_id_sms;
+      sendVerify({
+        type: "sms",
+        authy_id: authyId,
+        token,
+      });
+    } else {
+      const authyId = authenticate?.authy_id;
+      sendVerify({
+        type: "whatsapp",
+        authy_id: authyId,
+        token,
+      });
     }
   };
 
   const handleSendWhatsapp = async () => {
-    try {
-      const user = authenticate?.data?.user;
-      sendWhatsapp({
-        country_code: COUNTRY_CODE,
-        phone: user.phone,
-      });
-      setCountdown(timer);
-      setIsCountdown(true);
-    } catch (error) {
-      console.log(error);
-    }
+    const user = authenticate?.data?.user;
+    console.log(user)
+    sendMessage({
+      type: "whatsapp",
+      country_code: COUNTRY_CODE,
+      phone: user.phone,
+    });
+    setCountdown(timer);
+    setIsCountdown(true);
   };
 
   const handleSendSMS = async () => {
-    try {
-      const user = authenticate?.data?.user;
-      sendSms({
-        country_code: COUNTRY_CODE,
-        phone: user.phone,
-      });
-      setCountdown(timer);
-      setIsCountdown(true);
-      setIsSMS(true);
-    } catch (error) {
-      console.log(error);
-    }
+    const user = authenticate?.data?.user;
+    sendMessagee({
+      type: "sms",
+      country_code: COUNTRY_CODE,
+      phone: user.phone,
+    });
+    setCountdown(timer);
+    setIsCountdown(true);
+    setIsSMS(true);
   };
 
   const handleChange = (event, inputName) => {
+    setVerifyError("")
     if (event.target.value !== "")
       document.querySelector(`input[name=${inputName}]`).focus();
+    
   };
   return (
     <>
@@ -147,7 +151,7 @@ export default function OTP() {
             <h5>
               Kode verifikasi telah kami kirim melalui{" "}
               {isSMS ? "SMS" : "Whatsapp"} ke{" "}
-              <strong>+62{authenticate?.data?.user?.phone}</strong>
+              <strong>+62{authenticate?.user?.phone}</strong>
             </h5>
 
             <form onSubmit={handleSubmit(handleVerify)}>
@@ -157,7 +161,7 @@ export default function OTP() {
                   maxLength="1"
                   {...register("number1")}
                   className={`text-center w-[30px] ${
-                    errors.number1 ? "material-input-error" : "material-input"
+                    errors.number1 || verifyError ? "material-input-error" : "material-input"
                   }`}
                   onChange={(event) => handleChange(event, "number2")}
                 />
@@ -166,7 +170,7 @@ export default function OTP() {
                   maxLength={1}
                   {...register("number2")}
                   className={`text-center w-[30px] ${
-                    errors.number2 ? "material-input-error" : "material-input"
+                    errors.number2 || verifyError ? "material-input-error" : "material-input"
                   }`}
                   onChange={(event) => handleChange(event, "number3")}
                 />
@@ -175,7 +179,7 @@ export default function OTP() {
                   maxLength={1}
                   {...register("number3")}
                   className={`text-center w-[30px] ${
-                    errors.number3 ? "material-input-error" : "material-input"
+                    errors.number3 || verifyError ? "material-input-error" : "material-input"
                   }`}
                   onChange={(event) => handleChange(event, "number4")}
                 />
@@ -184,7 +188,7 @@ export default function OTP() {
                   maxLength={1}
                   {...register("number4")}
                   className={`text-center w-[30px] ${
-                    errors.number4 ? "material-input-error" : "material-input"
+                    errors.number4 || verifyError ? "material-input-error" : "material-input"
                   }`}
                   onChange={(event) => handleChange(event, "number5")}
                 />
@@ -193,7 +197,7 @@ export default function OTP() {
                   maxLength={1}
                   {...register("number5")}
                   className={`text-center w-[30px] ${
-                    errors.number5 ? "material-input-error" : "material-input"
+                    errors.number5 || verifyError ? "material-input-error" : "material-input"
                   }`}
                   onChange={(event) => handleChange(event, "number6")}
                 />
@@ -202,7 +206,7 @@ export default function OTP() {
                   maxLength={1}
                   {...register("number6")}
                   className={`text-center w-[30px] ${
-                    errors.number6 ? "material-input-error" : "material-input"
+                    errors.number6 || verifyError ? "material-input-error" : "material-input"
                   }`}
                   onChange={(event) => handleChange(event, "number7")}
                 />
@@ -211,8 +215,9 @@ export default function OTP() {
                   maxLength={1}
                   {...register("number7")}
                   className={`text-center w-[30px] ${
-                    errors.number7 ? "material-input-error" : "material-input"
+                    errors.number7 || verifyError ? "material-input-error" : "material-input"
                   }`}
+                  onChange={(event) => handleChange(event, "number1")}
                 />
               </div>
               {(errors.number1 ||
@@ -226,6 +231,12 @@ export default function OTP() {
                   Kode harus diisi
                 </a>
               )}
+
+              
+               { verifyError !== "" && <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ">
+                  {verifyError}
+                </a>}
+              
 
               <div className="text-[13px] mt-8">
                 Belum dapat kode ?{" "}

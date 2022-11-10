@@ -21,10 +21,10 @@ export default function Sidebar() {
   };
   return (
     <>
-      <div className="hidden lg:flex fixed shadow-xl h-screen">
+      <div className="hidden lg:flex fixed shadow-xl h-screen bg-white">
         {/* SIDEBAR */}
         <aside className="w-64 px-4">
-          <div className="overflow-y-auto py-4 px-3 gray-50 ">
+          <div className="overflow-y-auto py-4 px-3 ">
             {/* KEYTA LOGO */}
             <a
               href="/public/images/keyta.svg"

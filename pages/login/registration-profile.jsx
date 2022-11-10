@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/alt-text */
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
@@ -6,6 +7,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
+import { setLoginUserCookie, setTokenCookie } from "../../app/cookies";
+import { disableBack } from "../../app/utlis";
 import MaskotScreen from "../../components/Shared/MaskotScreen";
 import { useCreateShopMutation } from "../../services/shop.service";
 import styles from "../../styles/Login.module.css";
@@ -22,9 +25,22 @@ export default function RegistrationProfile() {
   const [isReferer, setIsReferer] = useState(false);
   const router = useRouter();
 
-  const [createShop] = useCreateShopMutation();
+  const [createShop, { data, isSuccess }] = useCreateShopMutation();
   const dispatch = useDispatch();
   let authenticate = useSelector((state) => state.authSlice?.authenticate);
+  
+  useEffect(() => {
+    disableBack();
+  },[])
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      setLoginUserCookie(authenticate.data.user.phone)
+      setTokenCookie(authenticate.data.token)
+      router.push("registration-success", undefined, { shallow: true });
+    }
+    return () => {};
+  }, [isSuccess]);
 
   const {
     register,
@@ -54,8 +70,6 @@ export default function RegistrationProfile() {
       });
 
       createShop(temp);
-
-      router.push("registration-success", undefined, { shallow: true });
     } catch (error) {
       console.log(error);
     }

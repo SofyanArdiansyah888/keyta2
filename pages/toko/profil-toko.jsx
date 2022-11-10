@@ -2,6 +2,7 @@
 import { Option, Select } from "@material-tailwind/react";
 import Image from "next/image";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { COUNTRY_CODE } from "../../app/constant";
 import Layout from "../../components/Layout/Layout";
 import KategoriModal from "../../components/Shared/KategoriModal";
@@ -9,6 +10,7 @@ import Modal from "../../components/Shared/Modal";
 import SumberModal from "../../components/Shared/SumberModal";
 export default function ProfilToko() {
   const [showModal, setShowModal] = useState(false)
+  let authenticate = useSelector((state) => state.authSlice?.authenticate);
   return (
     <>
       {/* CONTENT */}

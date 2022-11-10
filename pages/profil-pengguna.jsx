@@ -6,6 +6,7 @@ import InputPhone from "../components/Shared/InputPhone";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useSelector } from "react-redux";
 
 const schema = yup.object({
   phone: yup
@@ -17,6 +18,8 @@ const schema = yup.object({
 export default function ProfilPengguna() {
   const [isOpen, setIsOpen] = useState(false);
   const [isReset, setIsReset] = useState(false);
+  // let authenticate = useSelector((state) => state.authSlice?.authenticate);
+  // console.log(authenticate)
   const {
     register,
     handleSubmit,
@@ -89,7 +92,7 @@ export default function ProfilPengguna() {
           className="keyta-button mt-14 rounded-xl w-full"
           onClick={() => setIsOpen(true)}
         >
-          SIMPAN
+          Simpan
         </button>
       </div>
 
@@ -99,5 +102,6 @@ export default function ProfilPengguna() {
 }
 
 ProfilPengguna.getLayout = function getLayout(page) {
+  
   return <Layout>{page}</Layout>;
 };

@@ -1,15 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup";
-import Image from "next/image";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import * as yup from "yup";
 import MaskotScreen from "../../components/Shared/MaskotScreen";
 import styles from "../../styles/Login.module.css";
-import { COUNTRY_CODE } from "../../app/constant";
 
 import { useRouter } from "next/router";
 import InputPhone from "../../components/Shared/InputPhone";
+import { setCookie } from "cookies-next";
+import { useDispatch } from "react-redux";
+import { COUNTRY_CODE } from "../../app/constant";
+import { checkPhoneExist } from "../../app/cookies";
+import { useSendMessageMutation } from "../../services/auth.service";
+import { setAuthenticate } from "../../services/auth.slice";
 const schema = yup.object({
   phone: yup
     .number()
@@ -21,6 +25,8 @@ const schema = yup.object({
 export default function Login() {
   const [isReset, setIsReset] = useState(false);
   const router = useRouter();
+  const [sendMessage, { data, isSuccess }] = useSendMessageMutation();
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -28,15 +34,36 @@ export default function Login() {
     setValue,
     reset,
     values,
-  }= useForm({
+    control,
+    watch
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    if (isSuccess && data) {
+      dispatch(setAuthenticate(data.data));
+      router.push("/login/otp");
+    }
+    return () => {};
+  }, [isSuccess]);
+
+
+
   const handleLogin = async (data) => {
-    router.push({
-      pathname: "login/privacy-consent",
-      query: { ...data },
-    });
+    // IF PHONE NOT EXIST THEN MUST READ PRIVACY CONSENT FIRST
+    if (checkPhoneExist(data.phone)) {
+      sendMessage({
+        type: "whatsapp",
+        country_code: COUNTRY_CODE,
+        phone: data.phone,
+      });
+    } else {
+      router.push({
+        pathname: "login/privacy-consent",
+        query: { ...data },
+      });
+    }
   };
 
   return (
@@ -55,10 +82,11 @@ export default function Login() {
               <div className="mt-12 max-w-sm">
                 <InputPhone
                   isReset={isReset}
-                  setIsReset = {setIsReset}
-                  register={register('phone')}
+                  setIsReset={setIsReset}
+                  register={register("phone")}
                   errors={errors}
                   reset={reset}
+                  setValue={setValue}
                 />
                 {/* <label className="font-[600] text-[14px] ">Nomor Telepon</label>
                 <div className="relative w-max">
