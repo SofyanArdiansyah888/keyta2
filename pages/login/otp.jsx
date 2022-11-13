@@ -184,7 +184,7 @@ export default function OTP() {
             <h5>
               Kode verifikasi telah kami kirim melalui{" "}
               {isSMS ? "SMS" : "Whatsapp"} ke{" "}
-              <strong>+62{router.query.phone.substring(1)}</strong>
+              <strong>+62{router?.query?.phone?.substring(1)}</strong>
             </h5>
 
             <form onSubmit={handleSubmit(handleVerify)}>
