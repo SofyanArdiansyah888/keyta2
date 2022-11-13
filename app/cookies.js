@@ -28,6 +28,10 @@ export function setTokenCookie(token) {
   });
 }
 
+export function getTokenCookie() {
+  return getCookie('token')
+}
+
 export function clearTokenCookie(){
     deleteCookie('token');
 }

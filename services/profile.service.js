@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-const token = "";
+import { getTokenCookie } from "../app/cookies";
+const token = getTokenCookie();
 export const profileApi = createApi({
   reducerPath: "profileApi",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.BASE_URL }),

@@ -1,37 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
 import * as TERMS from "../../app/constant";
-import { setPhoneCookie } from "../../app/cookies";
 import MaskotScreen from "../../components/Shared/MaskotScreen";
-import { useSendMessageMutation } from "../../services/auth.service";
-import { setAuthenticate } from "../../services/auth.slice";
 import styles from "../../styles/Login.module.css";
 
 export default function PrivacyConsent() {
   const router = useRouter();
   const [isRead, setIsRead] = useState(false);
-  const [sendMessage, { data, isSuccess }] = useSendMessageMutation();
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    if (isSuccess && data) {
-      setPhoneCookie(data.data.user.phone)
-      dispatch(setAuthenticate(data.data));
-      router.push("otp");
-    }
-    return () => {};
-  }, [isSuccess]);
 
   const handleLanjut = () => {
     if (router.query.phone) {
-      sendMessage({
-        type: "whatsapp",
-        country_code: TERMS.COUNTRY_CODE,
-        phone: router.query.phone,
-      });
+      router.push(`/login/otp?phone=${router.query.phone}`);
     }
   };
 

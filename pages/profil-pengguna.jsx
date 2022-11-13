@@ -1,12 +1,16 @@
-import Image from "next/image";
-import Layout from "../components/Layout/Layout";
-import { COUNTRY_CODE } from "../app/constant";
-import { useState } from "react";
-import InputPhone from "../components/Shared/InputPhone";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useSelector } from "react-redux";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import * as yup from "yup";
+import Layout from "../components/Layout/Layout";
+import InputPhone from "../components/Shared/InputPhone";
+import {
+  useProfileQuery,
+  useUpdateProfileMutation,
+} from "../services/profile.service";
+import { setUser } from "../services/user.slice";
 
 const schema = yup.object({
   phone: yup
@@ -14,12 +18,25 @@ const schema = yup.object({
     .positive("Nomor Telepon tidak valid")
     .required("Nomor Telepon harus diisi")
     .typeError("Nomor Telepon tidak valid"),
+  name: yup.string().required("Nama Pengguna harus diisi"),
 });
 export default function ProfilPengguna() {
   const [isOpen, setIsOpen] = useState(false);
   const [isReset, setIsReset] = useState(false);
-  // let authenticate = useSelector((state) => state.authSlice?.authenticate);
-  // console.log(authenticate)
+  const { data, isLoading, isSuccess } = useProfileQuery();
+  const [updateProfile, updateData] = useUpdateProfileMutation();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      dispatch(setUser({ ...data.user }));
+      setValue("name", data?.user?.name);
+      setValue("phone", data?.user?.phone);
+    }
+    return () => {};
+  }, [isSuccess]);
+
   const {
     register,
     handleSubmit,
@@ -27,81 +44,89 @@ export default function ProfilPengguna() {
     setValue,
     reset,
     values,
+    watch,
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const handleForm = ({ name }) => {
+    updateProfile({ name });
+  };
+
   return (
     <>
-      <div className="max-w-md mx-auto mt-12">
-        {/* NAMA PENGGUNA  */}
-        <div>
-          <label className="font-[600] text-[14px] w-full ">
-            Nama Pengguna
-          </label>
-          <div className="relative w-full ">
-            <input
-              type="number"
-              //   {...register("phone")}
-              //   onChange={(event) => {
-              //     event.target.value === "" && setIsReset(false);
-              //     !isReset && setIsReset(true);
-              //   }}
-              className={`p-2 mt-4 text-xs w-full material-input  `}
-              placeholder="Masukkan Nama Pengguna"
-            />
-            {/* ${
-                  errors.phone?.message
-                    ? "material-input-error"
-                    : "material-input"
-                } */}
-            <div
-              className="absolute top-6 right-0"
-              onClick={() => {
-                reset({ phone: "" });
-                setIsReset(false);
-              }}
-            >
-              <Image
-                src="/icons/icon_close.svg"
-                height="18"
-                width="18"
-                alt="Logo"
+      <form onSubmit={handleSubmit(handleForm)}>
+        <div className="max-w-md mx-auto mt-12 px-10">
+          {/* NAMA PENGGUNA  */}
+          <div>
+            <label className="font-[600] text-[14px] w-full ">
+              Nama Pengguna
+            </label>
+            <div className="relative w-full ">
+              <input
+                type="text"
+                {...register("name")}
+                onChange={(event) => {
+                  event.target.value === "" && setIsReset(false);
+                  !isReset && setIsReset(true);
+                }}
+                className={`p-2  text-xs w-full material-input  `}
+                placeholder="Masukkan Nama Pengguna"
               />
+              {errors.name?.message && (
+                <a className="text-keytaCarnelian font-[600] block text-xs mt-1">
+                  {errors.name?.message}
+                </a>
+              )}
+              {isReset && (
+                <div
+                  className="absolute top-2 right-0"
+                  onClick={() => {
+                    reset({ name: "" });
+                    setIsReset(false);
+                  }}
+                >
+                  <Image
+                    src="/icons/icon_close.svg"
+                    height="18"
+                    width="18"
+                    alt="Logo"
+                  />
+                </div>
+              )}
             </div>
-
-            {/* {errors.phone?.message && (
-                      <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-6">
-                        {errors.phone?.message}
-                      </a>
-                    )} */}
           </div>
+
+          {/* NOMOR TELEPON  */}
+          <div className="mt-4">
+            <InputPhone
+              isReset={false}
+              setIsReset={setIsReset}
+              register={register("phone")}
+              errors={[]}
+              reset={reset}
+              disabled={true}
+            />
+          </div>
+
+          {updateData.isSuccess && (
+            <div className="keyta-button rounded-xl w-12 text-xs opacity-80 mt-6 mx-auto">
+              Berhasil disimpan
+            </div>
+          )}
+
+          <button
+            className="keyta-button mt-14 rounded-xl w-full"
+            onClick={() => setIsOpen(true)}
+          >
+            Simpan
+          </button>
         </div>
-
-        {/* NOMOR TELEPON  */}
-        <div className="mt-4">
-          <InputPhone
-            isReset={isReset}
-            setIsReset={setIsReset}
-            register={register("phone")}
-            errors={errors}
-            reset={reset}
-          />
-        </div>
-
-        <button
-          className="keyta-button mt-14 rounded-xl w-full"
-          onClick={() => setIsOpen(true)}
-        >
-          Simpan
-        </button>
-      </div>
-
-
+      </form>
     </>
   );
 }
 
 ProfilPengguna.getLayout = function getLayout(page) {
-  
   return <Layout>{page}</Layout>;
 };

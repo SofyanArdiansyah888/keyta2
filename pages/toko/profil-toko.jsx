@@ -1,23 +1,84 @@
 /* eslint-disable @next/next/no-img-element */
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Option, Select } from "@material-tailwind/react";
 import Image from "next/image";
-import { useState } from "react";
-import { useSelector } from "react-redux";
-import { COUNTRY_CODE } from "../../app/constant";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 import Layout from "../../components/Layout/Layout";
-import KategoriModal from "../../components/Shared/KategoriModal";
-import Modal from "../../components/Shared/Modal";
+import InputPhone from "../../components/Shared/InputPhone";
+import InputSelect from "../../components/Shared/InputSelect";
+import InputText from "../../components/Shared/InputText";
 import SumberModal from "../../components/Shared/SumberModal";
+import KategoriModal from "../../components/Shared/KategoriModal";
+import {
+  useShopQuery,
+  useUpdateShopMutation,
+} from "../../services/shop.service";
+import { useDispatch } from "react-redux";
+// import { setShop } from "../services/shop.slice";
+const schema = yup.object({
+  phone: yup
+    .number()
+    .positive("Nomor Telepon tidak valid")
+    .required("Nomor Telepon harus diisi")
+    .typeError("Nomor Telepon tidak valid"),
+
+  name: yup.string().required("Nama Pengguna harus diisi"),
+});
+
 export default function ProfilToko() {
-  const [showModal, setShowModal] = useState(false)
-  let authenticate = useSelector((state) => state.authSlice?.authenticate);
+  const [showSumberModal, setShowSumberModal] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const { data, isLoading, isSuccess } = useShopQuery();
+  const [updateToko, updateData] = useUpdateShopMutation();
+  const [isNameReset, setIsNameReset] = useState(false);
+  const [isAdressReset, setIsAdressReset] = useState(false);
+  const [isPhoneReset, setIsPhoneReset] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    reset,
+    values,
+    watch,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log(data)
+    if (data && isSuccess) {
+      
+      // dispatch(setShop({ ...data.data }));
+      setValue("name", data?.data?.name);
+      setValue("address", data?.data?.address);
+      setValue("phone", data?.data?.phone);
+      setValue("category", data?.data?.category);
+      
+    }
+    return () => {};
+  }, [isSuccess]);
+
   return (
     <>
       {/* CONTENT */}
       <div className="w-full text-center p-8 font-roboto">
         <div className="flex flex-col-reverse md:flex-row gap-8">
           <div className="flex-1 flex flex-col gap-4 text-left max-w-md">
-            <div className="flex justify-end">
+            <div className="flex justify-between">
+              {/* PHOTO PROFIL */}
+              <div className="rounded-full mx-auto w-[160px] bg-gray-200 text-center pt-10">
+                <Image
+                  src="/icons/photo.svg"
+                  alt="Info"
+                  height={70}
+                  width={70}
+                />
+              </div>
+
               <div>
                 <h2 className="font-semibold">Logo Toko</h2>
                 <p className="text-xs">Upload degan formar JPG, JPEG, PNG</p>
@@ -28,131 +89,42 @@ export default function ProfilToko() {
             </div>
             {/* NAMA TOKO  */}
             <div>
-              <label className="font-[600] text-[14px] ">Nama Toko</label>
-              <div className="relative ">
-                <input
-                  type="text"
-                  //   {...register("nama_toko")}
-                  //   onChange={(event) => {
-                  //     event.target.value === "" && setIsReset(false);
-                  //     !isReset && setIsReset(true);
-                  //   }}
-                  className={`p-2 text-xs w-full  material-input  `}
-                  placeholder="Masukkan Nama Toko"
-                />
-                {/* ${
-                  errors.nama_toko?.message
-                    ? "material-input-error"
-                    : "material-input"
-                } */}
-                <div
-                  className="absolute top-2 right-0"
-                  onClick={() => {
-                    reset({ nama_toko: "" });
-                    setIsReset(false);
-                  }}
-                >
-                  <Image
-                    src="/icons/icon_close.svg"
-                    height="18"
-                    width="18"
-                    alt="Logo"
-                  />
-                </div>
-
-                {/* {errors.nama_toko?.message && (
-                      <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-6">
-                        {errors.nama_toko?.message}
-                      </a>
-                    )} */}
-              </div>
+              <InputText
+                errorMessage={errors?.name?.message}
+                reset={reset}
+                name="name"
+                label="Nama Toko"
+                register={register("name")}
+                placeholder="Masukkan Nama Toko"
+                isReset={isNameReset}
+                setIsReset={setIsNameReset}
+              />
             </div>
 
             {/* ALAMAT TOKO  */}
             <div>
-              <label className="font-[600] text-[14px] ">Alamat Toko</label>
-              <div className="relative  ">
-                <input
-                  type="text"
-                  //   {...register("alamat_toko")}
-                  //   onChange={(event) => {
-                  //     event.target.value === "" && setIsReset(false);
-                  //     !isReset && setIsReset(true);
-                  //   }}
-                  className={`p-2  text-xs w-full  material-input  `}
-                  placeholder="Masukkan Alamat Toko"
-                />
-                {/* ${
-                  errors.alamat_toko?.message
-                    ? "material-input-error"
-                    : "material-input"
-                } */}
-                <div
-                  className="absolute top-2 right-0"
-                  onClick={() => {
-                    reset({ alamat_toko: "" });
-                    setIsReset(false);
-                  }}
-                >
-                  <Image
-                    src="/icons/icon_close.svg"
-                    height="18"
-                    width="18"
-                    alt="Logo"
-                  />
-                </div>
-
-                {/* {errors.alamat_toko?.message && (
-                      <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-6">
-                        {errors.alamat_toko?.message}
-                      </a>
-                    )} */}
-              </div>
+              <InputText
+                errorMessage={errors?.address?.message}
+                reset={reset}
+                name="address"
+                label="Alamat Toko"
+                register={register("address")}
+                placeholder="Masukkan Alamat Toko"
+                isReset={isAdressReset}
+                setIsReset={setIsAdressReset}
+              />
             </div>
 
             {/* NOMOR TELEPON  */}
             <div>
-              <label className="font-[600] text-[14px] ">Nomor Telepon</label>
-              <div className="relative  ">
-                <span className="text-[11px] bg-[#F1F2F5] border-[#CED2D9] rounded-[4px]  absolute left-0 top-2 p-1  ">
-                  +{COUNTRY_CODE}
-                </span>
-                <input
-                  type="number"
-                  //   {...register("phone")}
-                  //   onChange={(event) => {
-                  //     event.target.value === "" && setIsReset(false);
-                  //     !isReset && setIsReset(true);
-                  //   }}
-                  className={`p-2  ml-8 text-xs w-[93%] material-input  `}
-                  placeholder="Masukkan Nomor Telepon"
-                />
-                {/* ${
-                  errors.phone?.message
-                    ? "material-input-error"
-                    : "material-input"
-                } */}
-                <div
-                  className="absolute top-2 right-0"
-                  onClick={() => {
-                    reset({ phone: "" });
-                    setIsReset(false);
-                  }}
-                >
-                  <Image
-                    src="/icons/icon_close.svg"
-                    height="18"
-                    width="18"
-                    alt="Logo"
-                  />
-                </div>
-
-                {/* {errors.phone?.message && (
-                      <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-6">
-                        {errors.phone?.message}
-                      </a>
-                    )} */}
-              </div>
+              <InputPhone
+                isReset={isPhoneReset}
+                setIsReset={setIsPhoneReset}
+                register={register("phone")}
+                errors={[]}
+                reset={reset}
+                disabled={false}
+              />
             </div>
 
             {/* YELLOW BOX  */}
@@ -172,36 +144,44 @@ export default function ProfilToko() {
             </div>
 
             {/* DARIMANA ANDA MENGETAHUI KEYTA  */}
-            <div className="material-select ">
-              <Select
-                variant="static"
+            <div>
+              <InputSelect
+                name="category"
                 label="Kategori Penjualan"
-                placeholder="Pilih kategori penjualan anda"
-              >
-                <Option>Iklan di facebook</Option>
-                <Option>Twitter</Option>
-                <Option>Instagram</Option>
-              </Select>
+                register={register("category")}
+                placeholder="Pilih Kategori Penjualan Anda"
+                errorMessage={""}
+              />
             </div>
 
             {/* DARIMANA ANDA MENGETAHUI KEYTA  */}
-            <div className="material-select ">
-              <Select variant="static" label="Darimana Anda Mengetahui Keyta ?">
-                <Option>Iklan di facebook</Option>
-                <Option>Twitter</Option>
-                <Option>Instagram</Option>
-              </Select>
+            <div>
+              <InputSelect
+                name="sumber"
+                label="Dari Mana Anda Mengetahui Keyta?"
+                register={register("sumber")}
+                placeholder="Pilih Sumber Anda Mengetahui Keyta?"
+                errorMessage={""}
+                setModalOpen={setShowSumberModal}
+              />
             </div>
 
             <div className=" mt-12">
-              <button className="keyta-button w-full rounded-xl" onClick={() => setShowModal(true)}>Simpan</button>
+              <button
+                className="keyta-button w-full rounded-xl"
+                onClick={() => setShowModal(true)}
+              >
+                Simpan
+              </button>
             </div>
           </div>
 
           {/* FITUR PREMIUM AKTIF */}
           <div className="flex-1">
             <div className=" mx-auto max-w-sm">
-              <h1 className="text-left text-xl mb-4 font-semibold">Fitur Premium Aktif</h1>
+              <h1 className="text-left text-xl mb-4 font-semibold">
+                Fitur Premium Aktif
+              </h1>
               <div className="rouded-card px-4 pt-4 pb-6 ">
                 <div className="relative">
                   <div className="absolute top-3">
@@ -219,7 +199,9 @@ export default function ProfilToko() {
                       <button className="keyta-button rounded-lg">
                         Perpanjang
                       </button>
-                      <button className="text-keytaDarkBlue w-full">Upgrade</button>
+                      <button className="text-keytaDarkBlue w-full">
+                        Upgrade
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -233,12 +215,20 @@ export default function ProfilToko() {
         </div>
       </div>
       <SumberModal
-      header="Anda Belum Isi Data"
-      message="Lengkapi Profil Toko Anda, agar Keyta bisa memberikan layanan terbaik untuk Anda."
-      buttonText="Lanjut"
-      showModal={showModal}
-      setShowModal = {setShowModal}
-      handleButton = {() => setShowModal(false)}
+        header="Anda Belum Isi Data"
+        message="Lengkapi Profil Toko Anda, agar Keyta bisa memberikan layanan terbaik untuk Anda."
+        buttonText="Lanjut"
+        showModal={showSumberModal}
+        setShowModal={setShowSumberModal}
+        handleButton={() => setShowModal(false)}
+      />
+      <KategoriModal
+        header="Anda Belum Isi Data"
+        message="Lengkapi Profil Toko Anda, agar Keyta bisa memberikan layanan terbaik untuk Anda."
+        buttonText="Lanjut"
+        showModal={showCategoryModal}
+        setShowModal={setShowCategoryModal}
+        handleButton={() => setShowModal(false)}
       />
     </>
   );

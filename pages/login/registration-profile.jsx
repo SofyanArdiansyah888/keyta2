@@ -7,16 +7,19 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
-import { setLoginUserCookie, setTokenCookie } from "../../app/cookies";
+import { setTokenCookie } from "../../app/cookies";
 import { disableBack } from "../../app/utlis";
 import MaskotScreen from "../../components/Shared/MaskotScreen";
 import { useCreateShopMutation } from "../../services/shop.service";
 import styles from "../../styles/Login.module.css";
-const schema = yup.object({
-  user: yup.string().required("Nama Pengguna Harus Diisi"),
-  shop: yup.string().required("Nama Toko Harus Diisi"),
-  referrer: yup.string().nullable(true),
-});
+
+const schema = yup
+  .object({
+    user: yup.string().required("Nama Pengguna Harus Diisi"),
+    shop: yup.string().required("Nama Toko Harus Diisi"),
+    referrer: yup.string().nullable(true),
+  })
+  .required();
 
 export default function RegistrationProfile() {
   const [userReset, setUserReset] = useState(false);
@@ -26,17 +29,16 @@ export default function RegistrationProfile() {
   const router = useRouter();
 
   const [createShop, { data, isSuccess }] = useCreateShopMutation();
-  const dispatch = useDispatch();
+
   let authenticate = useSelector((state) => state.authSlice?.authenticate);
-  
+
   useEffect(() => {
     disableBack();
-  },[])
+  }, []);
 
   useEffect(() => {
     if (isSuccess && data) {
-      setLoginUserCookie(authenticate.data.user.phone)
-      setTokenCookie(authenticate.data.token)
+      setTokenCookie(authenticate.token);
       router.push("registration-success", undefined, { shallow: true });
     }
     return () => {};
@@ -57,10 +59,10 @@ export default function RegistrationProfile() {
         name: shop,
         referer,
         user_attributes: {
-          id: authenticate.data.user.id,
+          id: authenticate?.user?.id,
           name: user,
         },
-        token: authenticate?.data?.token,
+        token: authenticate?.token,
       };
 
       Object.keys(temp).forEach((key) => {
@@ -81,7 +83,12 @@ export default function RegistrationProfile() {
         <div className={styles.right_content_inner}>
           <Image src="/images/keyta.svg" height="30" width="117" alt="Logo" />
           <h1>Masukkan Data Profil</h1>
-          <form onSubmit={handleSubmit(handleCreate)}>
+          <form
+            onSubmit={handleSubmit(handleCreate)}
+            onKeyDown={(e) => (e) => {
+              if (e.code === "Enter") e.preventDefault();
+            }}
+          >
             {/* INPUT USER */}
             <div className="mt-12">
               <label className="font-[600] text-[13px] ">Nama Pengguna</label>
@@ -239,9 +246,7 @@ export default function RegistrationProfile() {
                 )}
               </div>
             </div>
-            <button type="submit" className="keyta-button mt-12">
-              Simpan
-            </button>
+            <button className="keyta-button mt-12">Simpan</button>
           </form>
         </div>
       </div>

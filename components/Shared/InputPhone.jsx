@@ -6,6 +6,7 @@ export default function InputPhone({
   register,
   errors,
   reset,
+  disabled = false,
   setValue = null,
   label = "Nomor Telepon",
 }) {
@@ -18,16 +19,18 @@ export default function InputPhone({
         </span>
         <input
           type="number"
+          disabled={disabled}
           {...register}
           onChange={(event) => {
             const value = event.target.value;
-            if(value[0] == "0"){
-              setValue('phone',value.substring(1))
+            if (value[0] !== "0") {
+              setValue("phone", `${value}`);
+            }
+            if (value === "") {
+              reset({ phone: "" });
             }
             value === "" && setIsReset(false);
             !isReset && setIsReset(true);
-         
-          
           }}
           className={`p-2 mt-2  ml-8 text-xs w-[93%] material-input  `}
           placeholder="Masukkan Nomor Telepon"
@@ -50,7 +53,7 @@ export default function InputPhone({
         )}
 
         {errors.phone?.message && (
-          <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-6">
+          <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-8">
             {errors.phone?.message}
           </a>
         )}

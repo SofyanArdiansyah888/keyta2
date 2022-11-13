@@ -69,11 +69,14 @@ export default function Navbar() {
             {isMenuOpen && (
               <div
                 id="profileMenu"
-                className="absolute w-[270px] px-5 py-3 z-[9999] text-[#A1A9B3]  font-inter bg-white rounded-lg shadow border top-[53px] right-1"
+                className="absolute w-[270px] px-5 py-3 z-[9999] text-[#A1A9B3]  font-inter bg-white rounded-lg shadow border top-[53px] right-1 cursor-pointer"
               >
                 {/* PROFILE NAME & AVATAR */}
                 <Link href="/profil-pengguna">
-                  <div className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg">
+                  <div
+                    className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg "
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     <Image
                       src="/images/keyta.svg"
                       height={40}
@@ -96,6 +99,7 @@ export default function Navbar() {
                         className={`flex items-center ${isActive(
                           "/profil-pengguna"
                         )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
+                        onClick={() => setIsMenuOpen(false)}
                       >
                         <div className="mr-5">
                           <PersonIcon />
@@ -113,6 +117,7 @@ export default function Navbar() {
                         className={`flex items-center my-6 transform ${isActive(
                           "/toko/profil-toko"
                         )} transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
+                        onClick={() => setIsMenuOpen(false)}
                       >
                         <div className="mr-5">
                           <TokoIcon />
@@ -127,12 +132,13 @@ export default function Navbar() {
                   {/* AJAK TEMAN */}
                   <li className="font-medium">
                     <h6 className="my-5 text-xs">Komunitas</h6>
-                    <Link href="ajak-teman-pakai-keyta">
+                    <Link href="/ajak-teman-pakai-keyta">
                       <a
                         href="#"
                         className={`flex items-center ${isActive(
                           "/ajak-teman-pakai-keyta"
                         )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
+                        onClick={() => setIsMenuOpen(false)}
                       >
                         <div className="mr-5">
                           <GroupPersonIcon />
@@ -148,7 +154,7 @@ export default function Navbar() {
                     <a
                       className={`flex items-center ${isActive(
                         "/gabung-komunitas"
-                      )} my-6 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
+                      )} cursor-pointer my-6 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                     >
                       <div className="mr-5">
                         <GroupPersonIcon2 />
@@ -164,10 +170,10 @@ export default function Navbar() {
                   <li className="font-medium">
                     <a
                       onClick={() => {
-                        setIsLogout(true)
-                        setIsMenuOpen(false)
+                        setIsLogout(true);
+                        setIsMenuOpen(false);
                       }}
-                      className="flex mb-4 mt-5 items-center transform transition-colors duration-200 border-r-4 border-transparent text-red-600"
+                      className="flex mb-4 mt-5 items-center transform transition-colors duration-200 border-r-4 border-transparent cursor-pointer text-red-600"
                     >
                       <div className="mr-3 text-red-600">
                         <LogoutIcon />

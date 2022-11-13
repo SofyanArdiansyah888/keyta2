@@ -31,42 +31,91 @@ export default function SumberModal({
                 </div>
                 {/*body*/}
                 <div className=" px-6 pb-12 ">
-                  <div className="flex flex-col text-slate-500 text-sm leading-relaxed">
-                    <Radio id="html" name="type" label="Google Playstore" />
-                    <Radio id="html" name="type" label="Media Sosial" />
-                    <Radio id="html" name="type" label="Refferral" />
-                    <Radio id="html" name="type" label=" Iklan / Website" />
-                    <div className="flex flex-row">
-                      <Radio
-                        id="html"
-                        name="type"
-                        label=""
-                        containerProps={() => (
-                          <>
-                            <button>test</button>
-                          </>
-                        )}
+                  <div className="flex flex-col text-slate-500 text-md leading-relaxed px-5 pt-8 ">
+                    <div class="flex items-center mb-4">
+                      <input
+                        id="sumber-1"
+                        type="radio"
+                        value=""
+                        name="sumber"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
                       />
-                      <div className="relative w-full  ">
+                      <label
+                        for="sumber-1"
+                        class="ml-2 text-sm font-medium text-gray-700 "
+                      >
+                        Google Playstore
+                      </label>
+                    </div>
+
+                    <div class="flex items-center mb-4">
+                      <input
+                        id="sumber-2"
+                        type="radio"
+                        value=""
+                        name="sumber"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                      />
+                      <label
+                        for="sumber-2"
+                        class="ml-2 text-sm font-medium text-gray-700 "
+                      >
+                        Media Sosial
+                      </label>
+                    </div>
+
+                    <div class="flex items-center mb-4">
+                      <input
+                        id="sumber-3"
+                        type="radio"
+                        value=""
+                        name="sumber"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                      />
+                      <label
+                        for="sumber-3"
+                        class="ml-2 text-sm font-medium text-gray-700 "
+                      >
+                        Referal
+                      </label>
+                    </div>
+
+                    <div class="flex items-center mb-4">
+                      <input
+                        id="sumber-4"
+                        type="radio"
+                        value=""
+                        name="sumber"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                      />
+                      <label
+                        for="sumber-4"
+                        class="ml-2 text-sm font-medium text-gray-700 "
+                      >
+                        Iklan / Website
+                      </label>
+                    </div>
+
+                    <div class="flex items-center mb-4">
+                      <input
+                        id="sumber-5"
+                        type="radio"
+                        value=""
+                        name="sumber"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                      />
+                      <div className="relative w-full ml-3  ">
                         <input
                           type="text"
-                          //   {...register("alamat_toko")}
-                          //   onChange={(event) => {
-                          //     event.target.value === "" && setIsReset(false);
-                          //     !isReset && setIsReset(true);
-                          //   }}
+       
                           className={`p-2 pl-0  text-xs   material-input w-full  `}
                           placeholder="Sumber Lain"
                         />
-                        {/* ${
-                  errors.alamat_toko?.message
-                    ? "material-input-error"
-                    : "material-input"
-                } */}
+
                         <div
                           className="absolute top-2 right-0"
                           onClick={() => {
-                            reset({ alamat_toko: "" });
+                            reset({ sumber_lain: "" });
                             setIsReset(false);
                           }}
                         >
@@ -78,11 +127,7 @@ export default function SumberModal({
                           />
                         </div>
 
-                        {/* {errors.alamat_toko?.message && (
-                      <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-6">
-                        {errors.alamat_toko?.message}
-                      </a>
-                    )} */}
+               
                       </div>
                     </div>
                   </div>

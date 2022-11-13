@@ -35,7 +35,7 @@ export default function Login() {
             
             <h6 className="mt-2">Klik <strong> Lanjut </strong> untuk memulai berjualan di keyta</h6>
             <button className="keyta-button w-2/3 rounded-xl mt-16" onClick={() => {
-              router.push("/dashboard", undefined, { shallow: true });
+              router.push("/dashboard");
             }}>Lanjut</button>
           </div>
         </div>
