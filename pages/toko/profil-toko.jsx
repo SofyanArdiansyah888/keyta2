@@ -16,6 +16,7 @@ import {
   useUpdateShopMutation,
 } from "../../services/shop.service";
 import { useDispatch } from "react-redux";
+import Modal from "../../components/Shared/Modal";
 // import { setShop } from "../services/shop.slice";
 const schema = yup.object({
   phone: yup
@@ -28,8 +29,12 @@ const schema = yup.object({
 });
 
 export default function ProfilToko() {
+  const [showModal, setShowModal] = useState(false);
   const [showSumberModal, setShowSumberModal] = useState(false);
+
   const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [categoryValue, setCategoryValue] = useState();
+
   const { data, isLoading, isSuccess } = useShopQuery();
   const [updateToko, updateData] = useUpdateShopMutation();
   const [isNameReset, setIsNameReset] = useState(false);
@@ -49,15 +54,14 @@ export default function ProfilToko() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    console.log(data)
     if (data && isSuccess) {
-      
+      let temp = data?.data;
       // dispatch(setShop({ ...data.data }));
-      setValue("name", data?.data?.name);
-      setValue("address", data?.data?.address);
-      setValue("phone", data?.data?.phone);
-      setValue("category", data?.data?.category);
-      
+      setValue("name", temp?.name);
+      setValue("address", temp?.address);
+      setValue("phone", temp?.phone);
+      setValue("category", temp?.category);
+      if (!(temp?.address || temp?.phone || temp?.category)) setShowModal(true);
     }
     return () => {};
   }, [isSuccess]);
@@ -151,6 +155,7 @@ export default function ProfilToko() {
                 register={register("category")}
                 placeholder="Pilih Kategori Penjualan Anda"
                 errorMessage={""}
+                setModalOpen={setShowCategoryModal}
               />
             </div>
 
@@ -215,12 +220,9 @@ export default function ProfilToko() {
         </div>
       </div>
       <SumberModal
-        header="Anda Belum Isi Data"
-        message="Lengkapi Profil Toko Anda, agar Keyta bisa memberikan layanan terbaik untuk Anda."
-        buttonText="Lanjut"
         showModal={showSumberModal}
         setShowModal={setShowSumberModal}
-        handleButton={() => setShowModal(false)}
+        setProfilValue={setValue}
       />
       <KategoriModal
         header="Anda Belum Isi Data"
@@ -228,6 +230,13 @@ export default function ProfilToko() {
         buttonText="Lanjut"
         showModal={showCategoryModal}
         setShowModal={setShowCategoryModal}
+      />
+      <Modal
+        header="Anda Belum Isi Data"
+        message="Lengkapi Profil Toko Anda, agar Keyta bisa memberikan layanan terbaik untuk Anda."
+        setShowModal={setShowModal}
+        showModal={showModal}
+        buttonText="Lanjut"
         handleButton={() => setShowModal(false)}
       />
     </>

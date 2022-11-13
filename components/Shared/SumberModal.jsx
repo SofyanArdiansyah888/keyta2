@@ -2,13 +2,29 @@ import { useState } from "react";
 import { Radio } from "@material-tailwind/react";
 import Image from "next/image";
 export default function SumberModal({
-  header,
-  message,
   setShowModal,
   showModal,
-  buttonText,
-  handleButton,
+  setProfilValue,
 }) {
+  const [value, setValue] = useState();
+  const [otherValue, setOtherValue] = useState();
+  const handleButton = () => {
+    setShowModal(false);
+    if (value === "Other") setProfilValue('sumber',otherValue);
+    else setProfilValue('sumber',value);
+  };
+
+  const handleChange = (event) => {
+    setValue(event.currentTarget.value);
+    if (event.currentTarget.value !== "Other") {
+      setOtherValue("");
+    }
+  };
+  const handleInputChange = (event) => {
+    if (value === "Other") {
+      setOtherValue(event?.target?.value);
+    }
+  };
   return (
     <>
       {showModal && (
@@ -19,7 +35,7 @@ export default function SumberModal({
               <div className="border-0 rounded-2xl shadow-lg relative flex flex-col bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 rounded-t">
-                  <h3 className="text-xl font-bold">{header}</h3>
+                  <h3 className="text-xl font-bold">Anda Belum Isi Data</h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
@@ -36,9 +52,11 @@ export default function SumberModal({
                       <input
                         id="sumber-1"
                         type="radio"
-                        value=""
                         name="sumber"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                        value="Google Playstore"
+                        onChange={handleChange}
+                        checked={value === "Google Playstore"}
                       />
                       <label
                         for="sumber-1"
@@ -52,9 +70,11 @@ export default function SumberModal({
                       <input
                         id="sumber-2"
                         type="radio"
-                        value=""
                         name="sumber"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                        value="Media Sosial"
+                        onChange={handleChange}
+                        checked={value === "Media Sosial"}
                       />
                       <label
                         for="sumber-2"
@@ -68,9 +88,11 @@ export default function SumberModal({
                       <input
                         id="sumber-3"
                         type="radio"
-                        value=""
                         name="sumber"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                        value="Referal"
+                        onChange={handleChange}
+                        checked={value === "Referal"}
                       />
                       <label
                         for="sumber-3"
@@ -84,9 +106,11 @@ export default function SumberModal({
                       <input
                         id="sumber-4"
                         type="radio"
-                        value=""
                         name="sumber"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                        value="Iklan / Website"
+                        onChange={handleChange}
+                        checked={value === "Iklan / Website"}
                       />
                       <label
                         for="sumber-4"
@@ -100,34 +124,38 @@ export default function SumberModal({
                       <input
                         id="sumber-5"
                         type="radio"
-                        value=""
                         name="sumber"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                        value="Other"
+                        onChange={handleChange}
+                        checked={value === "Other"}
                       />
                       <div className="relative w-full ml-3  ">
                         <input
                           type="text"
-       
                           className={`p-2 pl-0  text-xs   material-input w-full  `}
                           placeholder="Sumber Lain"
+                          onChange={handleInputChange}
+                          value={otherValue}
                         />
 
-                        <div
-                          className="absolute top-2 right-0"
-                          onClick={() => {
-                            reset({ sumber_lain: "" });
-                            setIsReset(false);
-                          }}
-                        >
-                          <Image
-                            src="/icons/icon_close.svg"
-                            height="18"
-                            width="18"
-                            alt="Logo"
-                          />
-                        </div>
-
-               
+                        {otherValue !== "" && (
+                          <div
+                            className="absolute top-2 right-0"
+                            onClick={() => {
+                              setOtherValue("");
+                              // reset({ sumber_lain: "" });
+                              // setIsReset(false);
+                            }}
+                          >
+                            <Image
+                              src="/icons/icon_close.svg"
+                              height="18"
+                              width="18"
+                              alt="Logo"
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -137,9 +165,9 @@ export default function SumberModal({
                   <button
                     className="flex-1 keyta-button  rounded-lg"
                     type="button"
-                    onClick={() => handleButton()}
+                    onClick={handleButton}
                   >
-                    {buttonText}
+                    Confirm
                   </button>
                 </div>
               </div>

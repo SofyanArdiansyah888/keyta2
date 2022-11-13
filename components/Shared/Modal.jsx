@@ -39,7 +39,7 @@ export default function Modal({
                   <button
                     className="flex-1 keyta-button  rounded-lg"
                     type="button"
-                    onClick={() => handleButton()}
+                    onClick={handleButton}
                   >
                     {buttonText}
                   </button>

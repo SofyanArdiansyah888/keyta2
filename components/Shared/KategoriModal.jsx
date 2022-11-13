@@ -1,33 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionHeader,
   AccordionBody,
   Checkbox,
 } from "@material-tailwind/react";
+import { useShopCategoryQuery } from "../../services/shop.service";
 export default function KategoriModal({
   header,
   message,
   setShowModal,
   showModal,
   buttonText,
-  handleButton,
 }) {
   const [open, setOpen] = useState(0);
+  const [accordions, setAccordions] = useState([]);
+  const { data, isLoading, isSuccess } = useShopCategoryQuery();
+  
+  useEffect(() => {
+    if (data && isSuccess) {
+      setAccordions(data?.category);
+    }
+    return () => {};
+  }, [isSuccess]);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
-  const accordions = [
-    'Art & Craft',
-    'Elektronik',
-    'Fashion',
-    'Ibu & Bayi',
-    'Jasa',
-    'Makanan',
-    'Minuman',
-    'Perawatan & Kecantikan'
-  ]
+
   return (
     <>
       {showModal && (
@@ -51,23 +51,31 @@ export default function KategoriModal({
                 {/*body*/}
                 <div className="relative px-6 pb-12 overflow-y-scroll max-h-[350px]">
                   <>
-                    {accordions.map((value,index) => <><Accordion
-                      open={open === index}
-                      icon={<Icon id={index} open={open} />}
-                    >
-                      <AccordionHeader
-                        className="text-md font-semibold"
-                        onClick={() => handleOpen(index)}
-                      >
-                        {value}
-                      </AccordionHeader>
-                      <AccordionBody className="flex flex-col">
-                        <Checkbox color="blue" defaultChecked label="hampers" />
-                        <Checkbox color="blue" defaultChecked label="hampers" />
-                        <Checkbox color="blue" defaultChecked label="hampers" />
-                      </AccordionBody>
-                    </Accordion></> )}
-                   
+                    {accordions.map((category, index) => (
+                      <>
+                        <Accordion
+                          open={open === index}
+                          icon={<Icon id={index} open={open} />}
+                        >
+                          <AccordionHeader
+                            className="text-md font-semibold"
+                            onClick={() => handleOpen(index)}
+                          >
+                            {category.category}
+                          </AccordionHeader>
+                          <AccordionBody className="flex flex-col">
+                            {category.subcategories.map((subcategory) => (
+                              <Checkbox
+                                key={subcategory.id}
+                                color="blue"
+                                value={subcategory.subcategory}
+                                label={subcategory.subcategory}
+                              />
+                            ))}
+                          </AccordionBody>
+                        </Accordion>
+                      </>
+                    ))}
                   </>
                 </div>
                 {/*footer*/}
