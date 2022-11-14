@@ -58,7 +58,7 @@ export default function ProfilToko() {
     formState: { errors },
     setValue,
     reset,
-    values,
+    getValues,
     watch,
   } = useForm({
     resolver: yupResolver(schema),
@@ -248,6 +248,7 @@ export default function ProfilToko() {
         showModal={showCategoryModal}
         setShowModal={setShowCategoryModal}
         setProfilValue={setValue}
+        getValues={getValues}
       />
       <Modal
         header="Anda Belum Isi Data"

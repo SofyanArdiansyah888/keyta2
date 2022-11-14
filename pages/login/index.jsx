@@ -30,20 +30,18 @@ export default function Login() {
   });
 
   const handleLogin = async (data) => {
-    if (data.phone[0] !== "0") {
-      setError("phone", {
-        type: "custom",
-        message: "Nomor Telepon harus diawali angka 0",
-      });
-      return;
-    }
+    let phone = data.phone
+    if(data.phone[0] === "0") phone = phone.toString().substring(1)
+
     // IF PHONE NOT EXIST THEN MUST READ PRIVACY CONSENT FIRST
     if (checkPhoneExist(data.phone)) {
-      router.push(`/login/otp?phone=${data.phone}`);
+      router.push(`/login/otp?phone=${phone}`);
     } else {
       router.push({
         pathname: "login/privacy-consent",
-        query: { ...data },
+        query: { 
+          phone
+         },
       });
     }
   };

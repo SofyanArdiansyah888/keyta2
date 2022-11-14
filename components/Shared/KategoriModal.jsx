@@ -7,15 +7,16 @@ import {
 } from "@material-tailwind/react";
 import { useShopCategoryQuery } from "../../services/shop.service";
 export default function KategoriModal({
-  
   setShowModal,
   showModal,
-  setProfilValue
+  setProfilValue,
+  getValues,
 }) {
   const [open, setOpen] = useState(0);
   const [accordions, setAccordions] = useState([]);
   const { data, isLoading, isSuccess } = useShopCategoryQuery();
-  
+  const [selectedSubCategory, setSelectedSubcategory] = useState([]);
+
   useEffect(() => {
     if (data && isSuccess) {
       setAccordions(data?.category);
@@ -25,6 +26,24 @@ export default function KategoriModal({
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
+  };
+
+  const handleCheckbox = (event, category) => {
+    
+    setProfilValue("category", category.category);
+    if (event.target.checked) {
+      setSelectedSubcategory((subcat) => [...subcat, {
+        category: category.category,
+        subcategory: event.target.value
+      }]);
+      // setProfilValue("subcategory", result.toString());
+    }
+    // console.log(result);
+  };
+
+  const handleLanjut = () => {
+    console.log(selectedSubCategory)
+    setShowModal(false);
   };
 
   return (
@@ -64,12 +83,31 @@ export default function KategoriModal({
                           </AccordionHeader>
                           <AccordionBody className="flex flex-col">
                             {category.subcategories.map((subcategory) => (
-                              <Checkbox
-                                key={subcategory.id}
-                                color="blue"
-                                value={subcategory.subcategory}
-                                label={subcategory.subcategory}
-                              />
+                              <>
+                                <div class="flex items-center mb-6 ml-4 font-roboto">
+                                  <input
+                                    id="default-checkbox"
+                                    type="checkbox"
+                                    value={subcategory.subcategory}
+                                    onChange={(e) =>
+                                      handleCheckbox(e, category)
+                                    }
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-100 "
+                                  />
+                                  <label
+                                    for="default-checkbox"
+                                    class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                  >
+                                    {subcategory.subcategory}
+                                  </label>
+                                </div>
+                              </>
+                              // <Checkbox
+                              //   key={subcategory.id}
+                              //   color="blue"
+                              //   value={subcategory.subcategory}
+                              //   label={subcategory.subcategory}
+                              // />
                             ))}
                           </AccordionBody>
                         </Accordion>
@@ -82,7 +120,7 @@ export default function KategoriModal({
                   <button
                     className="flex-1 keyta-button  rounded-lg"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={handleLanjut}
                   >
                     Lanjut
                   </button>
