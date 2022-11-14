@@ -7,11 +7,10 @@ import {
 } from "@material-tailwind/react";
 import { useShopCategoryQuery } from "../../services/shop.service";
 export default function KategoriModal({
-  header,
-  message,
+  
   setShowModal,
   showModal,
-  buttonText,
+  setProfilValue
 }) {
   const [open, setOpen] = useState(0);
   const [accordions, setAccordions] = useState([]);
@@ -38,7 +37,7 @@ export default function KategoriModal({
               <div className="border-0 rounded-2xl shadow-lg relative flex flex-col bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 rounded-t">
-                  <h3 className="text-xl font-bold">{header}</h3>
+                  <h3 className="text-xl font-bold">Anda Belum Isi Data</h3>
                   <button
                     className="p-1 ml-auto border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold "
                     onClick={() => setShowModal(false)}
@@ -83,9 +82,9 @@ export default function KategoriModal({
                   <button
                     className="flex-1 keyta-button  rounded-lg"
                     type="button"
-                    onClick={() => handleButton()}
+                    onClick={() => setShowModal(false)}
                   >
-                    {buttonText}
+                    Lanjut
                   </button>
                 </div>
               </div>

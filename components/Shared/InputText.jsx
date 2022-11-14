@@ -45,11 +45,11 @@ export default function InputText({
           </div>
         )}
 
-        {/* {errorMessage && (
-          <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-6">
+        {errorMessage !== "" && (
+          <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ">
             {errorMessage}
           </a>
-        )} */}
+        )}
       </div>
     </>
   );

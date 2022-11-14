@@ -24,8 +24,20 @@ const schema = yup.object({
     .positive("Nomor Telepon tidak valid")
     .required("Nomor Telepon harus diisi")
     .typeError("Nomor Telepon tidak valid"),
-
-  name: yup.string().required("Nama Pengguna harus diisi"),
+  name: yup
+    .string()
+    .min(4)
+    .required("Nama Toko harus diisi")
+    .typeError("Nama Toko minimal empat karakter"),
+  address: yup.string().nullable(true),
+  category: yup
+    .string()
+    .required("Kategori harus diisi")
+    .typeError("Kategori harus diisi"),
+  sumber: yup
+    .string()
+    .required("Sumber harus diisi")
+    .typeError("Sumber harus diisi"),
 });
 
 export default function ProfilToko() {
@@ -65,121 +77,129 @@ export default function ProfilToko() {
     }
     return () => {};
   }, [isSuccess]);
+  
+  const handleUpdateToko = (data) => {
+    const {sumber, ...temp} = data
+    updateToko({
+      ...temp
+    })
+  };
 
   return (
     <>
       {/* CONTENT */}
       <div className="w-full text-center p-8 font-roboto">
         <div className="flex flex-col-reverse md:flex-row gap-8">
-          <div className="flex-1 flex flex-col gap-4 text-left max-w-md">
-            <div className="flex justify-between">
-              {/* PHOTO PROFIL */}
-              <div className="rounded-full mx-auto w-[160px] bg-gray-200 text-center pt-10">
-                <Image
-                  src="/icons/photo.svg"
-                  alt="Info"
-                  height={70}
-                  width={70}
+          <form onSubmit={handleSubmit(handleUpdateToko)}>
+            <div className="flex-1 flex flex-col gap-4 text-left max-w-md">
+              <div className="flex justify-between">
+                {/* PHOTO PROFIL */}
+                <div className="rounded-full mx-auto w-[160px] bg-gray-200 text-center pt-10">
+                  <Image
+                    src="/icons/photo.svg"
+                    alt="Info"
+                    height={70}
+                    width={70}
+                  />
+                </div>
+
+                <div>
+                  <h2 className="font-semibold">Logo Toko</h2>
+                  <p className="text-xs">Upload degan formar JPG, JPEG, PNG</p>
+                  <button className="mt-24 text-[#023E8A] font-semibold">
+                    Ubah Logo
+                  </button>
+                </div>
+              </div>
+              {/* NAMA TOKO  */}
+              <div>
+                <InputText
+                  errorMessage={errors?.name?.message}
+                  reset={reset}
+                  name="name"
+                  label="Nama Toko"
+                  register={register("name")}
+                  placeholder="Masukkan Nama Toko"
+                  isReset={isNameReset}
+                  setIsReset={setIsNameReset}
                 />
               </div>
 
+              {/* ALAMAT TOKO  */}
               <div>
-                <h2 className="font-semibold">Logo Toko</h2>
-                <p className="text-xs">Upload degan formar JPG, JPEG, PNG</p>
-                <button className="mt-24 text-[#023E8A] font-semibold">
-                  Ubah Logo
+                <InputText
+                  errorMessage={errors?.address?.message}
+                  reset={reset}
+                  name="address"
+                  label="Alamat Toko"
+                  register={register("address")}
+                  placeholder="Masukkan Alamat Toko"
+                  isReset={isAdressReset}
+                  setIsReset={setIsAdressReset}
+                />
+              </div>
+
+              {/* NOMOR TELEPON  */}
+              <div>
+                <InputPhone
+                  isReset={isPhoneReset}
+                  setIsReset={setIsPhoneReset}
+                  register={register("phone")}
+                  errors={errors}
+                  reset={reset}
+                  disabled={false}
+                  setValue={setValue}
+                />
+              </div>
+
+              {/* YELLOW BOX  */}
+              <div className="yellow-box flex  my-4 py-2 pr-12 pl-4">
+                <span className="mr-4">
+                  <Image
+                    src="/icons/info.svg"
+                    alt="Info"
+                    height={30}
+                    width={30}
+                  />
+                </span>
+                <div className="text-sm text-[#42454D]">
+                  Nomor Telepon Toko akan digunakan untuk fitur E-invoice dan
+                  Katalog Produk
+                </div>
+              </div>
+
+              {/* DARIMANA ANDA MENGETAHUI KEYTA  */}
+              <div>
+                <InputSelect
+                  name="category"
+                  label="Kategori Penjualan"
+                  register={register("category")}
+                  placeholder="Pilih Kategori Penjualan Anda"
+                  errorMessage={errors?.category?.message}
+                  setModalOpen={setShowCategoryModal}
+                />
+              </div>
+
+              {/* DARIMANA ANDA MENGETAHUI KEYTA  */}
+              <div>
+                <InputSelect
+                  name="sumber"
+                  label="Dari Mana Anda Mengetahui Keyta?"
+                  register={register("sumber")}
+                  placeholder="Pilih Sumber Anda Mengetahui Keyta?"
+                  errorMessage={errors?.sumber?.message}
+                  setModalOpen={setShowSumberModal}
+                />
+                <input type="hidden" {...register("subcategory")} />
+              </div>
+
+              <div className=" mt-12">
+                <button className="keyta-button w-full rounded-xl">
+                  Simpan
                 </button>
               </div>
             </div>
-            {/* NAMA TOKO  */}
-            <div>
-              <InputText
-                errorMessage={errors?.name?.message}
-                reset={reset}
-                name="name"
-                label="Nama Toko"
-                register={register("name")}
-                placeholder="Masukkan Nama Toko"
-                isReset={isNameReset}
-                setIsReset={setIsNameReset}
-              />
-            </div>
-
-            {/* ALAMAT TOKO  */}
-            <div>
-              <InputText
-                errorMessage={errors?.address?.message}
-                reset={reset}
-                name="address"
-                label="Alamat Toko"
-                register={register("address")}
-                placeholder="Masukkan Alamat Toko"
-                isReset={isAdressReset}
-                setIsReset={setIsAdressReset}
-              />
-            </div>
-
-            {/* NOMOR TELEPON  */}
-            <div>
-              <InputPhone
-                isReset={isPhoneReset}
-                setIsReset={setIsPhoneReset}
-                register={register("phone")}
-                errors={[]}
-                reset={reset}
-                disabled={false}
-              />
-            </div>
-
-            {/* YELLOW BOX  */}
-            <div className="yellow-box flex  my-4 py-2 pr-24 pl-4">
-              <span className="mr-2">
-                <Image
-                  src="/icons/info.svg"
-                  alt="Info"
-                  height={30}
-                  width={30}
-                />
-              </span>
-              <div className="text-sm text-[#42454D]">
-                Nomor Telepon Toko akan digunakan untuk fitur E-invoice dan
-                Katalog Produk
-              </div>
-            </div>
-
-            {/* DARIMANA ANDA MENGETAHUI KEYTA  */}
-            <div>
-              <InputSelect
-                name="category"
-                label="Kategori Penjualan"
-                register={register("category")}
-                placeholder="Pilih Kategori Penjualan Anda"
-                errorMessage={""}
-                setModalOpen={setShowCategoryModal}
-              />
-            </div>
-
-            {/* DARIMANA ANDA MENGETAHUI KEYTA  */}
-            <div>
-              <InputSelect
-                name="sumber"
-                label="Dari Mana Anda Mengetahui Keyta?"
-                register={register("sumber")}
-                placeholder="Pilih Sumber Anda Mengetahui Keyta?"
-                errorMessage={""}
-                setModalOpen={setShowSumberModal}
-              />
-            </div>
-
-            <div className=" mt-12">
-              <button
-                className="keyta-button w-full rounded-xl"
-                onClick={() => setShowModal(true)}
-              >
-                Simpan
-              </button>
-            </div>
-          </div>
+          </form>
 
           {/* FITUR PREMIUM AKTIF */}
           <div className="flex-1">
@@ -225,11 +245,9 @@ export default function ProfilToko() {
         setProfilValue={setValue}
       />
       <KategoriModal
-        header="Anda Belum Isi Data"
-        message="Lengkapi Profil Toko Anda, agar Keyta bisa memberikan layanan terbaik untuk Anda."
-        buttonText="Lanjut"
         showModal={showCategoryModal}
         setShowModal={setShowCategoryModal}
+        setProfilValue={setValue}
       />
       <Modal
         header="Anda Belum Isi Data"

@@ -23,24 +23,21 @@ export default function InputSelect({
           placeholder={placeholder}
           onClick={() => setModalOpen(true)}
         />
-        
-          <div
-            className="absolute top-2 right-0"
-          >
-            <Image
-              src="/icons/arrow_down.svg"
-              height="18"
-              width="18"
-              alt="Logo"
-            />
-          </div>
-        
 
-        {/* {errorMessage && (
-          <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-6">
+        <div className="absolute top-2 right-0">
+          <Image
+            src="/icons/arrow_down.svg"
+            height="18"
+            width="18"
+            alt="Logo"
+          />
+        </div>
+
+        {errorMessage !== "" && (
+          <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ">
             {errorMessage}
           </a>
-        )} */}
+        )}
       </div>
     </>
   );
