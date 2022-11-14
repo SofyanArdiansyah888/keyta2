@@ -16,6 +16,7 @@ export default function KategoriModal({
   const [accordions, setAccordions] = useState([]);
   const { data, isLoading, isSuccess } = useShopCategoryQuery();
   const [selectedSubCategory, setSelectedSubcategory] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState();
 
   useEffect(() => {
     if (data && isSuccess) {
@@ -26,12 +27,15 @@ export default function KategoriModal({
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
+    setSelectedSubcategory([])
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+      checkbox.checked = false;
+    });
   };
 
   const handleCheckbox = (event, category) => {
-    
-    setProfilValue("category", category.category);
     if (event.target.checked) {
+      setSelectedCategory(category.category)
       setSelectedSubcategory((subcat) => [...subcat, {
         category: category.category,
         subcategory: event.target.value
@@ -42,7 +46,15 @@ export default function KategoriModal({
   };
 
   const handleLanjut = () => {
-    console.log(selectedSubCategory)
+    setProfilValue('category',selectedCategory)
+    let temp = selectedSubCategory.filter((item) => item.category === selectedCategory )
+    temp = temp.map(item => item.subcategory)
+    if(temp.length === 0) {
+      setProfilValue('category','')
+      setProfilValue('subcategory','')
+    }else{
+      setProfilValue('subcategory',temp.toString())
+    }
     setShowModal(false);
   };
 
@@ -56,7 +68,7 @@ export default function KategoriModal({
               <div className="border-0 rounded-2xl shadow-lg relative flex flex-col bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 rounded-t">
-                  <h3 className="text-xl font-bold">Anda Belum Isi Data</h3>
+                  <h3 className="text-xl font-bold">Pilih Kategori</h3>
                   <button
                     className="p-1 ml-auto border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold "
                     onClick={() => setShowModal(false)}
@@ -92,7 +104,7 @@ export default function KategoriModal({
                                     onChange={(e) =>
                                       handleCheckbox(e, category)
                                     }
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-100 "
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-100 accent-keytaPrimary "
                                   />
                                   <label
                                     for="default-checkbox"

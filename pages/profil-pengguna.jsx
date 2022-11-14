@@ -25,7 +25,7 @@ export default function ProfilPengguna() {
   const [isReset, setIsReset] = useState(false);
   const { data, isLoading, isSuccess } = useProfileQuery();
   const [updateProfile, updateData] = useUpdateProfileMutation();
-
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,6 +36,11 @@ export default function ProfilPengguna() {
     }
     return () => {};
   }, [isSuccess]);
+
+  useEffect(() => {
+    setUpdateSuccess(updateData.isSuccess);
+    return () => {};
+  }, [updateData.isSuccess]);
 
   const {
     register,
@@ -109,8 +114,8 @@ export default function ProfilPengguna() {
             />
           </div>
 
-          {updateData.isSuccess && (
-            <div className="keyta-button rounded-xl w-12 text-xs opacity-80 mt-6 mx-auto">
+          {updateSuccess && (
+            <div className="keyta-button rounded-xl w-12 text-xs opacity-80 mt-6 mx-auto" onClick={() => setUpdateSuccess(false)}>
               Berhasil disimpan
             </div>
           )}

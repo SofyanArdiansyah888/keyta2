@@ -41,17 +41,20 @@ const schema = yup.object({
 });
 
 export default function ProfilToko() {
+  // MODAL STATE
   const [showModal, setShowModal] = useState(false);
   const [showSumberModal, setShowSumberModal] = useState(false);
-
   const [showCategoryModal, setShowCategoryModal] = useState(false);
-  const [categoryValue, setCategoryValue] = useState();
 
+  // API STATE
   const { data, isLoading, isSuccess } = useShopQuery();
   const [updateToko, updateData] = useUpdateShopMutation();
+
+  const [updateSuccess, setUpdateSuccess] = useState(false);
   const [isNameReset, setIsNameReset] = useState(false);
   const [isAdressReset, setIsAdressReset] = useState(false);
   const [isPhoneReset, setIsPhoneReset] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -64,7 +67,6 @@ export default function ProfilToko() {
     resolver: yupResolver(schema),
   });
 
-  const dispatch = useDispatch();
   useEffect(() => {
     if (data && isSuccess) {
       let temp = data?.data;
@@ -73,16 +75,22 @@ export default function ProfilToko() {
       setValue("address", temp?.address);
       setValue("phone", temp?.phone);
       setValue("category", temp?.category);
+
       if (!(temp?.address || temp?.phone || temp?.category)) setShowModal(true);
     }
     return () => {};
   }, [isSuccess]);
-  
+
+  useEffect(() => {
+    setUpdateSuccess(updateData.isSuccess);
+    return () => {};
+  }, [updateData.isSuccess]);
+
   const handleUpdateToko = (data) => {
-    const {sumber, ...temp} = data
+    const { sumber, ...temp } = data;
     updateToko({
-      ...temp
-    })
+      ...temp,
+    });
   };
 
   return (
@@ -192,6 +200,15 @@ export default function ProfilToko() {
                 />
                 <input type="hidden" {...register("subcategory")} />
               </div>
+
+              {updateSuccess && (
+                <div
+                  className="keyta-button rounded-xl w-12 text-xs opacity-80 mt-6 mx-auto"
+                  onClick={() => setUpdateSuccess(false)}
+                >
+                  Berhasil disimpan
+                </div>
+              )}
 
               <div className=" mt-12">
                 <button className="keyta-button w-full rounded-xl">

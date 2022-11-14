@@ -38,7 +38,7 @@ export const shopApi = createApi({
 
     updateShop: builder.mutation({
       query: (body) => ({
-        url: "v2/shops",
+        url: "v1/my_shop",
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

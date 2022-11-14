@@ -51,10 +51,6 @@ export default function OTP() {
   let authenticate = useSelector((state) => state.authSlice?.authenticate);
 
   useEffect(() => {
-    // if(!authenticate?.user){
-    //   router.push('/login')
-    // }
-
     if (router?.query?.phone)
       sendMessage({
         type: "whatsapp",
@@ -144,12 +140,6 @@ export default function OTP() {
     setIsCountdown(true);
     setIsSMS(true);
   };
-
-  // const handleChange = (event, inputName) => {
-  //   setVerifyError("");
-  //   if (event.target.value !== "")
-  //     document.querySelector(`input[name=${inputName}]`).focus();
-  // };
 
   function handleChange(value1, event) {
     setOtpState({ [value1]: event.target.value });

@@ -19,7 +19,7 @@ export default function InputSelect({
           type="text"
           {...register}
           readOnly
-          className={`p-2  text-xs w-full  material-input  `}
+          className={`p-2  text-xs w-full  material-input   `}
           placeholder={placeholder}
           onClick={() => setModalOpen(true)}
         />

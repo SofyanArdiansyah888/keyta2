@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { setTokenCookie } from "../../app/cookies";
@@ -49,32 +49,49 @@ export default function RegistrationProfile() {
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
+  const user = useWatch({
+    control,
+    name: "user",
+  });
+  useEffect(() => {
+    user === "" && setUserReset(false);
+    !userReset && setUserReset(true);
+    return () => {};
+  }, [user]);
+
+  const shop = useWatch({
+    control,
+    name: "shop",
+  });
+  useEffect(() => {
+    shop === "" && setShopReset(false);
+    !shopReset && setShopReset(true);
+    return () => {};
+  }, [shop]);
+
   const handleCreate = async ({ user, referer, shop }) => {
-    try {
-      let temp = {
-        name: shop,
-        referer,
-        user_attributes: {
-          id: authenticate?.user?.id,
-          name: user,
-        },
-        token: authenticate?.token,
-      };
+    let temp = {
+      name: shop,
+      referer,
+      user_attributes: {
+        id: authenticate?.user?.id,
+        name: user,
+      },
+      token: authenticate?.token,
+    };
 
-      Object.keys(temp).forEach((key) => {
-        if (temp[key] === undefined) {
-          delete temp[key];
-        }
-      });
+    Object.keys(temp).forEach((key) => {
+      if (temp[key] === undefined) {
+        delete temp[key];
+      }
+    });
 
-      createShop(temp);
-    } catch (error) {
-      console.log(error);
-    }
+    createShop(temp);
   };
   return (
     <>
@@ -83,12 +100,7 @@ export default function RegistrationProfile() {
         <div className={styles.right_content_inner}>
           <Image src="/images/keyta.svg" height="30" width="117" alt="Logo" />
           <h1>Masukkan Data Profil</h1>
-          <form
-            onSubmit={handleSubmit(handleCreate)}
-            onKeyDown={(e) => (e) => {
-              if (e.code === "Enter") e.preventDefault();
-            }}
-          >
+          <form onSubmit={handleSubmit(handleCreate)}>
             {/* INPUT USER */}
             <div className="mt-12">
               <label className="font-[600] text-[13px] ">Nama Pengguna</label>
@@ -107,10 +119,10 @@ export default function RegistrationProfile() {
                   {...register("user")}
                   className="py-4 pl-8  text-xs w-[260px] lg:w-[300px] material-input"
                   placeholder="Masukkan Nama Pengguna"
-                  onChange={(event) => {
-                    event.target.value === "" && setUserReset(false);
-                    !userReset && setUserReset(true);
-                  }}
+                  // onChange={(event) => {
+                  //     event.target.value === "" && setUserReset(false);
+                  //     !userReset && setUserReset(true);
+                  // }}
                 />
                 {errors.user?.message && (
                   <a className="text-keytaCarnelian font-[500] block text-xs mt-1 ">
@@ -153,10 +165,10 @@ export default function RegistrationProfile() {
                   {...register("shop")}
                   className="py-4 pl-8  text-xs w-[260px] lg:w-[300px] material-input"
                   placeholder="Masukkan Nama Toko"
-                  onChange={(event) => {
-                    event.target.value === "" && setShopReset(false);
-                    !shopReset && setShopReset(true);
-                  }}
+                  // onChange={(event) => {
+                  //   event.target.value === "" && setShopReset(false);
+                  //   !shopReset && setShopReset(true);
+                  // }}
                 />
                 {errors.shop?.message && (
                   <a className="text-keytaCarnelian font-[500] block text-xs mt-1 ">
@@ -182,6 +194,7 @@ export default function RegistrationProfile() {
                 )}
               </div>
             </div>
+
             <div className="w-max  mt-8">
               <div className="float-right">
                 <Image src="/images/maskot_group.svg" height="60" width="131" />
