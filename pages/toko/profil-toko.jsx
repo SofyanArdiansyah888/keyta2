@@ -47,7 +47,7 @@ export default function ProfilToko() {
   const [showCategoryModal, setShowCategoryModal] = useState(false);
 
   // API STATE
-  const { data, isLoading, isSuccess } = useShopQuery();
+  const { data, isFetching, isSuccess } = useShopQuery();
   const [updateToko, updateData] = useUpdateShopMutation();
 
   const [updateSuccess, setUpdateSuccess] = useState(false);
@@ -74,12 +74,12 @@ export default function ProfilToko() {
       setValue("name", temp?.name);
       setValue("address", temp?.address);
       setValue("phone", temp?.phone);
-      setValue("category", temp?.category);
+      setValue("subcategory", temp?.subcategory);
 
-      if (!(temp?.address || temp?.phone || temp?.category)) setShowModal(true);
+      if (!(temp?.address || temp?.phone || temp?.subcategory)) setShowModal(true);
     }
     return () => {};
-  }, [isSuccess]);
+  }, [isFetching]);
 
   useEffect(() => {
     setUpdateSuccess(updateData.isSuccess);
@@ -104,7 +104,8 @@ export default function ProfilToko() {
                 {/* PHOTO PROFIL */}
                 <div className="rounded-full mx-auto w-[160px] bg-gray-200 text-center pt-10">
                   <Image
-                    src="/icons/photo.svg"
+                    // src={data?.data?.image_file_name}
+                    src ="/icons/photo.svg"
                     alt="Info"
                     height={70}
                     width={70}
@@ -114,9 +115,13 @@ export default function ProfilToko() {
                 <div>
                   <h2 className="font-semibold">Logo Toko</h2>
                   <p className="text-xs">Upload degan formar JPG, JPEG, PNG</p>
-                  <button className="mt-24 text-[#023E8A] font-semibold">
-                    Ubah Logo
-                  </button>
+                  <div className="mt-24 text-[#023E8A] font-semibold">
+                    <label for="files" class="btn">
+                      Select Image
+                    </label>
+                    <input id="files"  className="hidden" type="file" />
+                  </div>
+         
                 </div>
               </div>
               {/* NAMA TOKO  */}
@@ -179,11 +184,11 @@ export default function ProfilToko() {
               {/* DARIMANA ANDA MENGETAHUI KEYTA  */}
               <div>
                 <InputSelect
-                  name="category"
+                  name="subcategory"
                   label="Kategori Penjualan"
-                  register={register("category")}
+                  register={register("subcategory")}
                   placeholder="Pilih Kategori Penjualan Anda"
-                  errorMessage={errors?.category?.message}
+                  errorMessage={errors?.subcategory?.message}
                   setModalOpen={setShowCategoryModal}
                 />
               </div>
@@ -198,7 +203,7 @@ export default function ProfilToko() {
                   errorMessage={errors?.sumber?.message}
                   setModalOpen={setShowSumberModal}
                 />
-                <input type="hidden" {...register("subcategory")} />
+                <input type="hidden" {...register("category")} />
               </div>
 
               {updateSuccess && (

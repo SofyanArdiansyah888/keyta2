@@ -35,7 +35,7 @@ export default function SumberModal({
               <div className="border-0 rounded-2xl shadow-lg relative flex flex-col bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 rounded-t">
-                  <h3 className="text-xl font-bold">Anda Belum Isi Data</h3>
+                  <h3 className="text-xl font-bold">Pilih Sumber</h3>
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                     onClick={() => setShowModal(false)}
@@ -53,7 +53,7 @@ export default function SumberModal({
                         id="sumber-1"
                         type="radio"
                         name="sumber"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Google Playstore"
                         onChange={handleChange}
                         checked={value === "Google Playstore"}
@@ -71,7 +71,7 @@ export default function SumberModal({
                         id="sumber-2"
                         type="radio"
                         name="sumber"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Media Sosial"
                         onChange={handleChange}
                         checked={value === "Media Sosial"}
@@ -89,7 +89,7 @@ export default function SumberModal({
                         id="sumber-3"
                         type="radio"
                         name="sumber"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Referal"
                         onChange={handleChange}
                         checked={value === "Referal"}
@@ -107,7 +107,7 @@ export default function SumberModal({
                         id="sumber-4"
                         type="radio"
                         name="sumber"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Iklan / Website"
                         onChange={handleChange}
                         checked={value === "Iklan / Website"}
@@ -125,7 +125,7 @@ export default function SumberModal({
                         id="sumber-5"
                         type="radio"
                         name="sumber"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 "
+                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Other"
                         onChange={handleChange}
                         checked={value === "Other"}

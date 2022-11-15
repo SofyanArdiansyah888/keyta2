@@ -25,11 +25,9 @@ const schema = yup.object({
   number6: yup.number().required().typeError(),
   number7: yup.number().required().typeError(),
 });
-
+const timer = 60;
 export default function OTP() {
-  const timer = Date.now() + 60000;
   const [isSMS, setIsSMS] = useState(false);
-  const [isCountdown, setIsCountdown] = useState(false);
   const [countdown, setCountdown] = useState(timer);
   const [sendMessage, messageData] = useSendMessageMutation();
   const [sendVerify, verifyData] = useVerifyMessageMutation();
@@ -50,6 +48,19 @@ export default function OTP() {
   const dispatch = useDispatch();
   let authenticate = useSelector((state) => state.authSlice?.authenticate);
 
+  const handlePaste = (event) => {
+    const text = event.clipboardData.getData("text");
+    if (text.length === 7) {
+      setValue("number1", text[0]);
+      setValue("number2", text[1]);
+      setValue("number3", text[2]);
+      setValue("number4", text[3]);
+      setValue("number5", text[4]);
+      setValue("number6", text[5]);
+      setValue("number7", text[6]);
+    }
+  };
+
   useEffect(() => {
     if (router?.query?.phone)
       sendMessage({
@@ -57,10 +68,17 @@ export default function OTP() {
         country_code: COUNTRY_CODE,
         phone: router.query.phone,
       });
-
     disableBack();
+
     return () => {};
   }, []);
+
+  useEffect(() => {
+    if (countdown > 0) {
+      let interval = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearInterval(interval);
+    }
+  }, [countdown]);
 
   useEffect(() => {
     if (messageData.data && messageData.isSuccess)
@@ -95,6 +113,7 @@ export default function OTP() {
     formState: { errors },
     setError,
     trigger,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -126,7 +145,6 @@ export default function OTP() {
       phone: user.phone,
     });
     setCountdown(timer);
-    setIsCountdown(true);
   };
 
   const handleSendSMS = async () => {
@@ -137,7 +155,6 @@ export default function OTP() {
       phone: user.phone,
     });
     setCountdown(timer);
-    setIsCountdown(true);
     setIsSMS(true);
   };
 
@@ -157,6 +174,19 @@ export default function OTP() {
         elmnt.target.form.elements[next].focus();
       }
     }
+  };
+
+  const Timer = () => {
+    let minutes = Math.floor(countdown / 60);
+    let seconds = countdown - minutes * 60;
+    function strPadLeft(string, pad, length) {
+      return (new Array(length + 1).join(pad) + string).slice(-length);
+    }
+    return (
+      <span>
+        {strPadLeft(minutes, "0", 2) + ":" + strPadLeft(seconds, "0", 2)}
+      </span>
+    );
   };
 
   return (
@@ -181,6 +211,7 @@ export default function OTP() {
               <div className="mt-12 flex flex-row gap-1">
                 <input
                   type="text"
+                  onPaste={handlePaste}
                   maxLength="1"
                   {...register("number1")}
                   className={`text-center w-[30px] ${
@@ -293,36 +324,17 @@ export default function OTP() {
               <div className="text-[13px] mt-8">
                 Belum dapat kode ?{" "}
                 <span onClick={isSMS ? handleSendSMS : handleSendWhatsapp}>
-                  <a
+                  <button
+                    type="button"
                     className={`underline  mr-1 ${
-                      isCountdown ? "text-gray-300 " : "cursor-pointer"
+                      countdown > 0 ? "text-gray-300 " : "cursor-pointer"
                     } `}
-                    disabled={isCountdown}
+                    disabled={countdown > 0}
                   >
                     Kirim Ulang Kode
-                  </a>
+                  </button>
                 </span>
-                {/* <Countdown date={Date.now() + 10000} /> */}
-                <Countdown
-                  date={countdown}
-                  renderer={({ hours, minutes, seconds, completed }) => {
-                    let second = String(seconds).padStart(2, "0");
-                    let minute = String(minutes).padStart(2, "0");
-                    if (completed) {
-                      setIsCountdown(false);
-                      // Render a completed state
-                      return "";
-                    } else {
-                      setIsCountdown(true);
-                      // Render a countdown
-                      return (
-                        <span>
-                          {minute}:{second}
-                        </span>
-                      );
-                    }
-                  }}
-                />
+                <Timer />
               </div>
               {!isSMS && (
                 <>
@@ -332,7 +344,7 @@ export default function OTP() {
                   <div
                     className="text-[16px] mt-2 cursor-pointer text-keytaDarkBlue font-[600]"
                     onClick={handleSendSMS}
-                    disabled={isCountdown}
+                    disabled={countdown > 0}
                   >
                     Kirim melalui SMS
                   </div>

@@ -2,13 +2,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import Layout from "../components/Layout/Layout";
 import InputPhone from "../components/Shared/InputPhone";
 import {
   useProfileQuery,
-  useUpdateProfileMutation,
+  useUpdateProfileMutation
 } from "../services/profile.service";
 import { setUser } from "../services/user.slice";
 
@@ -23,7 +23,7 @@ const schema = yup.object({
 export default function ProfilPengguna() {
   const [isOpen, setIsOpen] = useState(false);
   const [isReset, setIsReset] = useState(false);
-  const { data, isLoading, isSuccess } = useProfileQuery();
+  const { data, isFetching, isSuccess } = useProfileQuery();
   const [updateProfile, updateData] = useUpdateProfileMutation();
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ export default function ProfilPengguna() {
       setValue("phone", data?.user?.phone);
     }
     return () => {};
-  }, [isSuccess]);
+  }, [isFetching]);
 
   useEffect(() => {
     setUpdateSuccess(updateData.isSuccess);
@@ -50,11 +50,17 @@ export default function ProfilPengguna() {
     reset,
     values,
     watch,
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const handleForm = ({ name }) => {
+    if (/\d/.test(name)) {
+      setError("name", {
+        message: "Nama tidak boleh mengandung angka !",
+      });
+    }
     updateProfile({ name });
   };
 
@@ -115,7 +121,10 @@ export default function ProfilPengguna() {
           </div>
 
           {updateSuccess && (
-            <div className="keyta-button rounded-xl w-12 text-xs opacity-80 mt-6 mx-auto" onClick={() => setUpdateSuccess(false)}>
+            <div
+              className="keyta-button rounded-xl w-12 text-xs opacity-80 mt-6 mx-auto"
+              onClick={() => setUpdateSuccess(false)}
+            >
               Berhasil disimpan
             </div>
           )}

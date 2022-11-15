@@ -23,9 +23,9 @@ export default function InputPhone({
           {...register}
           onChange={(event) => {
             const value = event.target.value;
-            // if (value[0] !== "0") {
-              setValue("phone", `${value}`);
-            // }
+            if (value[0] === "0") {
+              setValue("phone", `${value.substring(1)}`);
+            }
             if (value === "") {
               reset({ phone: "" });
             }

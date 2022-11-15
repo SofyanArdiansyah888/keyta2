@@ -31,7 +31,11 @@ export default function Login() {
 
   const handleLogin = async (data) => {
     let phone = data.phone
-    if(data.phone[0] === "0") phone = phone.toString().substring(1)
+    if(data.phone[0] !== "8") {setError('phone',{
+      message:'Angka pertama harus 8'
+    })
+    return;
+  }
 
     // IF PHONE NOT EXIST THEN MUST READ PRIVACY CONSENT FIRST
     if (checkPhoneExist(data.phone)) {

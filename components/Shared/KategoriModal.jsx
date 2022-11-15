@@ -14,7 +14,7 @@ export default function KategoriModal({
 }) {
   const [open, setOpen] = useState(0);
   const [accordions, setAccordions] = useState([]);
-  const { data, isLoading, isSuccess } = useShopCategoryQuery();
+  const { data, isLoading, isSuccess,isFetching } = useShopCategoryQuery();
   const [selectedSubCategory, setSelectedSubcategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
 
@@ -23,7 +23,7 @@ export default function KategoriModal({
       setAccordions(data?.category);
     }
     return () => {};
-  }, [isSuccess]);
+  }, [isFetching]);
 
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);

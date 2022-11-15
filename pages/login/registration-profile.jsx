@@ -16,7 +16,10 @@ import styles from "../../styles/Login.module.css";
 const schema = yup
   .object({
     user: yup.string().required("Nama Pengguna Harus Diisi"),
-    shop: yup.string().required("Nama Toko Harus Diisi"),
+    shop: yup
+      .string()
+      .min(4, "Nama Toko minimal 4 karakter")
+      .required("Nama Toko Harus Diisi"),
     referrer: yup.string().nullable(true),
   })
   .required();
@@ -39,7 +42,7 @@ export default function RegistrationProfile() {
   useEffect(() => {
     if (isSuccess && data) {
       setTokenCookie(authenticate.token);
-      router.push("registration-success", undefined, { shallow: true });
+      router.push("registration-success");
     }
     return () => {};
   }, [isSuccess]);
@@ -50,6 +53,7 @@ export default function RegistrationProfile() {
     formState: { errors },
     reset,
     control,
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -75,6 +79,27 @@ export default function RegistrationProfile() {
   }, [shop]);
 
   const handleCreate = async ({ user, referer, shop }) => {
+    if (/\d/.test(user)) {
+      setError("user", {
+        message: "Nama tidak boleh mengandung angka !",
+      });
+      return;
+    }
+    
+    if (user.trim() === "") {
+      setError("user", {
+        message: "Nama tidak boleh spasi saja !",
+      });
+      return;
+    }
+
+    if (shop.trim() === "") {
+      setError("shop", {
+        message: "Nama Toko tidak boleh spasi saja !",
+      });
+      return;
+    }
+
     let temp = {
       name: shop,
       referer,

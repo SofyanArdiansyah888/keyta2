@@ -13,7 +13,17 @@ const nextConfig = {
     });
 
     return config;
-  }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+        // port: '',
+        // pathname: '/account123/**',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig
