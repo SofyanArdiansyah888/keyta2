@@ -13,6 +13,10 @@ import JadwalinIcon from "../../public/icons/kontak_jadwalin.svg";
 import VideoTutorialIcon from "../../public/icons/video_tutorial.svg";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useProfileQuery } from "../../services/profile.service";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../services/user.slice";
+import { useEffect } from "react";
 export default function Sidebar() {
   const { pathname } = useRouter();
 
@@ -26,20 +30,22 @@ export default function Sidebar() {
         <aside className="w-64 px-4">
           <div className="overflow-y-auto py-4 px-3 ">
             {/* KEYTA LOGO */}
-            <a
-              href="/public/images/keyta.svg"
-              className="flex items-center  mb-5 "
-            >
-              <object data="/icons/hamburger.svg" width="20" height="20" />
-              <div className="ml-[30px] h-6 sm:h-7 relative">
-                <Image
-                  src="/images/keyta.svg"
-                  alt="Logo Keyta"
-                  height={30}
-                  width={117}
-                />
-              </div>
-            </a>
+            <Link href="/">
+              <a
+                href="/public/images/keyta.svg"
+                className="flex items-center  mb-5 "
+              >
+                <object data="/icons/hamburger.svg" width="20" height="20" />
+                <div className="ml-[30px] h-6 sm:h-7 relative">
+                  <Image
+                    src="/images/keyta.svg"
+                    alt="Logo Keyta"
+                    height={30}
+                    width={117}
+                  />
+                </div>
+              </a>
+            </Link>
 
             {/* MENU */}
             <div className="mt-14">
@@ -47,12 +53,12 @@ export default function Sidebar() {
               <ul className="">
                 {/* DASHBOARD ICON */}
                 <li className={`${styles.list} ${isActive("/dashboard")} `}>
-                  {/* <Link href="/dashboard" > */}
-                  <a className="cursor-default">
-                    <DashboardIcon />
-                    Dashboard
-                  </a>
-                  {/* </Link> */}
+                  <Link href="/">
+                    <a className="cursor-pointer">
+                      <DashboardIcon />
+                      Dashboard
+                    </a>
+                  </Link>
                   {/* <DropDownMenu
                     submenus={[
                       {
@@ -106,9 +112,9 @@ export default function Sidebar() {
                 <li className={`${styles.list} ${isActive("/analitik-toko")}`}>
                   {/* <Link href="/analitik-toko"> */}
                   <a className="cursor-default">
-                      <AnalitikTokoIcon />
-                      Analitik Toko
-                    </a>
+                    <AnalitikTokoIcon />
+                    Analitik Toko
+                  </a>
                   {/* </Link> */}
                 </li>
               </ul>
@@ -121,9 +127,9 @@ export default function Sidebar() {
                 <li className={`${styles.list} ${isActive("/faq")}`}>
                   {/* <Link href="/faq"> */}
                   <a className="cursor-default">
-                      <FaqIcon />
-                      Faq
-                    </a>
+                    <FaqIcon />
+                    Faq
+                  </a>
                   {/* </Link> */}
                 </li>
 
@@ -132,9 +138,9 @@ export default function Sidebar() {
                 >
                   {/* <Link href="/syarat-ketentuan"> */}
                   <a className="cursor-default">
-                      <SyaratIkon />
-                      Syarat Ketentuan
-                    </a>
+                    <SyaratIkon />
+                    Syarat Ketentuan
+                  </a>
                   {/* </Link> */}
                 </li>
 
@@ -143,9 +149,9 @@ export default function Sidebar() {
                 >
                   {/* <Link href="/kebijakan-privasi"> */}
                   <a className="cursor-default">
-                      <KebijakanIcon />
-                      Kebijakan Privasi
-                    </a>
+                    <KebijakanIcon />
+                    Kebijakan Privasi
+                  </a>
                   {/* </Link> */}
                 </li>
 
@@ -154,18 +160,18 @@ export default function Sidebar() {
                 >
                   {/* <Link href="/kontak-jadwalin"> */}
                   <a className="cursor-default">
-                      <JadwalinIcon />
-                      Kontak Jadwalin
-                    </a>
+                    <JadwalinIcon />
+                    Kontak Jadwalin
+                  </a>
                   {/* </Link> */}
                 </li>
 
                 <li className={`${styles.list} ${isActive("/video-tutorial")}`}>
                   {/* <Link href="/video-tutorial"> */}
                   <a className="cursor-default">
-                      <VideoTutorialIcon />
-                      Video Tutorial
-                    </a>
+                    <VideoTutorialIcon />
+                    Video Tutorial
+                  </a>
                   {/* </Link> */}
                 </li>
               </ul>

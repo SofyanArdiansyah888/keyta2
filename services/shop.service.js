@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getTokenCookie } from "../app/cookies";
-const token =  getTokenCookie();
+
 export const shopApi = createApi({
   reducerPath: "shopApi",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.BASE_URL }),
@@ -10,7 +10,7 @@ export const shopApi = createApi({
         url: "v1/shop/category",
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${getTokenCookie()}`,
         },
       }),
     }),
@@ -31,7 +31,7 @@ export const shopApi = createApi({
         url: "v1/my_shop",
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${getTokenCookie()}`,
         },
       }),
     }),
@@ -41,7 +41,7 @@ export const shopApi = createApi({
         url: "v1/my_shop",
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${getTokenCookie()}`,
         },
         body,
       }),

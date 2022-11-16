@@ -1,14 +1,14 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useForm, useWatch } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import Layout from "../components/Layout/Layout";
 import InputPhone from "../components/Shared/InputPhone";
 import {
   useProfileQuery,
-  useUpdateProfileMutation
+  useUpdateProfileMutation,
 } from "../services/profile.service";
 import { setUser } from "../services/user.slice";
 
@@ -23,19 +23,16 @@ const schema = yup.object({
 export default function ProfilPengguna() {
   const [isOpen, setIsOpen] = useState(false);
   const [isReset, setIsReset] = useState(false);
-  const { data, isFetching, isSuccess } = useProfileQuery();
+
   const [updateProfile, updateData] = useUpdateProfileMutation();
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  const dispatch = useDispatch();
+  let { user } = useSelector((state) => state?.userSlice);
 
   useEffect(() => {
-    if (data && isSuccess) {
-      dispatch(setUser({ ...data.user }));
-      setValue("name", data?.user?.name);
-      setValue("phone", data?.user?.phone);
-    }
+    setValue("name", user?.name);
+    setValue("phone", user?.phone);
     return () => {};
-  }, [isFetching]);
+  }, [user]);
 
   useEffect(() => {
     setUpdateSuccess(updateData.isSuccess);
@@ -54,13 +51,27 @@ export default function ProfilPengguna() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const userName = watch("name");
+  useEffect(() => {
+    userName === "" && setIsReset(false);
+    !isReset && setIsReset(true);
+    return () => {};
+  }, [userName]);
 
   const handleForm = ({ name }) => {
     if (/\d/.test(name)) {
       setError("name", {
-        message: "Nama tidak boleh mengandung angka !",
+        message: "Nama Pengguna hanya boleh dalam alfabet",
       });
     }
+
+    if (name.trim() === "") {
+      setError("name", {
+        message: "Nama Pelanggan harus diisi",
+      });
+    }
+    console.log(errors.name)
+    // if (typeof errors.name != "undefined") 
     updateProfile({ name });
   };
 
@@ -77,10 +88,6 @@ export default function ProfilPengguna() {
               <input
                 type="text"
                 {...register("name")}
-                onChange={(event) => {
-                  event.target.value === "" && setIsReset(false);
-                  !isReset && setIsReset(true);
-                }}
                 className={`p-2  text-xs w-full material-input  `}
                 placeholder="Masukkan Nama Pengguna"
               />
@@ -117,6 +124,8 @@ export default function ProfilPengguna() {
               errors={[]}
               reset={reset}
               disabled={true}
+              watch={watch}
+              setError={setError}
             />
           </div>
 

@@ -16,10 +16,7 @@ import styles from "../../styles/Login.module.css";
 const schema = yup
   .object({
     user: yup.string().required("Nama Pengguna Harus Diisi"),
-    shop: yup
-      .string()
-      .min(4, "Nama Toko minimal 4 karakter")
-      .required("Nama Toko Harus Diisi"),
+    shop: yup.string().required("Nama Toko Harus Diisi"),
     referrer: yup.string().nullable(true),
   })
   .required();
@@ -78,45 +75,50 @@ export default function RegistrationProfile() {
     return () => {};
   }, [shop]);
 
-  const handleCreate = async ({ user, referer, shop }) => {
+  const handleCreate = async ({ user, referrer, shop }) => {
     if (/\d/.test(user)) {
       setError("user", {
-        message: "Nama tidak boleh mengandung angka !",
+        message: "Nama Pengguna hanya boleh dalam alfabet",
       });
-      return;
     }
-    
+
     if (user.trim() === "") {
       setError("user", {
-        message: "Nama tidak boleh spasi saja !",
+        message: "Nama Pelanggan harus diisi",
       });
-      return;
     }
 
     if (shop.trim() === "") {
       setError("shop", {
-        message: "Nama Toko tidak boleh spasi saja !",
+        message: "Nama Toko harus diisi",
       });
-      return;
     }
 
-    let temp = {
-      name: shop,
-      referer,
-      user_attributes: {
-        id: authenticate?.user?.id,
-        name: user,
-      },
-      token: authenticate?.token,
-    };
+    if (shop.length < 4) {
+      setError("shop", {
+        message: "Nama Toko minimal 4 karakter",
+      });
+    }
+    if (!errors.shop &&  !errors.user) {
+      console.log(errors)
+      let temp = {
+        name: shop,
+        referrer,
+        user_attributes: {
+          id: authenticate?.user?.id,
+          name: user,
+        },
+        token: authenticate?.token,
+      };
 
-    Object.keys(temp).forEach((key) => {
-      if (temp[key] === undefined) {
-        delete temp[key];
-      }
-    });
+      Object.keys(temp).forEach((key) => {
+        if (temp[key] === undefined) {
+          delete temp[key];
+        }
+      });
 
-    createShop(temp);
+      createShop(temp);
+    }
   };
   return (
     <>
@@ -250,7 +252,7 @@ export default function RegistrationProfile() {
                     <div className="relative w-max">
                       <input
                         type="text"
-                        {...register("referer")}
+                        {...register("referrer")}
                         className="py-4  text-xs w-[260px] lg:w-[300px] material-input"
                         placeholder="FOKUSKEYTA"
                         onChange={(event) => {
@@ -258,16 +260,16 @@ export default function RegistrationProfile() {
                           !refererReset && setRefererReset(true);
                         }}
                       />
-                      {errors.referer?.message && (
+                      {errors.referrer?.message && (
                         <a className="text-keytaCarnelian font-[500] block text-xs mt-1 ">
-                          {errors.referer?.message}
+                          {errors.referrer?.message}
                         </a>
                       )}
                       {refererReset && (
                         <div
                           className="absolute top-4 right-1"
                           onClick={() => {
-                            reset({ referer: "" });
+                            reset({ referrer: "" });
                             setRefererReset(false);
                           }}
                         >

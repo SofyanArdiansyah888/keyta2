@@ -38,6 +38,7 @@ const schema = yup.object({
     .string()
     .required("Sumber harus diisi")
     .typeError("Sumber harus diisi"),
+  shop_image: yup.string().nullable(),
 });
 
 export default function ProfilToko() {
@@ -55,6 +56,9 @@ export default function ProfilToko() {
   const [isAdressReset, setIsAdressReset] = useState(false);
   const [isPhoneReset, setIsPhoneReset] = useState(false);
 
+  const [imageToko, setImageToko] = useState();
+  const [imageTokoPreview, setImageTokoPreview] = useState();
+
   const {
     register,
     handleSubmit,
@@ -63,6 +67,7 @@ export default function ProfilToko() {
     reset,
     getValues,
     watch,
+    setError,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -70,13 +75,14 @@ export default function ProfilToko() {
   useEffect(() => {
     if (data && isSuccess) {
       let temp = data?.data;
-      // dispatch(setShop({ ...data.data }));
       setValue("name", temp?.name);
       setValue("address", temp?.address);
       setValue("phone", temp?.phone);
       setValue("subcategory", temp?.subcategory);
-
-      if (!(temp?.address || temp?.phone || temp?.subcategory)) setShowModal(true);
+      setValue("category", temp?.category);
+      setImageTokoPreview(temp.image_file_name);
+      if (!(temp?.address || temp?.phone || temp?.subcategory))
+        setShowModal(true);
     }
     return () => {};
   }, [isFetching]);
@@ -86,8 +92,11 @@ export default function ProfilToko() {
     return () => {};
   }, [updateData.isSuccess]);
 
+  
+
   const handleUpdateToko = (data) => {
     const { sumber, ...temp } = data;
+    
     updateToko({
       ...temp,
     });
@@ -102,10 +111,9 @@ export default function ProfilToko() {
             <div className="flex-1 flex flex-col gap-4 text-left max-w-md">
               <div className="flex justify-between">
                 {/* PHOTO PROFIL */}
-                <div className="rounded-full mx-auto w-[160px] bg-gray-200 text-center pt-10">
+                <div className="rounded-full mx-auto  w-[160px] bg-gray-200 text-center pt-10">
                   <Image
-                    // src={data?.data?.image_file_name}
-                    src ="/icons/photo.svg"
+                    src={imageTokoPreview ?? "/icons/photo.svg"}
                     alt="Info"
                     height={70}
                     width={70}
@@ -119,9 +127,18 @@ export default function ProfilToko() {
                     <label for="files" class="btn">
                       Select Image
                     </label>
-                    <input id="files"  className="hidden" type="file" />
+                    <input
+                      id="files"
+                      className="hidden"
+                      type="file"
+                      {...register("shop_image")}
+                      onChange={(e)=> {
+                        const file = e.target.files[0];
+                        setImageToko(file)
+                        setImageTokoPreview(URL.createObjectURL(file))
+                      }}
+                    />
                   </div>
-         
                 </div>
               </div>
               {/* NAMA TOKO  */}
@@ -162,6 +179,8 @@ export default function ProfilToko() {
                   reset={reset}
                   disabled={false}
                   setValue={setValue}
+                  watch={watch}
+                  setError={setError}
                 />
               </div>
 

@@ -102,7 +102,7 @@ export default function OTP() {
 
   useEffect(() => {
     if (verifyData.isError) {
-      setVerifyError(verifyData.error.data.meta.message);
+      setVerifyError("Kode OTP yang Anda masukan salah");
     }
     return () => {};
   }, [verifyData.isError]);

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getTokenCookie } from "../app/cookies";
-const token = getTokenCookie();
+
 export const profileApi = createApi({
   reducerPath: "profileApi",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.BASE_URL }),
@@ -10,7 +10,7 @@ export const profileApi = createApi({
         url: "v1/my_profile",
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${getTokenCookie()}`,
         },
       }),
     }),
@@ -20,8 +20,10 @@ export const profileApi = createApi({
         url: "v1/my_profile",
         method: "PUT",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Access-Control-Allow-Origin":"*",
+          Authorization: `Bearer ${getTokenCookie()}`,
         },
+        mode:"no-cors",
         body,
       }),
     }),

@@ -1,5 +1,6 @@
 import { COUNTRY_CODE } from "../../app/constant";
 import Image from "next/image";
+import { useEffect } from "react";
 export default function InputPhone({
   isReset,
   setIsReset,
@@ -8,8 +9,29 @@ export default function InputPhone({
   reset,
   disabled = false,
   setValue = null,
+  watch,
+  setError,
   label = "Nomor Telepon",
 }) {
+  const phone = watch("phone");
+
+  useEffect(() => {
+    if (phone) {
+      if (phone[0] === "0") {
+        setValue("phone", `${phone.substring(1)}`);
+      }
+      if (phone[0] !== "8") {
+        setError("phone", {
+          message: "Nomor tidak valid",
+        });
+      }
+    }
+    if (phone === "") {
+      reset({ phone: "" });
+    }
+    phone === "" && setIsReset(false);
+    !isReset && setIsReset(true);
+  }, [phone]);
   return (
     <>
       <label className="font-[600] text-[14px] ">Nomor Telepon</label>
@@ -21,17 +43,6 @@ export default function InputPhone({
           type="number"
           disabled={disabled}
           {...register}
-          onChange={(event) => {
-            const value = event.target.value;
-            if (value[0] === "0") {
-              setValue("phone", `${value.substring(1)}`);
-            }
-            if (value === "") {
-              reset({ phone: "" });
-            }
-            value === "" && setIsReset(false);
-            !isReset && setIsReset(true);
-          }}
           className={`p-2 mt-2  ml-8 text-xs w-[93%] material-input  `}
           placeholder="Masukkan Nomor Telepon"
         />

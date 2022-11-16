@@ -25,20 +25,16 @@ export default function Login() {
     reset,
     values,
     setError,
+    watch
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const handleLogin = async (data) => {
     let phone = data.phone
-    if(data.phone[0] !== "8") {setError('phone',{
-      message:'Angka pertama harus 8'
-    })
-    return;
-  }
-
+  
     // IF PHONE NOT EXIST THEN MUST READ PRIVACY CONSENT FIRST
-    if (checkPhoneExist(data.phone)) {
+    if (checkPhoneExist(phone)) {
       router.push(`/login/otp?phone=${phone}`);
     } else {
       router.push({
@@ -64,9 +60,6 @@ export default function Login() {
             <h6>Kode Verifikasi akan di kirimkan ke nomor Anda</h6>
             <form
               onSubmit={handleSubmit(handleLogin)}
-              onKeyDown={(e) => (e) => {
-                if (e.code === "Enter") e.preventDefault();
-              }}
             >
               <div className="mt-12 max-w-sm">
                 <InputPhone
@@ -74,8 +67,10 @@ export default function Login() {
                   setIsReset={setIsReset}
                   register={register("phone")}
                   errors={errors}
+                  setError={setError}
                   reset={reset}
                   setValue={setValue}
+                  watch={watch}
                 />
               </div>
 

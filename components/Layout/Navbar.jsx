@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import GroupPersonIcon from "../../public/icons/group_person.svg";
@@ -10,15 +10,27 @@ import TokoIcon from "../../public/icons/Icon_store.svg";
 import PersonIcon from "../../public/icons/Icon_user.svg";
 import RightIcon from "../../public/icons/right_icon.svg";
 import ConfirmModal from "../Shared/ConfirmModal";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearTokenCookie } from "../../app/cookies";
+import { initialState, setUser } from "../../services/user.slice";
+import { profileApi, useProfileQuery } from "../../services/profile.service";
+import { setAuthenticate } from "../../services/auth.slice";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
   const router = useRouter();
   const { pathname } = useRouter();
-  // let authenticate = useSelector((state) => state.authSlice?.authenticate);
+  const dispatch = useDispatch();
+  const { data, isFetching, isSuccess } = useProfileQuery();
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      dispatch(setUser({ ...data.user }));
+    }
+
+    return () => {};
+  }, [isFetching]);
 
   const getMenuName = () => {
     const result = pathname.split("/");
@@ -34,6 +46,9 @@ export default function Navbar() {
 
   const handleLogout = () => {
     clearTokenCookie();
+    dispatch(setUser(initialState));
+    dispatch(setAuthenticate({}))
+    dispatch(profileApi.util.resetApiState())
     setTimeout(() => router.push("/"), 300);
   };
   return (
@@ -51,13 +66,17 @@ export default function Navbar() {
               className="flex justify-center items-center space-x-4 cursor-pointer"
               onClick={() => setIsMenuOpen((value) => !value)}
             >
-              <div className="w-10 h-10 rounded-full overflow-hidden ">
-                <Image
-                  src="/images/keyta.svg"
-                  height={40}
-                  width={40}
-                  alt="profil"
-                />
+              <div className="w-10 h-10 bg-gray-50 rounded-full overflow-hidden ">
+                {data?.user?.shop?.image_file_name && (
+                  <Image
+                    src={data?.user?.shop?.image_file_name}
+                    height={40}
+                    width={40}
+                    alt="profil"
+                    placeholder="blur"
+                    blurDataURL="/images/keyta.svg"
+                  />
+                )}
               </div>
               <div className=" text-gray-900 text-md">
                 <div className="cursor-pointer">Profil</div>
@@ -77,14 +96,20 @@ export default function Navbar() {
                     className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg "
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Image
-                      src="/images/keyta.svg"
-                      height={40}
-                      width={40}
-                      alt="profil"
-                    />
+                    <div className="w-10 h-10 bg-gray-50 rounded-full overflow-hidden ">
+                      {data?.user?.shop?.image_file_name && (
+                        <Image
+                          src={data?.user?.shop?.image_file_name}
+                          height={40}
+                          width={40}
+                          alt="profil"
+                          placeholder="blur"
+                          blurDataURL="/images/keyta.svg"
+                        />
+                      )}
+                    </div>
                     <h2 className="font-semibold text-[13px]">
-                      Toko Sejahtera
+                      {data?.user?.shop?.name}
                     </h2>
                   </div>
                 </Link>
