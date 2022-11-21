@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import Layout from "../../components/Layout/Layout";
 import InputPhone from "../../components/Shared/InputPhone";
@@ -11,10 +12,9 @@ import InputText from "../../components/Shared/InputText";
 import KategoriModal from "../../components/Shared/KategoriModal";
 import Modal from "../../components/Shared/Modal";
 import SumberModal from "../../components/Shared/SumberModal";
-import {
-  updateShop,
-  useShopQuery
-} from "../../services/shop.service";
+import { useProfileQuery } from "../../services/profile.service";
+import { updateShop, useShopQuery } from "../../services/shop.service";
+import { setUser } from "../../services/user.slice";
 // import { setShop } from "../services/shop.slice";
 const schema = yup.object({
   phone: yup
@@ -57,6 +57,22 @@ export default function ProfilToko() {
   const [imageTokoPreview, setImageTokoPreview] = useState();
 
   const {
+    data: dataProfile,
+    isFetching: isFetchingProfile,
+    isSuccess: isProfileSuccess,
+    refetch: refetchProfile,
+  } = useProfileQuery();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (dataProfile && isProfileSuccess) {
+      dispatch(setUser({ ...dataProfile.user }));
+    }
+
+    return () => {};
+  }, [isFetchingProfile]);
+
+  const {
     register,
     handleSubmit,
     formState: { errors },
@@ -90,6 +106,7 @@ export default function ProfilToko() {
     setIsUpdate(true);
     await updateShop(data);
     await refetch();
+    await refetchProfile();
     setIsUpdate(false);
   };
 
