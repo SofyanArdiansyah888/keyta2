@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getTokenCookie } from "../app/cookies";
-
+import axios from 'axios';
 export const shopApi = createApi({
   reducerPath: "shopApi",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.BASE_URL }),
@@ -53,13 +53,31 @@ export const shopApi = createApi({
         method: "PUT",
         headers: {
           Authorization: `Bearer ${getTokenCookie()}`,
-          "Content-Type": 'application/json',
+          'Content-Type': 'multipart/form-data'
         },
         body,
       }),
     }),
   }),
 });
+
+export const updateShop = async (data) => {
+    return await axios.put(`${process.env.BASE_URL}v1/my_shop`,data,{
+      headers:{
+        Authorization: `Bearer ${getTokenCookie()}`,
+        'Content-Type': 'multipart/form-data'
+        // 'Content-Type' : 'application/json'
+      }
+    })
+    // return await axios({
+    //   url:`${process.env.BASE_URL}v1/my_shop`,
+    //   method:"PUT",
+    //   headers:{
+    //         Authorization: `Bearer ${getTokenCookie()}`,
+    //     // 'Content-Type': 'multipart/form-data'
+    //   }
+    // },data)
+}
 
 export const {
   useCheckReferalMutation,

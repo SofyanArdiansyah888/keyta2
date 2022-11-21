@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Option, Select } from "@material-tailwind/react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -9,14 +8,13 @@ import Layout from "../../components/Layout/Layout";
 import InputPhone from "../../components/Shared/InputPhone";
 import InputSelect from "../../components/Shared/InputSelect";
 import InputText from "../../components/Shared/InputText";
-import SumberModal from "../../components/Shared/SumberModal";
 import KategoriModal from "../../components/Shared/KategoriModal";
-import {
-  useShopQuery,
-  useUpdateShopMutation,
-} from "../../services/shop.service";
-import { useDispatch } from "react-redux";
 import Modal from "../../components/Shared/Modal";
+import SumberModal from "../../components/Shared/SumberModal";
+import {
+  updateShop,
+  useShopQuery
+} from "../../services/shop.service";
 // import { setShop } from "../services/shop.slice";
 const schema = yup.object({
   phone: yup
@@ -49,14 +47,13 @@ export default function ProfilToko() {
 
   // API STATE
   const { data, isFetching, isSuccess, refetch } = useShopQuery();
-  const [updateToko, updateData] = useUpdateShopMutation();
+  const [isUpdate, setIsUpdate] = useState(false);
 
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [isNameReset, setIsNameReset] = useState(false);
   const [isAdressReset, setIsAdressReset] = useState(false);
   const [isPhoneReset, setIsPhoneReset] = useState(false);
 
-  // const [imageToko, setImageToko] = useState();
   const [imageTokoPreview, setImageTokoPreview] = useState();
 
   const {
@@ -87,25 +84,13 @@ export default function ProfilToko() {
     return () => {};
   }, [isFetching]);
 
-  useEffect(() => {
-    setUpdateSuccess(updateData.isSuccess);
-    refetch();
-    return () => {};
-  }, [updateData.isSuccess]);
-
-  const handleUpdateToko = (data) => {
-    const { sumber, shop_image, ...temp } = data;
-    // let formData = new FormData();
-    // formData.append("shop_image", shop_image);
-    // formData.append("name", temp?.name);
-    // formData.append("address", temp?.address);
-    // formData.append("phone", temp?.phone);
-    // formData.append("subcategory", temp?.subcategory);
-    // formData.append("category", temp?.category);
-    updateToko({
-      
-      ...temp,
-    });
+  const handleUpdateToko = async () => {
+    const form = document.querySelector("form");
+    const data = new FormData(form);
+    setIsUpdate(true);
+    await updateShop(data);
+    await refetch();
+    setIsUpdate(false);
   };
 
   return (
@@ -113,7 +98,10 @@ export default function ProfilToko() {
       {/* CONTENT */}
       <div className="w-full text-center p-8 font-roboto">
         <div className="flex flex-col-reverse md:flex-row gap-8">
-          <form onSubmit={handleSubmit(handleUpdateToko)}>
+          <form
+            onSubmit={handleSubmit(handleUpdateToko)}
+            encType="multipart/form-data"
+          >
             <div className="flex-1 flex flex-col gap-4 text-left max-w-md">
               <div className="flex justify-between">
                 {/* PHOTO PROFIL */}
@@ -138,11 +126,12 @@ export default function ProfilToko() {
                       id="files"
                       className="hidden"
                       type="file"
+                      name="shop_image"
                       accept="image/png,image/jpg,image/jpeg"
                       {...register("shop_image")}
                       onChange={(e) => {
                         const file = e.target.files[0];
-                        setValue("shop_image", file);
+                        // setValue("shop_image", file);
                         setImageTokoPreview(URL.createObjectURL(file));
                       }}
                     />
@@ -244,7 +233,7 @@ export default function ProfilToko() {
 
               <button
                 className="keyta-button mt-14 rounded-xl w-full relative"
-                disabled={updateData.isLoading}
+                disabled={isUpdate}
               >
                 Simpan
                 <svg
@@ -254,9 +243,7 @@ export default function ProfilToko() {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   className={`${
-                    updateData.isLoading
-                      ? "absolute left-4 top-[10px]"
-                      : "hidden"
+                    isUpdate ? "absolute left-4 top-[10px]" : "hidden"
                   }`}
                 >
                   <path
