@@ -30,7 +30,7 @@ export default function Sidebar() {
         <aside className="w-64 px-4">
           <div className="overflow-y-auto py-4 px-3 ">
             {/* KEYTA LOGO */}
-            <Link href="/">
+            <Link href="/home">
               <a
                 href="/public/images/keyta.svg"
                 className="flex items-center  mb-5 "
@@ -52,13 +52,13 @@ export default function Sidebar() {
               <h1 className={styles.header}>Menu</h1>
               <ul className="">
                 {/* DASHBOARD ICON */}
-                <li className={`${styles.list} ${isActive("/dashboard")} `}>
-                  <Link href="/">
-                    <a className="cursor-pointer">
+                <li className={`${styles.list} ${isActive("/home")} `}>
+                  {/* <Link href="/"> */}
+                    <a >
                       <DashboardIcon />
-                      Dashboard
+                      Home
                     </a>
-                  </Link>
+                  {/* </Link> */}
                   {/* <DropDownMenu
                     submenus={[
                       {

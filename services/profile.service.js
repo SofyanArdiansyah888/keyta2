@@ -21,9 +21,9 @@ export const profileApi = createApi({
         method: "PUT",
         headers: {
           "Access-Control-Allow-Origin":"*",
+          "Content-Type": 'application/json',
           Authorization: `Bearer ${getTokenCookie()}`,
         },
-        mode:"no-cors",
         body,
       }),
     }),

@@ -62,13 +62,12 @@ export default function OTP() {
   };
 
   useEffect(() => {
-    if (router?.query?.phone)
+    if (router?.query?.phone && !authenticate.token){
       sendMessage({
         type: "whatsapp",
         country_code: COUNTRY_CODE,
         phone: router.query.phone,
-      });
-    disableBack();
+      });}
 
     return () => {};
   }, []);
@@ -92,7 +91,7 @@ export default function OTP() {
       setPhoneCookie(authenticate?.user?.phone);
       if (authenticate?.user?.shop_id) {
         setTokenCookie(verifyData.data.data.token);
-        router.push("/dashboard");
+        router.push("/home");
         return;
       }
       router.push("registration-profile");
@@ -159,19 +158,25 @@ export default function OTP() {
   };
 
   function handleChange(value1, event) {
-    setOtpState({ [value1]: event.target.value });
+    if (/\d/.test(event.target.value))
+      setOtpState({ [value1]: event.target.value });
+    else {
+      setValue(value1, "");
+    }
   }
 
   const inputfocus = (elmnt) => {
-    if (elmnt.key === "Delete" || elmnt.key === "Backspace") {
-      const next = elmnt.target.tabIndex - 2;
-      if (next > -1) {
-        elmnt.target.form.elements[next].focus();
-      }
-    } else {
-      const next = elmnt.target.tabIndex;
-      if (next < 7) {
-        elmnt.target.form.elements[next].focus();
+    if (/\d/.test(elmnt.key)) {
+      if (elmnt.key === "Delete" || elmnt.key === "Backspace") {
+        const next = elmnt.target.tabIndex - 2;
+        if (next > -1) {
+          elmnt.target.form.elements[next].focus();
+        }
+      } else {
+        const next = elmnt.target.tabIndex;
+        if (next < 7) {
+          elmnt.target.form.elements[next].focus();
+        }
       }
     }
   };
@@ -204,7 +209,7 @@ export default function OTP() {
             <h5>
               Kode verifikasi telah kami kirim melalui{" "}
               {isSMS ? "SMS" : "Whatsapp"} ke{" "}
-              <strong>+62{router?.query?.phone?.substring(1)}</strong>
+              <strong>+62{router?.query?.phone}</strong>
             </h5>
 
             <form onSubmit={handleSubmit(handleVerify)}>
@@ -351,8 +356,30 @@ export default function OTP() {
                 </>
               )}
 
-              <button type="submit" className="keyta-button mt-12">
+            
+              <button
+                className="keyta-button mt-14  relative"
+                disabled={verifyData.isLoading}
+              >
                 Verifikasi
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className={`${
+                    verifyData.isLoading
+                      ? "absolute left-4 top-[10px]"
+                      : "hidden"
+                  }`}
+                >
+                  <path
+                    opacity="0.5"
+                    d="M10 0C8.02219 0 6.08879 0.58649 4.4443 1.6853C2.79981 2.78412 1.51809 4.3459 0.761209 6.17317C0.00433284 8.00043 -0.193701 10.0111 0.192152 11.9509C0.578004 13.8907 1.53041 15.6725 2.92894 17.0711C4.32746 18.4696 6.10929 19.422 8.0491 19.8079C9.98891 20.1937 11.9996 19.9957 13.8268 19.2388C15.6541 18.4819 17.2159 17.2002 18.3147 15.5557C19.4135 13.9112 20 11.9778 20 10C20 8.68678 19.7413 7.38642 19.2388 6.17317C18.7363 4.95991 17.9997 3.85752 17.0711 2.92893C16.1425 2.00035 15.0401 1.26375 13.8268 0.761205C12.6136 0.258658 11.3132 0 10 0ZM10 18C8.41775 18 6.87104 17.5308 5.55544 16.6518C4.23985 15.7727 3.21447 14.5233 2.60897 13.0615C2.00347 11.5997 1.84504 9.99113 2.15372 8.43928C2.4624 6.88743 3.22433 5.46197 4.34315 4.34315C5.46197 3.22433 6.88743 2.4624 8.43928 2.15372C9.99113 1.84504 11.5997 2.00346 13.0615 2.60896C14.5233 3.21447 15.7727 4.23984 16.6518 5.55544C17.5308 6.87103 18 8.41775 18 10C18 12.1217 17.1572 14.1566 15.6569 15.6569C14.1566 17.1571 12.1217 18 10 18Z"
+                    fill="black"
+                  />
+                </svg>
               </button>
             </form>
           </div>

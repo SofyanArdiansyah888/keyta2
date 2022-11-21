@@ -12,7 +12,7 @@ import RightIcon from "../../public/icons/right_icon.svg";
 import ConfirmModal from "../Shared/ConfirmModal";
 import { useDispatch, useSelector } from "react-redux";
 import { clearTokenCookie } from "../../app/cookies";
-import { initialState, setUser } from "../../services/user.slice";
+import { setUser } from "../../services/user.slice";
 import { profileApi, useProfileQuery } from "../../services/profile.service";
 import { setAuthenticate } from "../../services/auth.slice";
 
@@ -46,7 +46,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     clearTokenCookie();
-    dispatch(setUser(initialState));
+    dispatch(setUser({}));
     dispatch(setAuthenticate({}))
     dispatch(profileApi.util.resetApiState())
     setTimeout(() => router.push("/"), 300);

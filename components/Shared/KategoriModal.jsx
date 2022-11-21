@@ -36,10 +36,14 @@ export default function KategoriModal({
   const handleCheckbox = (event, category) => {
     if (event.target.checked) {
       setSelectedCategory(category.category)
+
+
       setSelectedSubcategory((subcat) => [...subcat, {
         category: category.category,
         subcategory: event.target.value
       }]);
+      // const unique = [...new Map(selectedSubCategory.map(item => [item['subcategory'], item])).values()]
+      // setSelectedSubcategory(unique)
       // setProfilValue("subcategory", result.toString());
     }
     // console.log(result);
@@ -47,14 +51,19 @@ export default function KategoriModal({
 
   const handleLanjut = () => {
     setProfilValue('category',selectedCategory)
+    
     let temp = selectedSubCategory.filter((item) => item.category === selectedCategory )
     temp = temp.map(item => item.subcategory)
+    
+
     if(temp.length === 0) {
       setProfilValue('category','')
       setProfilValue('subcategory','')
     }else{
       setProfilValue('subcategory',temp.toString())
     }
+    setSelectedCategory("")
+    setSelectedSubcategory([])
     setShowModal(false);
   };
 

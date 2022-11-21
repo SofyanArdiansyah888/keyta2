@@ -6,7 +6,7 @@ export function middleware(request) {
     request.cookies.get("token") &&
     request.nextUrl?.pathname.startsWith("/login")
   )
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/home", request.url));
   if (
     !request.cookies.get("token") &&
     !request.nextUrl?.pathname.startsWith("/login")
@@ -19,7 +19,7 @@ export function middleware(request) {
 export const config = {
   matcher: [
     "/login",
-    "/dashboard",
+    "/home",
     "/profil-pengguna",
     "/ajak-teman-pakai-keyta",
     "/analitik-toko",

@@ -15,6 +15,17 @@ export const shopApi = createApi({
       }),
     }),
 
+    checkReferal: builder.mutation({
+      query: ({referrer}) => ({
+        url: `v2/referral/${referrer}`,
+        method: "GET",
+        headers: {
+          "Content-Type": 'application/json',
+          Authorization: `Bearer ${getTokenCookie()}`,
+        },
+      }),
+    }),
+
     createShop: builder.mutation({
       query: ({token, ...body}) => ({
         url: "v2/shops",
@@ -42,6 +53,7 @@ export const shopApi = createApi({
         method: "PUT",
         headers: {
           Authorization: `Bearer ${getTokenCookie()}`,
+          "Content-Type": 'application/json',
         },
         body,
       }),
@@ -50,6 +62,7 @@ export const shopApi = createApi({
 });
 
 export const {
+  useCheckReferalMutation,
   useCreateShopMutation,
   useUpdateShopMutation,
   useShopCategoryQuery,
