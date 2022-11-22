@@ -2,13 +2,11 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Countdown from "react-countdown";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { COUNTRY_CODE } from "../../app/constant";
 import { setPhoneCookie, setTokenCookie } from "../../app/cookies";
-import { disableBack } from "../../app/utlis";
 import MaskotScreen from "../../components/Shared/MaskotScreen";
 import {
   useSendMessageMutation,
@@ -62,12 +60,13 @@ export default function OTP() {
   };
 
   useEffect(() => {
-    if (router?.query?.phone && !authenticate.token){
+    if (router?.query?.phone && !authenticate.token) {
       sendMessage({
         type: "whatsapp",
         country_code: COUNTRY_CODE,
         phone: router.query.phone,
-      });}
+      });
+    }
 
     return () => {};
   }, []);
@@ -166,13 +165,16 @@ export default function OTP() {
   }
 
   const inputfocus = (elmnt) => {
-    if (/\d/.test(elmnt.key)) {
-      if (elmnt.key === "Delete" || elmnt.key === "Backspace") {
-        const next = elmnt.target.tabIndex - 2;
-        if (next > -1) {
-          elmnt.target.form.elements[next].focus();
-        }
-      } else {
+    
+    if (elmnt.key === "Delete" || elmnt.key === "Backspace") {
+      setValue(elmnt.target.name, "");
+      const next = elmnt.target.tabIndex - 2;
+      if (next > -1) {
+        elmnt.target.form.elements[next].focus();
+      }
+    } else {
+      if (/\d/.test(elmnt.key)) {
+        setValue(elmnt.target.name, elmnt.key);
         const next = elmnt.target.tabIndex;
         if (next < 7) {
           elmnt.target.form.elements[next].focus();
@@ -224,7 +226,6 @@ export default function OTP() {
                       ? "material-input-error"
                       : "material-input"
                   }`}
-                  // onChange={(event) => handleChange(event, "number2")}
                   onChange={(e) => handleChange("number1", e)}
                   tabIndex="1"
                   onKeyUp={(e) => inputfocus(e)}
@@ -305,7 +306,12 @@ export default function OTP() {
                   }`}
                   onChange={(e) => handleChange("number7", e)}
                   tabIndex="7"
-                  onKeyUp={(e) => inputfocus(e)}
+                  onKeyUp={(e) => {
+                    inputfocus(e);
+                    // if (/\d/.test(e.target.key)){
+                    //
+                    // }
+                  }}
                 />
               </div>
               {(errors.number1 ||
@@ -356,7 +362,6 @@ export default function OTP() {
                 </>
               )}
 
-            
               <button
                 className="keyta-button mt-14  relative"
                 disabled={verifyData.isLoading}

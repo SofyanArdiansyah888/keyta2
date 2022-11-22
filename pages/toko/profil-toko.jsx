@@ -274,7 +274,7 @@ export default function ProfilToko() {
           </form>
 
           {/* FITUR PREMIUM AKTIF */}
-          <div className="flex-1">
+          {/* <div className="flex-1">
             <div className=" mx-auto max-w-sm">
               <h1 className="text-left text-xl mb-4 font-semibold">
                 Fitur Premium Aktif
@@ -303,12 +303,12 @@ export default function ProfilToko() {
                   </div>
                 </div>
               </div>
-              {/* TIDAK BERLANGGANAN */}
-              {/* <div className="rouded-card pt-[30px] bg-gray-400 min-h-[100px] text- font-semibold ">
+              
+              <div className="rouded-card pt-[30px] bg-gray-400 min-h-[100px] text- font-semibold ">
                 Tidak Berlangganan
-              </div> */}
+              </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <SumberModal
