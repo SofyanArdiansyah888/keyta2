@@ -88,8 +88,8 @@ export default function OTP() {
     if (verifyData.data && verifyData.isSuccess) {
       dispatch(setAuthenticate(verifyData.data.data));
       setPhoneCookie(authenticate?.user?.phone);
+      setTokenCookie(verifyData?.data?.data?.token);
       if (authenticate?.user?.shop_id) {
-        setTokenCookie(verifyData.data.data.token);
         router.push("/home");
         return;
       }
@@ -169,9 +169,9 @@ export default function OTP() {
     if (elmnt.key === "Delete" || elmnt.key === "Backspace") {
       setValue(elmnt.target.name, "");
       const next = elmnt.target.tabIndex - 2;
-      if (next > -1) {
-        elmnt.target.form.elements[next].focus();
-      }
+      // if (next > -1) {
+      //   elmnt.target.form.elements[next].focus();
+      // }
     } else {
       if (/\d/.test(elmnt.key)) {
         setValue(elmnt.target.name, elmnt.key);

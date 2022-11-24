@@ -57,20 +57,9 @@ export default function ProfilToko() {
   const [imageTokoPreview, setImageTokoPreview] = useState();
 
   const {
-    data: dataProfile,
-    isFetching: isFetchingProfile,
-    isSuccess: isProfileSuccess,
     refetch: refetchProfile,
   } = useProfileQuery();
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (dataProfile && isProfileSuccess) {
-      dispatch(setUser({ ...dataProfile.user }));
-    }
-
-    return () => {};
-  }, [isFetchingProfile]);
 
   const {
     register,
@@ -122,15 +111,21 @@ export default function ProfilToko() {
             <div className="flex-1 flex flex-col gap-4 text-left max-w-md">
               <div className="flex justify-between">
                 {/* PHOTO PROFIL */}
-                <div className="rounded-full mx-auto  w-[160px] bg-gray-200 text-center pt-9">
-                  <Image
+                {imageTokoPreview ?  <Image
                     src={imageTokoPreview ?? "/icons/photo.svg"}
+                    alt="Info"
+                    height={160}
+                    width={160}
+                    className="rounded-full"
+                  />: <div className="rounded-full mx-auto  w-[160px] bg-gray-200 text-center pt-9">
+                  <Image
+                    src="/icons/photo.svg"
                     alt="Info"
                     height={90}
                     width={90}
                     className="rounded-full"
                   />
-                </div>
+                </div>  }
 
                 <div>
                   <h2 className="font-semibold">Logo Toko</h2>

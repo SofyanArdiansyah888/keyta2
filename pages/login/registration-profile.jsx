@@ -23,12 +23,12 @@ const schema = yup
     user: yup
       .string()
       .required("Nama Pengguna Harus Diisi")
-      .noWhiteSpace("Nama Pelanggan Harus Diisi")
+      .noWhiteSpace("Nama Pengguna Harus Diisi")
       .onlyAlphabet("Nama Pengguna Hanya Boleh Dalam Alfabet"),
     shop: yup
       .string()
       .min(4, "Nama Toko minimal 4 karakter")
-      .noWhiteSpace("Nama Toko harus diisis")
+      .noWhiteSpace("Nama Toko harus diisi")
       .required("Nama Toko Harus Diisi"),
     referrer: yup.string().nullable(true),
   })

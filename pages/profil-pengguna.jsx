@@ -1,13 +1,18 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
+import { clearTokenCookie } from "../app/cookies";
 import { noWhiteSpace, onlyAlphabet } from "../app/utlis";
 import Layout from "../components/Layout/Layout";
+import ConfirmModal from "../components/Shared/ConfirmModal";
 import InputPhone from "../components/Shared/InputPhone";
+import { setAuthenticate } from "../services/auth.slice";
 import {
+  profileApi,
   useProfileQuery,
   useUpdateProfileMutation,
 } from "../services/profile.service";
@@ -24,20 +29,21 @@ const schema = yup.object({
     .typeError("Nomor Telepon tidak valid"),
   name: yup
     .string()
-    .noWhiteSpace("Nama Pelanggan Harus Diisi")
+    .noWhiteSpace("Nama Pengguna Harus Diisi")
     .onlyAlphabet("Nama Pengguna Hanya Boleh Dalam Alfabet")
     .required("Nama Pengguna harus diisi"),
 });
 export default function ProfilPengguna() {
-  const [isOpen, setIsOpen] = useState(false);
   const [isReset, setIsReset] = useState(false);
+  const [isLogout, setIsLogout] = useState(false);
 
   const [updateProfile, updateData] = useUpdateProfileMutation();
   const [updateSuccess, setUpdateSuccess] = useState(false);
   let { user } = useSelector((state) => state?.userSlice);
   const dispatch = useDispatch();
+  const router = useRouter();
 
-  
+ 
 
   useEffect(() => {
     setValue("name", user?.name);
@@ -53,7 +59,9 @@ export default function ProfilPengguna() {
       let temp = {
         name: updateData?.data?.data?.name,
       };
+    
       dispatch(setUser({ ...user, ...temp }));
+
     }
 
     return () => {};
@@ -80,6 +88,14 @@ export default function ProfilPengguna() {
 
   const handleForm = ({ name }) => {
     updateProfile({ name: name.trim() });
+  };
+
+  const handleLogout = () => {
+    clearTokenCookie();
+    dispatch(setUser({}));
+    dispatch(setAuthenticate({}))
+    dispatch(profileApi.util.resetApiState())
+    setTimeout(() => router.push("/"), 300);
   };
 
   return (
@@ -147,7 +163,6 @@ export default function ProfilPengguna() {
 
           <button
             className="keyta-button mt-14 rounded-xl w-full relative"
-            onClick={() => setIsOpen(true)}
             disabled={updateData.isLoading}
           >
             Simpan
@@ -157,7 +172,9 @@ export default function ProfilPengguna() {
               viewBox="0 0 20 20"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className={`${updateData.isLoading ? "absolute left-4 top-[10px]" : "hidden"}`}
+              className={`${
+                updateData.isLoading ? "absolute left-4 top-[10px]" : "hidden"
+              }`}
             >
               <path
                 opacity="0.5"
@@ -168,6 +185,16 @@ export default function ProfilPengguna() {
           </button>
         </div>
       </form>
+      <ConfirmModal
+        header={"Konfirmasi Keluar?"}
+        message={
+          "Anda memiliki perubahan yang belum disimpan. Apakah Anda ingin membatalkan perubahan?"
+        }
+        setShowModal={setIsLogout}
+        showModal={isLogout}
+        buttonText={""}
+        handleConfirm={handleLogout}
+      />
     </>
   );
 }

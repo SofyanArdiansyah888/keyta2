@@ -37,7 +37,7 @@ export default function Navbar() {
     if (result.length > 0) {
       return result[result.length - 1].replace(/-/g, " ");
     }
-    return "Dashboard";
+    return "Home";
   };
 
   const isActive = (menuName) => {
