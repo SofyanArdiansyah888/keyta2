@@ -82,7 +82,7 @@ export default function ProfilToko() {
           phone = phone?.substring(1);
         }
       setValue("phone", phone);
-      setValue("subcategory", temp?.subcategory.toString());
+      setValue("subcategory", temp?.subcategory?.toString());
       setValue("category", temp?.category);
       setValue("instalation_source", temp?.instalation_source);
       setImageTokoPreview(temp?.image_file_name);
