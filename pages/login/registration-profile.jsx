@@ -46,9 +46,16 @@ export default function RegistrationProfile() {
 
   let authenticate = useSelector((state) => state.authSlice?.authenticate);
 
-  useEffect(() => {
-    disableBack();
-  }, []);
+  // useEffect(() => {
+  //   const handleRouteChange = (url, { shallow }) => {
+  //     if(!url.includes('register-success'))
+  //       router.push('/login/registration-profile')  
+  //   }
+  //   router.events.on('routeChangeStart', handleRouteChange)
+  //   return () => {
+  //     router.events.off('routeChangeStart', handleRouteChange)
+  //   }
+  // }, [])
 
   useEffect(() => {
     if (isSuccess && data) {

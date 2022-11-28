@@ -15,11 +15,19 @@ const schema = yup.object({
 });
 
 export default function Login() {
-  const router = useRouter();
-  useEffect(() => {
-    disableBack();
-  },[])
+  const router = useRouter()
+  // useEffect(() => {
+  //   const handleRouteChange = (url, { shallow }) => {
+  //     // router.reload()
+  //   }
+  //   router.events.on('routeChangeStart', handleRouteChange)
 
+  //   // If the component is unmounted, unsubscribe
+  //   // from the event with the `off` method:
+  //   return () => {
+  //     router.events.off('routeChangeStart', handleRouteChange)
+  //   }
+  // }, [])
 
   return (
     <>

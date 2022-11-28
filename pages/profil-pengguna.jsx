@@ -39,9 +39,20 @@ export default function ProfilPengguna() {
 
   const [updateProfile, updateData] = useUpdateProfileMutation();
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
   let { user } = useSelector((state) => state?.userSlice);
   const dispatch = useDispatch();
   const router = useRouter();
+
+  // useEffect(() => {
+  //   const handleRouteChange = (url) => {
+  //     setIsLogout(true)
+  //   }
+  //   router.events.on('routeChangeStart', handleRouteChange)
+  //   return () => {
+  //     router.events.off('routeChangeStart', handleRouteChange)
+  //   }
+  // }, [])
 
  
 
@@ -79,6 +90,11 @@ export default function ProfilPengguna() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+
+
+
+  
   const userName = watch("name");
   useEffect(() => {
     userName === "" && setIsReset(false);

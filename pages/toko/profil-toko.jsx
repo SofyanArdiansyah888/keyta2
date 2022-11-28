@@ -32,7 +32,7 @@ const schema = yup.object({
     .string()
     .required("Subkategori harus diisi")
     .typeError("Subkategori harus diisi"),
-  sumber: yup
+  instalation_source: yup
     .string()
     .required("Sumber harus diisi")
     .typeError("Sumber harus diisi"),
@@ -79,9 +79,14 @@ export default function ProfilToko() {
       let temp = data?.data;
       setValue("name", temp?.name);
       setValue("address", temp?.address);
-      setValue("phone", temp?.phone);
-      setValue("subcategory", temp?.subcategory);
+      let phone = temp?.phone
+      if(phone[0] === "0"){
+        phone = phone.substring(1)
+      }
+      setValue("phone", phone);
+      setValue("subcategory", temp?.subcategory.toString());
       setValue("category", temp?.category);
+      setValue("instalation_source", temp?.instalation_source);
       setImageTokoPreview(temp.image_file_name);
       if (!(temp?.address || temp?.phone || temp?.subcategory))
         setShowModal(true);
@@ -89,11 +94,17 @@ export default function ProfilToko() {
     return () => {};
   }, [isFetching]);
 
-  const handleUpdateToko = async () => {
+  const handleUpdateToko = async (result) => {
+    
     const form = document.querySelector("form");
     const data = new FormData(form);
+    data.set('subcategory',result.subcategory.split(','))
     setIsUpdate(true);
     await updateShop(data);
+    let {shop_image, ...temp} = result;
+    temp.subcategory = temp.subcategory.split(',')
+
+    await updateShop(temp);
     await refetch();
     await refetchProfile();
     setIsUpdate(false);
@@ -224,11 +235,11 @@ export default function ProfilToko() {
               {/* DARIMANA ANDA MENGETAHUI KEYTA  */}
               <div>
                 <InputSelect
-                  name="sumber"
+                  name="instalation_source"
                   label="Dari Mana Anda Mengetahui Keyta?"
-                  register={register("sumber")}
+                  register={register("instalation_source")}
                   placeholder="Pilih Sumber Anda Mengetahui Keyta?"
-                  errorMessage={errors?.sumber?.message}
+                  errorMessage={errors?.instalation_source?.message}
                   setModalOpen={setShowSumberModal}
                 />
                 <input type="hidden" {...register("category")} />

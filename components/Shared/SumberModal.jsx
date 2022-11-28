@@ -10,8 +10,8 @@ export default function SumberModal({
   const [otherValue, setOtherValue] = useState();
   const handleButton = () => {
     setShowModal(false);
-    if (value === "Other") setProfilValue('sumber',otherValue);
-    else setProfilValue('sumber',value);
+    if (value === "Other") setProfilValue('instalation_source',otherValue);
+    else setProfilValue('instalation_source',value);
   };
 
   const handleChange = (event) => {
@@ -50,16 +50,16 @@ export default function SumberModal({
                   <div className="flex flex-col text-slate-500 text-md leading-relaxed px-5 pt-8 ">
                     <div class="flex items-center mb-4">
                       <input
-                        id="sumber-1"
+                        id="instalation_source-1"
                         type="radio"
-                        name="sumber"
+                        name="instalation_source"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Google Playstore"
                         onChange={handleChange}
                         checked={value === "Google Playstore"}
                       />
                       <label
-                        for="sumber-1"
+                        for="instalation_source-1"
                         class="ml-2 text-sm font-medium text-gray-700 "
                       >
                         Google Playstore
@@ -68,16 +68,16 @@ export default function SumberModal({
 
                     <div class="flex items-center mb-4">
                       <input
-                        id="sumber-2"
+                        id="instalation_source-2"
                         type="radio"
-                        name="sumber"
+                        name="instalation_source"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Media Sosial"
                         onChange={handleChange}
                         checked={value === "Media Sosial"}
                       />
                       <label
-                        for="sumber-2"
+                        for="instalation_source-2"
                         class="ml-2 text-sm font-medium text-gray-700 "
                       >
                         Media Sosial
@@ -86,16 +86,16 @@ export default function SumberModal({
 
                     <div class="flex items-center mb-4">
                       <input
-                        id="sumber-3"
+                        id="instalation_source-3"
                         type="radio"
-                        name="sumber"
+                        name="instalation_source"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Referal"
                         onChange={handleChange}
                         checked={value === "Referal"}
                       />
                       <label
-                        for="sumber-3"
+                        for="instalation_source-3"
                         class="ml-2 text-sm font-medium text-gray-700 "
                       >
                         Referal
@@ -104,16 +104,16 @@ export default function SumberModal({
 
                     <div class="flex items-center mb-4">
                       <input
-                        id="sumber-4"
+                        id="instalation_source-4"
                         type="radio"
-                        name="sumber"
+                        name="instalation_source"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Iklan / Website"
                         onChange={handleChange}
                         checked={value === "Iklan / Website"}
                       />
                       <label
-                        for="sumber-4"
+                        for="instalation_source-4"
                         class="ml-2 text-sm font-medium text-gray-700 "
                       >
                         Iklan / Website
@@ -122,9 +122,9 @@ export default function SumberModal({
 
                     <div class="flex items-center mb-4">
                       <input
-                        id="sumber-5"
+                        id="instalation_source-5"
                         type="radio"
-                        name="sumber"
+                        name="instalation_source"
                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Other"
                         onChange={handleChange}

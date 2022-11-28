@@ -89,6 +89,7 @@ export default function OTP() {
       dispatch(setAuthenticate(verifyData.data.data));
       setPhoneCookie(authenticate?.user?.phone);
       setTokenCookie(verifyData?.data?.data?.token);
+      
       if (authenticate?.user?.shop_id) {
         router.push("/home");
         return;
@@ -167,10 +168,18 @@ export default function OTP() {
   const inputfocus = (elmnt) => {
     
     if (elmnt.key === "Delete" || elmnt.key === "Backspace") {
-      setValue(elmnt.target.name, "");
-      const next = elmnt.target.tabIndex - 2;
+      setValue('number1', "");
+      setValue('number2', "");
+      setValue('number3', "");
+      setValue('number4', "");
+      setValue('number5', "");
+      setValue('number6', "");
+      setValue('number7', "");
+
+      // const next = elmnt.target.tabIndex - 2;
+
       // if (next > -1) {
-      //   elmnt.target.form.elements[next].focus();
+        // elmnt.target.form.elements[0].focus();
       // }
     } else {
       if (/\d/.test(elmnt.key)) {
