@@ -56,10 +56,7 @@ export default function ProfilToko() {
 
   const [imageTokoPreview, setImageTokoPreview] = useState();
 
-  const {
-    refetch: refetchProfile,
-  } = useProfileQuery();
-
+  const { refetch: refetchProfile } = useProfileQuery();
 
   const {
     register,
@@ -79,15 +76,16 @@ export default function ProfilToko() {
       let temp = data?.data;
       setValue("name", temp?.name);
       setValue("address", temp?.address);
-      let phone = temp?.phone
-      if(phone[0] === "0"){
-        phone = phone.substring(1)
-      }
+      let phone = temp?.phone;
+      if (phone)
+        if (phone[0] === "0") {
+          phone = phone?.substring(1);
+        }
       setValue("phone", phone);
       setValue("subcategory", temp?.subcategory.toString());
       setValue("category", temp?.category);
       setValue("instalation_source", temp?.instalation_source);
-      setImageTokoPreview(temp.image_file_name);
+      setImageTokoPreview(temp?.image_file_name);
       if (!(temp?.address || temp?.phone || temp?.subcategory))
         setShowModal(true);
     }
@@ -95,14 +93,13 @@ export default function ProfilToko() {
   }, [isFetching]);
 
   const handleUpdateToko = async (result) => {
-    
     const form = document.querySelector("form");
     const data = new FormData(form);
-    data.set('subcategory',result.subcategory.split(','))
+    data.set("subcategory", result.subcategory.split(","));
     setIsUpdate(true);
     await updateShop(data);
-    let {shop_image, ...temp} = result;
-    temp.subcategory = temp.subcategory.split(',')
+    let { shop_image, ...temp } = result;
+    temp.subcategory = temp.subcategory.split(",");
 
     await updateShop(temp);
     await refetch();
@@ -122,21 +119,25 @@ export default function ProfilToko() {
             <div className="flex-1 flex flex-col gap-4 text-left max-w-md">
               <div className="flex justify-between">
                 {/* PHOTO PROFIL */}
-                {imageTokoPreview ?  <Image
+                {imageTokoPreview ? (
+                  <Image
                     src={imageTokoPreview ?? "/icons/photo.svg"}
                     alt="Info"
                     height={160}
                     width={160}
                     className="rounded-full"
-                  />: <div className="rounded-full mx-auto  w-[160px] bg-gray-200 text-center pt-9">
-                  <Image
-                    src="/icons/photo.svg"
-                    alt="Info"
-                    height={90}
-                    width={90}
-                    className="rounded-full"
                   />
-                </div>  }
+                ) : (
+                  <div className="rounded-full mx-auto  w-[160px] bg-gray-200 text-center pt-9">
+                    <Image
+                      src="/icons/photo.svg"
+                      alt="Info"
+                      height={90}
+                      width={90}
+                      className="rounded-full"
+                    />
+                  </div>
+                )}
 
                 <div>
                   <h2 className="font-semibold">Logo Toko</h2>
