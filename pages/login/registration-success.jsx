@@ -16,18 +16,6 @@ const schema = yup.object({
 
 export default function Login() {
   const router = useRouter()
-  // useEffect(() => {
-  //   const handleRouteChange = (url, { shallow }) => {
-  //     // router.reload()
-  //   }
-  //   router.events.on('routeChangeStart', handleRouteChange)
-
-  //   // If the component is unmounted, unsubscribe
-  //   // from the event with the `off` method:
-  //   return () => {
-  //     router.events.off('routeChangeStart', handleRouteChange)
-  //   }
-  // }, [])
 
   return (
     <>
@@ -43,7 +31,7 @@ export default function Login() {
             
             <h6 className="mt-2">Klik <strong> Lanjut </strong> untuk memulai berjualan di keyta</h6>
             <button className="keyta-button w-2/3 rounded-xl mt-16" onClick={() => {
-              router.push("/home");
+              router.replace("/home");
             }}>Lanjut</button>
           </div>
         </div>

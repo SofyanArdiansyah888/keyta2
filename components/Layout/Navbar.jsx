@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 
 import GroupPersonIcon from "../../public/icons/group_person.svg";
@@ -15,8 +15,11 @@ import { clearTokenCookie } from "../../app/cookies";
 import { setUser } from "../../services/user.slice";
 import { profileApi, useProfileQuery } from "../../services/profile.service";
 import { setAuthenticate } from "../../services/auth.slice";
+import { SidebarContext } from "../../pages/_app";
 
 export default function Navbar() {
+  let {expand, setExpand} = useContext(SidebarContext);
+  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
   const router = useRouter();
@@ -49,11 +52,11 @@ export default function Navbar() {
     dispatch(setUser({}));
     dispatch(setAuthenticate({}))
     dispatch(profileApi.util.resetApiState())
-    setTimeout(() => router.push("/"), 300);
+    setTimeout(() => router.replace("/"), 300);
   };
   return (
     <>
-      <nav className="pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg mx-auto lg:ml-[255px] ">
+      <nav className={`pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg mx-auto ${expand ? "lg:ml-[255px]" : "lg:ml-[100px]"}  `}>
         <div className=" container flex flex-wrap justify-between items-center mx-auto">
           {/* DASHBOARD NAME */}
           <span className="text-md lg:text-xl font-semibold capitalize ">

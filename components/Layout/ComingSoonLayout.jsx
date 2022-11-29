@@ -1,13 +1,16 @@
+import { useContext } from "react";
+import { SidebarContext } from "../../pages/_app";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 export default function ComingSoonLayout() {
+  let {expand, setExpand} = useContext(SidebarContext);
   return (
     <>
       <div className="flex">
         <Sidebar />
-        <div className="w-full lg:w-[calc(100%-255px)]">
+        <div className={`w-full   ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"} `}>
           <Navbar />
-          <div className="container mx-auto lg:ml-[255px]">
+          <div className={`container mx-auto ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"}`}>
             <div className="w-full text-center">
               <img
                 className="mx-auto mt-12"
@@ -23,7 +26,7 @@ export default function ComingSoonLayout() {
               <h4 className="mt-8 text-sm">
                 Pantau Instagram kami untuk informasi berikutnya!
               </h4>
-              <div className="w-72 mx-auto text-center">
+              <div className=" mx-auto text-center">
                 <a
                   href="https://www.instagram.com/keyta.id/"
                   target="blank"

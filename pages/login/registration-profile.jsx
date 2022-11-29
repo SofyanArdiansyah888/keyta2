@@ -46,21 +46,10 @@ export default function RegistrationProfile() {
 
   let authenticate = useSelector((state) => state.authSlice?.authenticate);
 
-  // useEffect(() => {
-  //   const handleRouteChange = (url, { shallow }) => {
-  //     if(!url.includes('register-success'))
-  //       router.push('/login/registration-profile')  
-  //   }
-  //   router.events.on('routeChangeStart', handleRouteChange)
-  //   return () => {
-  //     router.events.off('routeChangeStart', handleRouteChange)
-  //   }
-  // }, [])
-
   useEffect(() => {
     if (isSuccess && data) {
       setTokenCookie(authenticate.token);
-      router.push("registration-success");
+      router.replace("registration-success");
     }
     return () => {};
   }, [isSuccess]);

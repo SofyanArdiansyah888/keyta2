@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Radio } from "@material-tailwind/react";
 import Image from "next/image";
 export default function SumberModal({
   setShowModal,
   showModal,
   setProfilValue,
+  getValues
 }) {
   const [value, setValue] = useState();
   const [otherValue, setOtherValue] = useState();
+
+  useEffect(() => {
+    let source = getValues('instalation_source');
+    console.log(source)
+    setValue(source)
+  },[getValues('instalation_source')])
+
   const handleButton = () => {
     setShowModal(false);
     if (value === "Other") setProfilValue('instalation_source',otherValue);

@@ -89,12 +89,12 @@ export default function OTP() {
       dispatch(setAuthenticate(verifyData.data.data));
       setPhoneCookie(authenticate?.user?.phone);
       setTokenCookie(verifyData?.data?.data?.token);
-      
+
       if (authenticate?.user?.shop_id) {
-        router.push("/home");
+        router.replace("/home");
         return;
       }
-      router.push("registration-profile");
+      router.replace("registration-profile");
     }
     return () => {};
   }, [verifyData.isSuccess]);
@@ -113,11 +113,13 @@ export default function OTP() {
     setError,
     trigger,
     setValue,
+    getValues,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const handleVerify = async (data) => {
+    setVerifyError("");
     const token = Object.values(data).reverse().toString().replaceAll(",", "");
     if (isSMS) {
       const authyId = authenticate?.authy_id_sms;
@@ -166,24 +168,16 @@ export default function OTP() {
   }
 
   const inputfocus = (elmnt) => {
-    
     if (elmnt.key === "Delete" || elmnt.key === "Backspace") {
-      setValue('number1', "");
-      setValue('number2', "");
-      setValue('number3', "");
-      setValue('number4', "");
-      setValue('number5', "");
-      setValue('number6', "");
-      setValue('number7', "");
-
-      // const next = elmnt.target.tabIndex - 2;
-
-      // if (next > -1) {
-        // elmnt.target.form.elements[0].focus();
-      // }
+      const next = elmnt.target.tabIndex - 2;
+      if (next > -1) {
+        elmnt.target.form.elements[next].focus();
+      }
+      setValue(elmnt.target.name, "");
     } else {
       if (/\d/.test(elmnt.key)) {
-        setValue(elmnt.target.name, elmnt.key);
+        if (elmnt.target.name !== "number7" && getValues("number7") !== "")
+          setValue(elmnt.target.name, elmnt.key);
         const next = elmnt.target.tabIndex;
         if (next < 7) {
           elmnt.target.form.elements[next].focus();
@@ -335,11 +329,20 @@ export default function OTP() {
                 </a>
               )}
 
-              {verifyError !== "" && (
-                <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ">
-                  {verifyError}
-                </a>
-              )}
+              {verifyError !== "" &&
+                !(
+                  errors.number1 ||
+                  errors.number2 ||
+                  errors.number3 ||
+                  errors.number4 ||
+                  errors.number5 ||
+                  errors.number6 ||
+                  errors.number7
+                ) && (
+                  <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ">
+                    {verifyError}
+                  </a>
+                )}
 
               <div className="text-[13px] mt-8">
                 Belum dapat kode ?{" "}

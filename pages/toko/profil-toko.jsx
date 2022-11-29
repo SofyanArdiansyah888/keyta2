@@ -71,6 +71,8 @@ export default function ProfilToko() {
     resolver: yupResolver(schema),
   });
 
+  
+
   useEffect(() => {
     if (data && isSuccess) {
       let temp = data?.data;
@@ -82,7 +84,9 @@ export default function ProfilToko() {
           phone = phone?.substring(1);
         }
       setValue("phone", phone);
-      setValue("subcategory", temp?.subcategory?.toString());
+      let temps = temp?.subcategory.split(",");
+      temps = temps.join(", ");
+      setValue("subcategory", temps);
       setValue("category", temp?.category);
       setValue("instalation_source", temp?.instalation_source);
       setImageTokoPreview(temp?.image_file_name);
@@ -322,6 +326,7 @@ export default function ProfilToko() {
         showModal={showSumberModal}
         setShowModal={setShowSumberModal}
         setProfilValue={setValue}
+        getValues={getValues}
       />
       <KategoriModal
         showModal={showCategoryModal}

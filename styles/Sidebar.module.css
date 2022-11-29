@@ -1,5 +1,5 @@
 .list {
-  @apply -ml-3 pl-3 py-0;
+  @apply  py-0;
 }
 .activeList {
   @apply bg-[#FFF7E8]  rounded-xl;
@@ -14,9 +14,12 @@
 .list > a {
   @apply flex items-center py-3 text-base font-normal text-gray-900 rounded-lg hover:bg-gray-100 hover:rounded-xl hover:text-keytaSecondary;
 }
+.list > a > span {
+  @apply ml-4
+}
 
 .list > a > svg {
-  @apply mr-4;
+  /* @apply mr-4; */
 }
 
 .list > a {
@@ -25,6 +28,10 @@
 
 .header {
   @apply font-roboto text-[#A1A9B3] text-[15px] font-semibold;
+}
+
+.headerThin {
+  @apply font-roboto text-[#A1A9B3] text-[14px] mb-4 font-light;
 }
 .dropdown {
   list-style: none;

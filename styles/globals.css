@@ -62,9 +62,7 @@
   .keyta-button[disabled] {
     opacity: 0.5;
   }
-  *:focus-visible{
-  border:none !important;
-  }
+
 
   .material-input {
     @apply text-keytaDark;

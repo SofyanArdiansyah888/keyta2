@@ -111,7 +111,7 @@ export default function ProfilPengguna() {
     dispatch(setUser({}));
     dispatch(setAuthenticate({}))
     dispatch(profileApi.util.resetApiState())
-    setTimeout(() => router.push("/"), 300);
+    setTimeout(() => router.replace("/"), 300);
   };
 
   return (

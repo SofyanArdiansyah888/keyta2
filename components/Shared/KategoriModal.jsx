@@ -1,11 +1,14 @@
 import {
-  Accordion, AccordionBody, AccordionHeader
+  Accordion,
+  AccordionBody,
+  AccordionHeader,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import * as yup from "yup";
 import { useShopCategoryQuery } from "../../services/shop.service";
 import InputSearch from "./InputSearch";
-
+import InputText from "../../components/Shared/InputText";
+import Image from "next/image";
 let myindex = 0;
 const schema = yup
   .object({
@@ -24,25 +27,44 @@ export default function KategoriModal({
   const [isSearch, setIsSearch] = useState(false);
   const [search, setSearch] = useState("");
   const [isReset, setIsReset] = useState("");
-  const [selectedSubcategories, setSelectedSubcategories] = useState([])
-  
+  const [selectedSubcategories, setSelectedSubcategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
   useEffect(() => {
-    let subcategories =  getValues('subcategory')
-    if(subcategories){
-      setSelectedSubcategories(subcategories.split(','))
+    let subcategories = getValues("subcategory");
+    if (subcategories) {
+      setSelectedSubcategories(subcategories.split(","));
     }
-  },[getValues('subcategory')])
+  }, [getValues("subcategory")]);
 
   useEffect(() => {
     if (data && isSuccess) {
-      setAccordions(data?.category);
+      let temp = data?.category?.map((cat) => {
+        let subcat = cat?.subcategories?.map((subcat) => {
+          let tempSubcat = {
+            ...subcat,
+            selected: false,
+          };
+          return tempSubcat;
+        });
+        subcat.push({
+          selected: false,
+          subcategory: "",
+        });
+
+        return {
+          ...cat,
+          subcategories: [...subcat],
+        };
+      });
+
+      setAccordions(temp);
     }
     return () => {};
   }, [isFetching]);
 
   const filterData = () => {
     return accordions?.filter((item) => {
-      let temp = item.subcategories.some((subcategory) => {
+      let temp = item?.subcategories?.some((subcategory) => {
         return subcategory.subcategory
           .toLowerCase()
           .includes(search.toLowerCase());
@@ -56,26 +78,33 @@ export default function KategoriModal({
   };
 
   const handleCheckbox = (event, category) => {
-    if(category.category !== getValues('category')){
-      setSelectedSubcategories([])
-    }
-    
-    setProfilValue('category',category.category)
     let value = event.target.value.trim();
-    if(event.target.checked){
-      setSelectedSubcategories(subcat => {
-        let temp = [...new Set(subcat).add(value)]
-        return temp
-      })
-    }else{
-      let temp = selectedSubcategories.filter((item) => item.trim() !== value )
-      setSelectedSubcategories(temp)
+    // setAccordions(categories => {
+    //   return categories.map((cat) => {
+    //     cat.subcategories.map((subcat) => {
+    //       if(subcat.subcategory == value)
+    //       subcat.selected = true
+    //       return subcat
+    //     })
+    //     return cat;
+    //   })
+    // });
+
+    setProfilValue("category", category.category);
+
+    if (event.target.checked) {
+      setSelectedSubcategories((subcat) => {
+        let temp = [...new Set(subcat).add(value)];
+        return temp;
+      });
+    } else {
+      let temp = selectedSubcategories.filter((item) => item.trim() !== value);
+      setSelectedSubcategories(temp);
     }
-    
   };
 
   const handleLanjut = () => {
-    setProfilValue('subcategory',selectedSubcategories.toString())
+    setProfilValue("subcategory", selectedSubcategories.join(", "));
     setShowModal(false);
   };
 
@@ -124,7 +153,7 @@ export default function KategoriModal({
                   </div>
                 )}
                 {/*body*/}
-                <div className="relative px-6 pb-12 overflow-y-scroll max-h-[350px]">
+                <div className="relative px-6 pb-4 overflow-y-scroll max-h-[350px] min-h-[350px]">
                   <>
                     {filterData()?.map((category, index) => (
                       <>
@@ -132,46 +161,71 @@ export default function KategoriModal({
                           open={open === index}
                           icon={<Icon id={index} open={open} />}
                         >
-                          <AccordionHeader
-                            className="text-md font-semibold"
-                            onClick={() => handleOpen(index)}
-                          >
-                            {category.category}
-                          </AccordionHeader>
-                          <AccordionBody className="flex flex-col">
+                          {filterData()?.length > 1 && (
+                            <AccordionHeader
+                              className="text-md font-semibold"
+                              onClick={() => handleOpen(index)}
+                            >
+                              {category.category}
+                            </AccordionHeader>
+                          )}
+                          <AccordionBody className="flex flex-col ">
                             {category.subcategories.map(
                               (subcategory, subcatIndex) => {
                                 myindex++;
-
-                                return (
-                                  <div
-                                    class="flex items-center mb-6 ml-4 font-roboto"
-                                    key={`${myindex}${subcatIndex}`}
-                                  >
-                                    <input
-                                      id={subcategory.subcategory}
-                                      type="checkbox"
-                                      value={subcategory.subcategory}
-                                      onChange={(e) =>
-                                        handleCheckbox(e, category)
-                                      }
-                                      checked={selectedSubcategories.some((temp) => temp.trim() === subcategory.subcategory.trim() )}
-                                      class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-100 accent-keytaPrimary "
-                                    />
-                                    <label
-                                      htmlFor={subcategory.subcategory}
-                                      class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                if (subcategory.id)
+                                  return (
+                                    <div
+                                      class="flex items-center mb-6 ml-4 font-roboto"
+                                      key={`${myindex}${subcatIndex}`}
                                     >
-                                      {subcategory.subcategory}
-                                    </label>
-                                  </div>
-                                );
+                                      <input
+                                        id={subcategory.subcategory}
+                                        type="checkbox"
+                                        value={subcategory.subcategory}
+                                        onChange={(e) =>
+                                          handleCheckbox(e, category)
+                                        }
+                                        // checked={subcategory.selected}
+                                        checked={selectedSubcategories.some(
+                                          (temp) =>
+                                            temp.trim() ===
+                                            subcategory.subcategory.trim()
+                                        )}
+                                        class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-100 accent-keytaPrimary "
+                                      />
+                                      <label
+                                        htmlFor={subcategory.subcategory}
+                                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                                      >
+                                        <Compo
+                                          key={`${myindex}${subcatIndex}`}
+                                          value={subcategory.subcategory}
+                                          higlight={search}
+                                        />
+                                      </label>
+                                    </div>
+                                  );
+                                else
+                                  return (
+                                    <div
+                                      key={`xxxx`}
+                                      class="flex ml-4 font-roboto"
+                                    >
+                                      <KategoriLain></KategoriLain>
+                                    </div>
+                                  );
                               }
                             )}
                           </AccordionBody>
                         </Accordion>
                       </>
                     ))}
+                    {filterData()?.length === 0 && (
+                      <div className="box font-semibold text-[#42454D] border-md h-[300px] text-center pt-[40%] ">
+                        Kategori Tidak Ditemukan
+                      </div>
+                    )}
                   </>
                 </div>
                 {/*footer*/}
@@ -181,7 +235,7 @@ export default function KategoriModal({
                     type="button"
                     onClick={handleLanjut}
                   >
-                    Lanjut
+                    Pilih
                   </button>
                 </div>
               </div>
@@ -190,6 +244,46 @@ export default function KategoriModal({
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
       )}
+    </>
+  );
+}
+
+function KategoriLain() {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [checked, setChecked] = useState(false);
+  useEffect(() => {
+    if (!checked) {
+      setErrorMessage("");
+    }
+  }, [checked]);
+  return (
+    <>
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => setChecked(e.target.checked)}
+        class="mt-2 w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-100 accent-keytaPrimary "
+      />
+      <div className="w-full">
+        <input
+          type="text"
+          onChange={(event) => {
+            if (checked && event.target.value.trim() === "") {
+              setErrorMessage("Harus diisi");
+              return;
+            }
+            setErrorMessage("");
+          }}
+          className={`p-2 ml-2  text-xs w-full  material-input  `}
+          placeholder="Kategori Lain"
+        />
+
+        {errorMessage !== "" && (
+          <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-2 ">
+            {errorMessage}
+          </a>
+        )}
+      </div>
     </>
   );
 }
@@ -209,4 +303,22 @@ function Icon({ id, open }) {
       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
     </svg>
   );
+}
+
+const Compo = ({ higlight, value }) => {
+  return <p>{getHighlightedText(value, higlight)}</p>;
+};
+
+function getHighlightedText(text, higlight) {
+  // Split text on higlight term, include term itself into parts, ignore case
+  var parts = text.split(new RegExp(`(${higlight})`, "gi"));
+  return parts.map((part, index) => (
+    <>
+      {part.toLowerCase() === higlight.toLowerCase() ? (
+        <b style={{ color: "#F5B22D" }}>{part}</b>
+      ) : (
+        part
+      )}
+    </>
+  ));
 }
