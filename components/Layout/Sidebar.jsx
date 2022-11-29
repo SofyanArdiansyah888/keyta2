@@ -19,8 +19,8 @@ import VideoTutorialIcon from "../../public/icons/video_tutorial.svg";
 
 export default function Sidebar() {
   const { pathname } = useRouter();
-  let {expand, setExpand} = useContext(SidebarContext);
-  
+  let { expand, setExpand } = useContext(SidebarContext);
+
   const isActive = (condition) => {
     // return pathname === condition ? styles.activeList : "";
   };
@@ -32,38 +32,46 @@ export default function Sidebar() {
         <aside className={`${expand ? "w-64 px-4" : "w-[100px] px-4"} `}>
           <div className="overflow-y-auto py-4 px-3 ">
             {/* KEYTA LOGO */}
-            <Link href="/home">
-              <a
-                href="/public/images/keyta.svg"
-                className="flex items-center  mb-5 "
-              >
-                <div
-                  onClick={() => {
-                    setExpand((expand) => !expand);
-                  }}
-                >
-                  <Hamburger data="/icons/hamburger.svg" width="20" height="20" />
-                </div>
 
-                {expand && <div
-                  className={`ml-[30px] h-6 sm:h-7 relative`}
-                >
-                  <Image
-                    src="/images/keyta.svg"
-                    alt="Logo Keyta"
-                    height={30}
-                    width={117}
-                  />
-                </div>}
-              </a>
-            </Link>
+            <div
+              
+              className="flex items-center  mb-5 "
+            >
+              <div
+                onClick={() => {
+                  setExpand((expand) => !expand);
+                }}
+              >
+                <Hamburger data="/icons/hamburger.svg" width="20" height="20" />
+              </div>
+              <Link href="/home">
+                <a>
+                {expand && (
+                  <div className={`ml-[30px] h-6 sm:h-7 relative`}>
+                    <Image
+                      src="/images/keyta.svg"
+                      alt="Logo Keyta"
+                      height={30}
+                      width={117}
+                    />
+                  </div>
+                )}
+                </a>
+              </Link>
+            </div>
 
             {/* MENU */}
             <div className="mt-14">
-              <h1 className={`${expand ? styles.header : styles.headerThin } `}>Menu</h1>
+              <h1 className={`${expand ? styles.header : styles.headerThin} `}>
+                Menu
+              </h1>
               <ul className="">
                 {/* DASHBOARD ICON */}
-                <li className={`${!expand ? "ml-0" : ""}  ${styles.list} ${isActive("/home")} `}>
+                <li
+                  className={`${!expand ? "ml-0" : ""}  ${
+                    styles.list
+                  } ${isActive("/home")} `}
+                >
                   {/* <Link href="/"> */}
                   <a className="mx-auto">
                     <DashboardIcon />
@@ -96,7 +104,7 @@ export default function Sidebar() {
                 <li className={` ${styles.list} ${isActive("/daftar-produk")}`}>
                   {/* <Link href="/daftar-produk"> */}
                   <a className="cursor-default">
-                    <DaftarProdukIcon  />
+                    <DaftarProdukIcon />
                     {expand && <span>Daftar Produk</span>}
                   </a>
                   {/* </Link> */}
@@ -133,7 +141,9 @@ export default function Sidebar() {
 
             {/* BANTUAN */}
             <div className="mt-6">
-              <h1 className={`${expand ? styles.header : styles.headerThin } `}>Bantuan</h1>
+              <h1 className={`${expand ? styles.header : styles.headerThin} `}>
+                Bantuan
+              </h1>
               <ul>
                 <li className={`${styles.list} ${isActive("/faq")}`}>
                   {/* <Link href="/faq"> */}
