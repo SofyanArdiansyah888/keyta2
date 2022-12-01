@@ -71,8 +71,6 @@ export default function ProfilToko() {
     resolver: yupResolver(schema),
   });
 
-  
-
   useEffect(() => {
     if (data && isSuccess) {
       let temp = data?.data;
@@ -84,9 +82,14 @@ export default function ProfilToko() {
           phone = phone?.substring(1);
         }
       setValue("phone", phone);
-      let temps = temp?.subcategory.split(",");
-      temps = temps.join(", ");
-      setValue("subcategory", temps);
+
+      let temps = JSON.parse(temp?.category);
+      let tempe = [...temps];
+
+      tempe = tempe.map((item) => item.subcategory);
+
+      // setValue("subcategory", temps);
+      setValue("subcategory", tempe.flat(1).join(", "));
       setValue("category", temp?.category);
       setValue("instalation_source", temp?.instalation_source);
       setImageTokoPreview(temp?.image_file_name);
@@ -96,16 +99,13 @@ export default function ProfilToko() {
     return () => {};
   }, [isFetching]);
 
-  const handleUpdateToko = async (result) => {
+  const handleUpdateToko = async (temp) => {
     const form = document.querySelector("form");
     const data = new FormData(form);
-    data.set("subcategory", result.subcategory.split(","));
+    data.set("category", temp.category);
+    
     setIsUpdate(true);
     await updateShop(data);
-    let { shop_image, ...temp } = result;
-    temp.subcategory = temp.subcategory.split(",");
-
-    await updateShop(temp);
     await refetch();
     await refetchProfile();
     setIsUpdate(false);
@@ -147,7 +147,7 @@ export default function ProfilToko() {
                   <h2 className="font-semibold">Logo Toko</h2>
                   <p className="text-xs">Upload degan formar JPG, JPEG, PNG</p>
                   <div className="mt-24 text-[#023E8A] font-semibold">
-                    <label for="files" class="btn">
+                    <label for="files" className="btn">
                       Select Image
                     </label>
                     <input

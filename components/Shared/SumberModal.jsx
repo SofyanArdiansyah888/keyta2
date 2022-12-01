@@ -12,7 +12,6 @@ export default function SumberModal({
 
   useEffect(() => {
     let source = getValues('instalation_source');
-    console.log(source)
     setValue(source)
   },[getValues('instalation_source')])
 
@@ -56,84 +55,84 @@ export default function SumberModal({
                 {/*body*/}
                 <div className=" px-6 pb-12 ">
                   <div className="flex flex-col text-slate-500 text-md leading-relaxed px-5 pt-8 ">
-                    <div class="flex items-center mb-4">
+                    <div className="flex items-center mb-4">
                       <input
                         id="instalation_source-1"
                         type="radio"
                         name="instalation_source"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Google Playstore"
                         onChange={handleChange}
                         checked={value === "Google Playstore"}
                       />
                       <label
                         for="instalation_source-1"
-                        class="ml-2 text-sm font-medium text-gray-700 "
+                        className="ml-2 text-sm font-medium text-gray-700 "
                       >
                         Google Playstore
                       </label>
                     </div>
 
-                    <div class="flex items-center mb-4">
+                    <div className="flex items-center mb-4">
                       <input
                         id="instalation_source-2"
                         type="radio"
                         name="instalation_source"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Media Sosial"
                         onChange={handleChange}
                         checked={value === "Media Sosial"}
                       />
                       <label
                         for="instalation_source-2"
-                        class="ml-2 text-sm font-medium text-gray-700 "
+                        className="ml-2 text-sm font-medium text-gray-700 "
                       >
                         Media Sosial
                       </label>
                     </div>
 
-                    <div class="flex items-center mb-4">
+                    <div className="flex items-center mb-4">
                       <input
                         id="instalation_source-3"
                         type="radio"
                         name="instalation_source"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Referal"
                         onChange={handleChange}
                         checked={value === "Referal"}
                       />
                       <label
                         for="instalation_source-3"
-                        class="ml-2 text-sm font-medium text-gray-700 "
+                        className="ml-2 text-sm font-medium text-gray-700 "
                       >
                         Referal
                       </label>
                     </div>
 
-                    <div class="flex items-center mb-4">
+                    <div className="flex items-center mb-4">
                       <input
                         id="instalation_source-4"
                         type="radio"
                         name="instalation_source"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Iklan / Website"
                         onChange={handleChange}
                         checked={value === "Iklan / Website"}
                       />
                       <label
                         for="instalation_source-4"
-                        class="ml-2 text-sm font-medium text-gray-700 "
+                        className="ml-2 text-sm font-medium text-gray-700 "
                       >
                         Iklan / Website
                       </label>
                     </div>
 
-                    <div class="flex items-center mb-4">
+                    <div className="flex items-center mb-4">
                       <input
                         id="instalation_source-5"
                         type="radio"
                         name="instalation_source"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Other"
                         onChange={handleChange}
                         checked={value === "Other"}

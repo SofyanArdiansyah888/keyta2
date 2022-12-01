@@ -10,7 +10,6 @@ export const authSlice = createSlice({
       state.authenticate = action.payload;
     },
     // setDataAuth: (state, action) => {
-    //     console.log(action.payload)
     //   state.authenticate = action.payload;
     // },
   },

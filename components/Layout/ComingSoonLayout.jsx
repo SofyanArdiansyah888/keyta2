@@ -10,8 +10,8 @@ export default function ComingSoonLayout() {
         <Sidebar />
         <div className={`w-full   ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"} `}>
           <Navbar />
-          <div className={`container mx-auto ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"}`}>
-            <div className="w-full text-center">
+          <div className={` mx-auto ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"}`}>
+            <div className={`w-full   text-center ${expand? "lg:ml-[255px]" : "lg:ml-[100px]"} `}>
               <img
                 className="mx-auto mt-12"
                 src="/images/keyta.svg"
@@ -39,14 +39,15 @@ export default function ComingSoonLayout() {
                   />
                 </a>
               </div>
-              <div className="absolute bottom-0 -z-50 ">
+           
+            </div>
+            <div className="absolute bottom-0 -z-50 ">
                 <img
                   src="/images/dashboard_background.svg"
                   alt="Gambar Dashboard"
                   className="h-[300px]  w-screen  bg-center object-center"
                 />
               </div>
-            </div>
           </div>
         </div>
       </div>

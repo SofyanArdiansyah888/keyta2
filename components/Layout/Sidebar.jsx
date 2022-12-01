@@ -27,6 +27,7 @@ export default function Sidebar() {
 
   return (
     <>
+  
       <div className="hidden lg:flex fixed shadow-xl h-screen bg-white">
         {/* SIDEBAR */}
         <aside className={`${expand ? "w-64 px-4" : "w-[100px] px-4"} `}>
@@ -73,7 +74,7 @@ export default function Sidebar() {
                   } ${isActive("/home")} `}
                 >
                   {/* <Link href="/"> */}
-                  <a className="mx-auto">
+                  <a className={`${!expand ? "justify-center" : ""} `}  >
                     <DashboardIcon />
                     {expand && <span>Home</span>}
                   </a>
@@ -103,7 +104,7 @@ export default function Sidebar() {
 
                 <li className={` ${styles.list} ${isActive("/daftar-produk")}`}>
                   {/* <Link href="/daftar-produk"> */}
-                  <a className="cursor-default">
+                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
                     <DaftarProdukIcon />
                     {expand && <span>Daftar Produk</span>}
                   </a>
@@ -112,7 +113,7 @@ export default function Sidebar() {
 
                 <li className={`${styles.list} ${isActive("/pesan-kurir")}`}>
                   {/* <Link href="/pesan-kurir"> */}
-                  <a className="cursor-default">
+                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
                     <PesanKurirIcon />
                     {expand && <span>Pesan Kurir</span>}
                   </a>
@@ -121,7 +122,7 @@ export default function Sidebar() {
 
                 <li className={`${styles.list} ${isActive("/keyta-saldo")}`}>
                   {/* <Link href="/keyta-saldo"> */}
-                  <a className="cursor-default">
+                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
                     <KeytaSaldoIcon />
                     {expand && <span>Keyta Saldo</span>}
                   </a>
@@ -130,7 +131,7 @@ export default function Sidebar() {
 
                 <li className={`${styles.list} ${isActive("/analitik-toko")}`}>
                   {/* <Link href="/analitik-toko"> */}
-                  <a className="cursor-default">
+                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
                     <AnalitikTokoIcon />
                     {expand && <span>Analitik Toko</span>}
                   </a>
@@ -147,7 +148,7 @@ export default function Sidebar() {
               <ul>
                 <li className={`${styles.list} ${isActive("/faq")}`}>
                   {/* <Link href="/faq"> */}
-                  <a className="cursor-default">
+                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
                     <FaqIcon />
                     {expand && <span>Faq</span>}
                   </a>
@@ -158,7 +159,7 @@ export default function Sidebar() {
                   className={`${styles.list} ${isActive("/syarat-ketentuan")}`}
                 >
                   {/* <Link href="/syarat-ketentuan"> */}
-                  <a className="cursor-default">
+                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
                     <SyaratIkon />
                     {expand && <span>Syarat Ketentuan</span>}
                   </a>
@@ -169,7 +170,7 @@ export default function Sidebar() {
                   className={`${styles.list} ${isActive("/kebijakan-privasi")}`}
                 >
                   {/* <Link href="/kebijakan-privasi"> */}
-                  <a className="cursor-default">
+                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
                     <KebijakanIcon />
                     {expand && <span>Kebijakan Privasi</span>}
                   </a>
@@ -180,7 +181,7 @@ export default function Sidebar() {
                   className={`${styles.list} ${isActive("/kontak-jadwalin")}`}
                 >
                   {/* <Link href="/kontak-jadwalin"> */}
-                  <a className="cursor-default">
+                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
                     <JadwalinIcon />
                     {expand && <span>Kontak Jadwalin</span>}
                   </a>
@@ -189,7 +190,7 @@ export default function Sidebar() {
 
                 <li className={`${styles.list} ${isActive("/video-tutorial")}`}>
                   {/* <Link href="/video-tutorial"> */}
-                  <a className="cursor-default">
+                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
                     <VideoTutorialIcon />
                     {expand && <span>Video Tutorial</span>}
                   </a>
@@ -205,7 +206,6 @@ export default function Sidebar() {
 }
 
 // function DropDownMenu({ submenus }) {
-//   console.log(submenus);
 //   return (
 //     <>
 //       <ul className={styles.dropdown}>
