@@ -42,6 +42,7 @@ export default function Sidebar() {
                 onClick={() => {
                   setExpand((expand) => !expand);
                 }}
+                className="cursor-pointer"
               >
                 <Hamburger data="/icons/hamburger.svg" width="20" height="20" />
               </div>
