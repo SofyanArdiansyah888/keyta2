@@ -8,27 +8,31 @@ import Head from "next/head";
 
 export const NavbarContext = createContext();
 export const SidebarContext = createContext();
+export const InputChangeContext = createContext();
 export default function MyApp({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => page);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expand, setExpand] = useState(true);
+  const [inputChange, setInputChange] = useState(false);
   return (
     <>
       <Provider store={store}>
-        <SidebarContext.Provider value={{expand,setExpand}}>
-          {getLayout(
-            <NavbarContext.Provider value={{ isMenuOpen, setIsMenuOpen }}>
-              <Head>
-                <meta
-                  name="viewport"
-                  content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
-                />
-              </Head>
+        <InputChangeContext.Provider value={{ inputChange, setInputChange }}>
+          <SidebarContext.Provider value={{ expand, setExpand }}>
+            {getLayout(
+              <NavbarContext.Provider value={{ isMenuOpen, setIsMenuOpen }}>
+                <Head>
+                  <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+                  />
+                </Head>
 
-              <Component {...pageProps} />
-            </NavbarContext.Provider>
-          )}
-        </SidebarContext.Provider>
+                <Component {...pageProps} />
+              </NavbarContext.Provider>
+            )}
+          </SidebarContext.Provider>
+        </InputChangeContext.Provider>
       </Provider>
     </>
   );

@@ -292,10 +292,10 @@ function AccordionCustom({
             <h2 onClick={() => handleOpen(index)}>
               <button
                 type="button"
-                className="flex items-center justify-between w-full px-2 py-3 font-medium text-left border-b-[1px]  border-gray-200  rounded-t-xl"
+                className="flex items-center justify-between w-full px-2 py-3 font-medium text-left  rounded-t-xl"
               >
                 <span className="text-md font-semibold">{category?.name}</span>
-                <Icon id={index} open={open} />
+                {search === '' && <Icon id={index} open={open}  />}
               </button>
             </h2>
           )}

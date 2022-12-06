@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +18,7 @@ import {
   useUpdateProfileMutation,
 } from "../services/profile.service";
 import { setUser } from "../services/user.slice";
+import { InputChangeContext } from "./_app";
 
 onlyAlphabet(yup);
 noWhiteSpace(yup);
@@ -36,6 +38,8 @@ const schema = yup.object({
 export default function ProfilPengguna() {
   const [isReset, setIsReset] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
+  let {inputChange, setInputChange} = useContext(InputChangeContext)
+
 
   const [updateProfile, updateData] = useUpdateProfileMutation();
   const [updateSuccess, setUpdateSuccess] = useState(false);
@@ -59,6 +63,7 @@ export default function ProfilPengguna() {
   useEffect(() => {
     setValue("name", user?.name);
     setValue("phone", user?.phone);
+    
     return () => {};
   }, [user]);
 
@@ -91,19 +96,21 @@ export default function ProfilPengguna() {
     resolver: yupResolver(schema),
   });
 
-
-
-
-  
   const userName = watch("name");
   useEffect(() => {
     userName === "" && setIsReset(false);
     !isReset && setIsReset(true);
+    if(userName !== user?.name){
+      setInputChange(true)
+    }else{
+      setInputChange(false)
+    }
     return () => {};
   }, [userName]);
 
-  const handleForm = ({ name }) => {
-    updateProfile({ name: name.trim() });
+  const handleForm = async ({ name }) => {
+    await updateProfile({ name: name.trim() });
+    setInputChange(false)
   };
 
   const handleLogout = () => {

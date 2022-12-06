@@ -15,19 +15,18 @@ import { clearTokenCookie } from "../../app/cookies";
 import { setUser } from "../../services/user.slice";
 import { profileApi, useProfileQuery } from "../../services/profile.service";
 import { setAuthenticate } from "../../services/auth.slice";
-import { SidebarContext } from "../../pages/_app";
+import { InputChangeContext, SidebarContext } from "../../pages/_app";
 
 export default function Navbar() {
-  let {expand, setExpand} = useContext(SidebarContext);
-  
+  let { expand, setExpand } = useContext(SidebarContext);
+  let { inputChange, setInputChange } = useContext(InputChangeContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
   const router = useRouter();
   const { pathname } = useRouter();
   const dispatch = useDispatch();
   const { data, isFetching, isSuccess } = useProfileQuery();
-
-  useEffect(() => {
+  const navigate = useEffect(() => {
     if (data && isSuccess) {
       dispatch(setUser({ ...data.user }));
     }
@@ -50,13 +49,17 @@ export default function Navbar() {
   const handleLogout = () => {
     clearTokenCookie();
     dispatch(setUser({}));
-    dispatch(setAuthenticate({}))
-    dispatch(profileApi.util.resetApiState())
+    dispatch(setAuthenticate({}));
+    dispatch(profileApi.util.resetApiState());
     setTimeout(() => router.replace("/"), 300);
   };
   return (
     <>
-      <nav className={`pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg mx-auto ${expand ? "lg:ml-[255px]" : "lg:ml-[100px]"}  `}>
+      <nav
+        className={`pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg mx-auto ${
+          expand ? "lg:ml-[255px]" : "lg:ml-[100px]"
+        }  `}
+      >
         <div className=" container flex flex-wrap justify-between items-center mx-auto">
           {/* DASHBOARD NAME */}
           <span className="text-md lg:text-xl font-semibold capitalize ">
@@ -121,38 +124,48 @@ export default function Navbar() {
                   {/* PENGGUNA */}
                   <li className="font-medium">
                     <h6 className="my-5 text-xs">Profil</h6>
-                    <Link href="/profil-pengguna">
-                      <a
-                        href="#"
-                        className={`flex items-center ${isActive(
-                          "/profil-pengguna"
-                        )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <div className="mr-5">
-                          <PersonIcon />
-                        </div>
-                        Pengguna
-                      </a>
-                    </Link>
+                    {/* <Link href="/profil-pengguna"> */}
+                    <a
+                      href="#"
+                      className={`flex items-center ${isActive(
+                        "/profil-pengguna"
+                      )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        if (inputChange) {
+                          setIsLogout(true);
+                        } else router.push("/profil-pengguna");
+                      }}
+                    >
+                      <div className="mr-5">
+                        <PersonIcon />
+                      </div>
+                      Pengguna
+                    </a>
+                    {/* </Link> */}
                   </li>
 
                   {/* TOKO */}
                   <li className="font-medium my-5">
-                    <Link href="/toko/profil-toko">
-                      <a
-                        href="#"
-                        className={`flex items-center my-6 transform ${isActive(
-                          "/toko/profil-toko"
-                        )} transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        <div className="mr-5">
-                          <TokoIcon />
-                        </div>
-                        Toko
-                      </a>
-                    </Link>
+                    {/* <Link href="/toko/profil-toko"> */}
+                    <a
+                      href="#"
+                      className={`flex items-center my-6 transform ${isActive(
+                        "/toko/profil-toko"
+                      )} transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        if (inputChange) {
+                          setIsLogout(true);
+                        } else router.push("/toko/profil-toko");
+                      }}
+                    >
+                      <div className="mr-5">
+                        <TokoIcon />
+                      </div>
+                      Toko
+                    </a>
+                    {/* </Link> */}
                   </li>
 
                   <hr className="dark:border-gray-700" />

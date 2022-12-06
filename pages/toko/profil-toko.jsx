@@ -75,7 +75,7 @@ export default function ProfilToko() {
     if (data && isSuccess) {
       let temp = data?.data;
       setValue("name", temp?.name);
-      setValue("address", temp?.address);
+      setValue("inv_address", temp?.inv_address);
       let phone = temp?.phone;
       if (phone)
         if (phone[0] === "0") {
@@ -103,7 +103,6 @@ export default function ProfilToko() {
     const form = document.querySelector("form");
     const data = new FormData(form);
     data.set("category", temp.category);
-    
     setIsUpdate(true);
     await updateShop(data);
     await refetch();
@@ -183,11 +182,11 @@ export default function ProfilToko() {
               {/* ALAMAT TOKO  */}
               <div>
                 <InputText
-                  errorMessage={errors?.address?.message}
+                  errorMessage={errors?.inv_address?.message}
                   reset={reset}
-                  name="address"
+                  name="inv_address"
                   label="Alamat Toko"
-                  register={register("address")}
+                  register={register("inv_address")}
                   placeholder="Masukkan Alamat Toko"
                   isReset={isAdressReset}
                   setIsReset={setIsAdressReset}

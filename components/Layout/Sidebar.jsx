@@ -4,7 +4,7 @@ import styles from "../../styles/Sidebar.module.css";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
-import { SidebarContext } from "../../pages/_app";
+import { InputChangeContext, SidebarContext } from "../../pages/_app";
 import AnalitikTokoIcon from "../../public/icons/analitik_toko.svg";
 import DaftarProdukIcon from "../../public/icons/daftar_produk.svg";
 import DashboardIcon from "../../public/icons/dashboard_icon.svg";
@@ -16,28 +16,37 @@ import JadwalinIcon from "../../public/icons/kontak_jadwalin.svg";
 import PesanKurirIcon from "../../public/icons/pesan_kurir.svg";
 import SyaratIkon from "../../public/icons/syarat_ketentuan.svg";
 import VideoTutorialIcon from "../../public/icons/video_tutorial.svg";
+import ConfirmModal from "../Shared/ConfirmModal";
+import { profileApi } from "../../services/profile.service";
 
 export default function Sidebar() {
   const { pathname } = useRouter();
+  const router = useRouter();
+  let { inputChange, setInputChange } = useContext(InputChangeContext);
   let { expand, setExpand } = useContext(SidebarContext);
+  const [isLogout, setIsLogout] = useState(false);
 
   const isActive = (condition) => {
     // return pathname === condition ? styles.activeList : "";
   };
 
+  const handleLogout = () => {
+    clearTokenCookie();
+    dispatch(setUser({}));
+    dispatch(setAuthenticate({}));
+    dispatch(profileApi.util.resetApiState());
+    setTimeout(() => router.replace("/"), 300);
+  };
+
   return (
     <>
-  
       <div className="hidden lg:flex fixed shadow-xl h-screen bg-white">
         {/* SIDEBAR */}
         <aside className={`${expand ? "w-64 px-4" : "w-[100px] px-4"} `}>
           <div className="overflow-y-auto py-4 px-3 ">
             {/* KEYTA LOGO */}
 
-            <div
-              
-              className="flex items-center  mb-5 "
-            >
+            <div className="flex items-center  mb-5 ">
               <div
                 onClick={() => {
                   setExpand((expand) => !expand);
@@ -46,8 +55,17 @@ export default function Sidebar() {
               >
                 <Hamburger data="/icons/hamburger.svg" width="20" height="20" />
               </div>
-              <Link href="/home">
-                <a>
+              {/* <Link href="/home"> */}
+              <a
+                onClick={() => {
+                  if (inputChange) {
+                    setIsLogout(true);
+                  }else{
+                    router.push("/home");
+                  }
+                  
+                }}
+              >
                 {expand && (
                   <div className={`ml-[30px] h-6 sm:h-7 relative`}>
                     <Image
@@ -58,8 +76,8 @@ export default function Sidebar() {
                     />
                   </div>
                 )}
-                </a>
-              </Link>
+              </a>
+              {/* </Link> */}
             </div>
 
             {/* MENU */}
@@ -75,7 +93,7 @@ export default function Sidebar() {
                   } ${isActive("/home")} `}
                 >
                   {/* <Link href="/"> */}
-                  <a className={`${!expand ? "justify-center" : ""} `}  >
+                  <a className={`${!expand ? "justify-center" : ""} `}>
                     <DashboardIcon />
                     {expand && <span>Home</span>}
                   </a>
@@ -105,7 +123,11 @@ export default function Sidebar() {
 
                 <li className={` ${styles.list} ${isActive("/daftar-produk")}`}>
                   {/* <Link href="/daftar-produk"> */}
-                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
+                  <a
+                    className={`${
+                      !expand ? "justify-center" : ""
+                    } cursor-default `}
+                  >
                     <DaftarProdukIcon />
                     {expand && <span>Daftar Produk</span>}
                   </a>
@@ -114,7 +136,11 @@ export default function Sidebar() {
 
                 <li className={`${styles.list} ${isActive("/pesan-kurir")}`}>
                   {/* <Link href="/pesan-kurir"> */}
-                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
+                  <a
+                    className={`${
+                      !expand ? "justify-center" : ""
+                    } cursor-default `}
+                  >
                     <PesanKurirIcon />
                     {expand && <span>Pesan Kurir</span>}
                   </a>
@@ -123,7 +149,11 @@ export default function Sidebar() {
 
                 <li className={`${styles.list} ${isActive("/keyta-saldo")}`}>
                   {/* <Link href="/keyta-saldo"> */}
-                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
+                  <a
+                    className={`${
+                      !expand ? "justify-center" : ""
+                    } cursor-default `}
+                  >
                     <KeytaSaldoIcon />
                     {expand && <span>Keyta Saldo</span>}
                   </a>
@@ -132,7 +162,11 @@ export default function Sidebar() {
 
                 <li className={`${styles.list} ${isActive("/analitik-toko")}`}>
                   {/* <Link href="/analitik-toko"> */}
-                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
+                  <a
+                    className={`${
+                      !expand ? "justify-center" : ""
+                    } cursor-default `}
+                  >
                     <AnalitikTokoIcon />
                     {expand && <span>Analitik Toko</span>}
                   </a>
@@ -149,7 +183,11 @@ export default function Sidebar() {
               <ul>
                 <li className={`${styles.list} ${isActive("/faq")}`}>
                   {/* <Link href="/faq"> */}
-                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
+                  <a
+                    className={`${
+                      !expand ? "justify-center" : ""
+                    } cursor-default `}
+                  >
                     <FaqIcon />
                     {expand && <span>Faq</span>}
                   </a>
@@ -160,7 +198,11 @@ export default function Sidebar() {
                   className={`${styles.list} ${isActive("/syarat-ketentuan")}`}
                 >
                   {/* <Link href="/syarat-ketentuan"> */}
-                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
+                  <a
+                    className={`${
+                      !expand ? "justify-center" : ""
+                    } cursor-default `}
+                  >
                     <SyaratIkon />
                     {expand && <span>Syarat Ketentuan</span>}
                   </a>
@@ -171,7 +213,11 @@ export default function Sidebar() {
                   className={`${styles.list} ${isActive("/kebijakan-privasi")}`}
                 >
                   {/* <Link href="/kebijakan-privasi"> */}
-                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
+                  <a
+                    className={`${
+                      !expand ? "justify-center" : ""
+                    } cursor-default `}
+                  >
                     <KebijakanIcon />
                     {expand && <span>Kebijakan Privasi</span>}
                   </a>
@@ -182,7 +228,11 @@ export default function Sidebar() {
                   className={`${styles.list} ${isActive("/kontak-jadwalin")}`}
                 >
                   {/* <Link href="/kontak-jadwalin"> */}
-                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
+                  <a
+                    className={`${
+                      !expand ? "justify-center" : ""
+                    } cursor-default `}
+                  >
                     <JadwalinIcon />
                     {expand && <span>Kontak Jadwalin</span>}
                   </a>
@@ -191,7 +241,11 @@ export default function Sidebar() {
 
                 <li className={`${styles.list} ${isActive("/video-tutorial")}`}>
                   {/* <Link href="/video-tutorial"> */}
-                  <a className={`${!expand ? "justify-center" : ""} cursor-default `}>
+                  <a
+                    className={`${
+                      !expand ? "justify-center" : ""
+                    } cursor-default `}
+                  >
                     <VideoTutorialIcon />
                     {expand && <span>Video Tutorial</span>}
                   </a>
@@ -202,6 +256,16 @@ export default function Sidebar() {
           </div>
         </aside>
       </div>
+      <ConfirmModal
+        header={"Konfirmasi Keluar?"}
+        message={
+          "Anda memiliki perubahan yang belum disimpan. Apakah Anda ingin membatalkan perubahan?"
+        }
+        setShowModal={setIsLogout}
+        showModal={isLogout}
+        buttonText={""}
+        handleConfirm={handleLogout}
+      />
     </>
   );
 }
