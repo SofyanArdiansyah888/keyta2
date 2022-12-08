@@ -57,7 +57,7 @@ export default function ProfilToko() {
   const [imageTokoPreview, setImageTokoPreview] = useState();
 
   const { refetch: refetchProfile } = useProfileQuery();
-
+  
   const {
     register,
     handleSubmit,
@@ -70,6 +70,7 @@ export default function ProfilToko() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
 
   useEffect(() => {
     if (data && isSuccess) {
@@ -84,7 +85,7 @@ export default function ProfilToko() {
       setValue("phone", phone);
 
       let temps = JSON.parse(temp?.category);
-      let tempe = [...temps];
+      let tempe = temps ? [...temps] : [];
 
       tempe = tempe.map((item) => item.subcategory);
 

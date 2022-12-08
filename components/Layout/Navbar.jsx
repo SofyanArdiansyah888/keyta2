@@ -173,20 +173,25 @@ export default function Navbar() {
                   {/* AJAK TEMAN */}
                   <li className="font-medium">
                     <h6 className="my-5 text-xs">Komunitas</h6>
-                    <Link href="/ajak-teman-pakai-keyta">
+                    {/* <Link href="/ajak-teman-pakai-keyta"> */}
                       <a
                         href="#"
                         className={`flex items-center ${isActive(
                           "/ajak-teman-pakai-keyta"
                         )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
-                        onClick={() => setIsMenuOpen(false)}
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          if (inputChange) {
+                            setIsLogout(true);
+                          } else router.push("/ajak-teman-pakai-keyta");
+                        }}
                       >
                         <div className="mr-5">
                           <GroupPersonIcon />
                         </div>
                         Ajak Temanmu Pakai Keyta
                       </a>
-                    </Link>
+                    {/* </Link> */}
                   </li>
 
                   {/* GABUNG KOMUNITAS */}
@@ -196,6 +201,12 @@ export default function Navbar() {
                       className={`flex items-center ${isActive(
                         "/gabung-komunitas"
                       )} cursor-pointer my-6 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        if (inputChange) {
+                          setIsLogout(true);
+                        } else router.push("/gabung-komunitas");
+                      }}
                     >
                       <div className="mr-5">
                         <GroupPersonIcon2 />

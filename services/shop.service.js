@@ -4,6 +4,7 @@ import axios from 'axios';
 export const shopApi = createApi({
   reducerPath: "shopApi",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.BASE_URL }),
+  refetchOnMountOrArgChange: true,
   endpoints: (builder) => ({
     shopCategory: builder.query({
       query: () => ({
@@ -43,8 +44,11 @@ export const shopApi = createApi({
         method: "GET",
         headers: {
           Authorization: `Bearer ${getTokenCookie()}`,
+          'Cache-Control': 'no-store'
         },
+        
       }),
+      
     }),
 
     updateShop: builder.mutation({

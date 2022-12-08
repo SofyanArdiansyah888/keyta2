@@ -71,11 +71,11 @@ export default function KategoriModal({
       setAccordions(temp);
     }
     return () => {};
-  }, [isFetching,getProfilValue('category')]);
+  }, [isFetching,getProfilValue('category'), mywatch]);
 
   const filterData = () => {
     const temp = [...fields];
-    let result = temp?.filter((item) => {
+    let result = fields?.filter((item) => {
       let temp = item?.subcategories?.some((subcategory) => {
         return subcategory.name.toLowerCase().includes(search.toLowerCase());
       });
@@ -318,7 +318,7 @@ function AccordionCustom({
                           `category.${index}.subcategories.${subcatIndex}.selected`
                         )}
                         type="checkbox"
-                        checked={subcategory.selected}
+                        // checked={subcategory.selected}
                         className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-100 accent-keytaPrimary "
                       />
                       <label

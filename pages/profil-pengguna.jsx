@@ -40,7 +40,6 @@ export default function ProfilPengguna() {
   const [isLogout, setIsLogout] = useState(false);
   let {inputChange, setInputChange} = useContext(InputChangeContext)
 
-
   const [updateProfile, updateData] = useUpdateProfileMutation();
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
@@ -48,15 +47,15 @@ export default function ProfilPengguna() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   const handleRouteChange = (url) => {
-  //     setIsLogout(true)
-  //   }
-  //   router.events.on('routeChangeStart', handleRouteChange)
-  //   return () => {
-  //     router.events.off('routeChangeStart', handleRouteChange)
-  //   }
-  // }, [])
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      setInputChange(false)
+    }
+    router.events.on('routeChangeStart', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  }, [])
 
  
 
