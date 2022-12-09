@@ -114,11 +114,13 @@ export default function ProfilPengguna() {
   };
 
   const handleLogout = () => {
-    clearTokenCookie();
-    dispatch(setUser({}));
-    dispatch(setAuthenticate({}));
-    dispatch(profileApi.util.resetApiState());
-    setTimeout(() => router.replace("/"), 300);
+    // clearTokenCookie();
+    // dispatch(setUser({}));
+    // dispatch(setAuthenticate({}));
+    // dispatch(profileApi.util.resetApiState());
+    // setTimeout(() => router.replace("/"), 300);
+    if(getCookie('visited-link'))
+    router.push(getCookie('visited-link'))
     setCookie("input-pengguna", false);
   };
 

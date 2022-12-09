@@ -16,6 +16,7 @@ import { setUser } from "../../services/user.slice";
 import { profileApi, useProfileQuery } from "../../services/profile.service";
 import { setAuthenticate } from "../../services/auth.slice";
 import { InputChangeContext, SidebarContext } from "../../pages/_app";
+import { setCookie } from "cookies-next";
 
 export default function Navbar() {
   let { expand, setExpand } = useContext(SidebarContext);
@@ -135,6 +136,7 @@ export default function Navbar() {
                         // if (inputChange) {
                         //   setIsLogout(true);
                         // } else 
+                        setCookie('visited-link',"/profil-pengguna")
                         router.push("/profil-pengguna");
                       }}
                     >
@@ -159,6 +161,7 @@ export default function Navbar() {
                         // if (inputChange) {
                         //   setIsLogout(true);
                         // } else 
+                        setCookie('visited-link',"/toko/profil-toko")
                         router.push("/toko/profil-toko");
                       }}
                     >
@@ -186,6 +189,7 @@ export default function Navbar() {
                           // if (inputChange) {
                           //   setIsLogout(true);
                           // } else 
+                          setCookie('visited-link',"/ajak-teman-pakai-keyta")
                           router.push("/ajak-teman-pakai-keyta");
                         }}
                       >

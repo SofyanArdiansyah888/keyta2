@@ -18,7 +18,7 @@ import SyaratIkon from "../../public/icons/syarat_ketentuan.svg";
 import VideoTutorialIcon from "../../public/icons/video_tutorial.svg";
 import ConfirmModal from "../Shared/ConfirmModal";
 import { profileApi } from "../../services/profile.service";
-
+import { setCookie, getCookie, deleteCookie, hasCookie } from "cookies-next";
 export default function Sidebar() {
   const { pathname } = useRouter();
   const router = useRouter();
@@ -61,7 +61,8 @@ export default function Sidebar() {
                   // if (inputChange) {
                   //   setIsLogout(true);
                   // }else
-                    router.push("/home");  
+                  setCookie("visited-link", "/home");
+                  router.push("/home");
                 }}
               >
                 {expand && (
