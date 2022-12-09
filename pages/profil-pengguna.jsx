@@ -68,12 +68,12 @@ export default function ProfilPengguna() {
   useEffect(() => {
     setUpdateSuccess(updateData.isSuccess);
     setValue("user", user?.name);
-
+    setCookie("input-pengguna", false);
     if (updateData.data) {
       let temp = {
         name: updateData?.data?.data?.name,
       };
-
+      
       dispatch(setUser({ ...user, ...temp }));
     }
 
@@ -119,6 +119,7 @@ export default function ProfilPengguna() {
     dispatch(setAuthenticate({}));
     dispatch(profileApi.util.resetApiState());
     setTimeout(() => router.replace("/"), 300);
+    setCookie("input-pengguna", false);
   };
 
   return (
