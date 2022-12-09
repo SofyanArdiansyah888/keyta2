@@ -119,6 +119,7 @@ export default function ProfilPengguna() {
     // dispatch(setAuthenticate({}));
     // dispatch(profileApi.util.resetApiState());
     // setTimeout(() => router.replace("/"), 300);
+    console.log(getCookie('visitedlink'))
     router.push(getCookie('visitedlink'))
     setCookie("inputpengguna", false);
   };
