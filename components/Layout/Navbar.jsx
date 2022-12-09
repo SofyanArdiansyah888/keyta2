@@ -16,7 +16,7 @@ import { setUser } from "../../services/user.slice";
 import { profileApi, useProfileQuery } from "../../services/profile.service";
 import { setAuthenticate } from "../../services/auth.slice";
 import { InputChangeContext, SidebarContext } from "../../pages/_app";
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 
 export default function Navbar() {
   let { expand, setExpand } = useContext(SidebarContext);
@@ -133,9 +133,7 @@ export default function Navbar() {
                       )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       onClick={() => {
                         setIsMenuOpen(false);
-                        // if (inputChange) {
-                        //   setIsLogout(true);
-                        // } else 
+                       
                         setCookie('visitedlink',"/profil-pengguna")
                         router.push("/profil-pengguna");
                       }}
@@ -158,11 +156,14 @@ export default function Navbar() {
                       )} transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       onClick={() => {
                         setIsMenuOpen(false);
-                        // if (inputChange) {
-                        //   setIsLogout(true);
-                        // } else 
-                        setCookie('visitedlink',"/toko/profil-toko")
-                        router.push("/toko/profil-toko");
+                        if(getCookie('inputpengguna')){
+                          setIsLogout(true);
+                          setCookie('visitedlink',"/toko/profil-toko")
+                        }else{
+                          router.push("/toko/profil-toko");
+                        }
+                  
+                        
                       }}
                     >
                       <div className="mr-5">
@@ -186,11 +187,12 @@ export default function Navbar() {
                         )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                         onClick={() => {
                           setIsMenuOpen(false);
-                          // if (inputChange) {
-                          //   setIsLogout(true);
-                          // } else 
-                          setCookie('visitedlink',"/ajak-teman-pakai-keyta")
-                          router.push("/ajak-teman-pakai-keyta");
+                          if(getCookie('inputpengguna')){
+                            setIsLogout(true);
+                            setCookie('visitedlink',"/ajak-teman-pakai-keyta")
+                          }else{
+                            router.push("/ajak-teman-pakai-keyta");
+                          }
                         }}
                       >
                         <div className="mr-5">
@@ -255,7 +257,11 @@ export default function Navbar() {
         setShowModal={setIsLogout}
         showModal={isLogout}
         buttonText={""}
-        handleConfirm={handleLogout}
+        handleConfirm={(getCookie('inputpengguna')) ? () => {
+          router.push(getCookie('visitedlink'))
+          setIsLogout(false)
+          setCookie('inputpengguna',false)
+        } : handleLogout}
       />
     </>
   );

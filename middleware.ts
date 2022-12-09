@@ -14,10 +14,10 @@ export function middleware(request) {
   )
     return NextResponse.redirect(new URL("/login", request.url));
 
-  if (
-    request.cookies.get('inputpengguna')== 'true' && !request.nextUrl?.pathname.startsWith("/profil-pengguna")
-  )
-    return NextResponse.redirect(new URL("/profil-pengguna?inputChange=true", request.url));
+  // if (
+  //   request.cookies.get('inputpengguna')== 'true' && !request.nextUrl?.pathname.startsWith("/profil-pengguna")
+  // )
+  //   return NextResponse.redirect(new URL("/profil-pengguna?inputChange=true", request.url));
 
   return NextResponse.next();
 }

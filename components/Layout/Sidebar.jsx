@@ -19,24 +19,19 @@ import VideoTutorialIcon from "../../public/icons/video_tutorial.svg";
 import ConfirmModal from "../Shared/ConfirmModal";
 import { profileApi } from "../../services/profile.service";
 import { setCookie, getCookie, deleteCookie, hasCookie } from "cookies-next";
+import { clearTokenCookie } from "../../app/cookies";
+import { useDispatch } from "react-redux";
 export default function Sidebar() {
   const { pathname } = useRouter();
   const router = useRouter();
   let { inputChange, setInputChange } = useContext(InputChangeContext);
   let { expand, setExpand } = useContext(SidebarContext);
   const [isLogout, setIsLogout] = useState(false);
-
+  const dispatch = useDispatch()
   const isActive = (condition) => {
     // return pathname === condition ? styles.activeList : "";
   };
 
-  const handleLogout = () => {
-    clearTokenCookie();
-    dispatch(setUser({}));
-    dispatch(setAuthenticate({}));
-    dispatch(profileApi.util.resetApiState());
-    setTimeout(() => router.replace("/"), 300);
-  };
 
   return (
     <>
@@ -58,11 +53,13 @@ export default function Sidebar() {
               {/* <Link href="/home"> */}
               <a
                 onClick={() => {
-                  // if (inputChange) {
-                  //   setIsLogout(true);
-                  // }else
-                  setCookie("visitedlink", "/home");
-                  router.push("/home");
+                  if(getCookie('inputpengguna')){
+                    setIsLogout(true);
+                    setCookie("visitedlink", "/home");
+                  }else{
+                    router.push("/home");
+                  }
+                
                 }}
               >
                 {expand && (
@@ -263,7 +260,12 @@ export default function Sidebar() {
         setShowModal={setIsLogout}
         showModal={isLogout}
         buttonText={""}
-        handleConfirm={handleLogout}
+        handleConfirm={(getCookie('inputpengguna')) ? () => {
+          router.push(getCookie('visitedlink'))
+          setIsLogout(false)
+          setCookie('inputpengguna',false)
+        } : ""}
+
       />
     </>
   );

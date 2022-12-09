@@ -1,25 +1,19 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import { setCookie } from "cookies-next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useContext } from "react";
-import { useEffect, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useContext, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
-import { clearTokenCookie } from "../app/cookies";
 import { noWhiteSpace, onlyAlphabet } from "../app/utlis";
 import Layout from "../components/Layout/Layout";
-import ConfirmModal from "../components/Shared/ConfirmModal";
 import InputPhone from "../components/Shared/InputPhone";
-import { setAuthenticate } from "../services/auth.slice";
 import {
-  profileApi,
-  useProfileQuery,
-  useUpdateProfileMutation,
+  useUpdateProfileMutation
 } from "../services/profile.service";
 import { setUser } from "../services/user.slice";
 import { InputChangeContext } from "./_app";
-import { setCookie, getCookie, deleteCookie, hasCookie } from "cookies-next";
 
 onlyAlphabet(yup);
 noWhiteSpace(yup);
@@ -113,16 +107,11 @@ export default function ProfilPengguna() {
     setInputChange(false);
   };
 
-  const handleLogout = () => {
-    // clearTokenCookie();
-    // dispatch(setUser({}));
-    // dispatch(setAuthenticate({}));
-    // dispatch(profileApi.util.resetApiState());
-    // setTimeout(() => router.replace("/"), 300);
-    console.log(getCookie('visitedlink'))
-    router.push(getCookie('visitedlink'))
-    setCookie("inputpengguna", false);
-  };
+  // const handleLogout = () => {
+
+  //   router.push(getCookie('visitedlink'))
+  //   setCookie("inputpengguna", false);
+  // };
 
   return (
     <>
@@ -211,7 +200,7 @@ export default function ProfilPengguna() {
           </button>
         </div>
       </form>
-      <ConfirmModal
+      {/* <ConfirmModal
         header={"Konfirmasi Keluar?"}
         message={
           "Anda memiliki perubahan yang belum disimpan. Apakah Anda ingin membatalkan perubahan?"
@@ -220,7 +209,7 @@ export default function ProfilPengguna() {
         showModal={isLogout}
         buttonText={""}
         handleConfirm={handleLogout}
-      />
+      /> */}
     </>
   );
 }
