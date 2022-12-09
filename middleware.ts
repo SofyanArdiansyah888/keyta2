@@ -8,7 +8,7 @@ export function middleware(request) {
     request.nextUrl?.pathname.startsWith("/login")
   )
     return NextResponse.redirect(new URL("/home", request.url));
-  if (
+  if ( 
     !request.cookies.get("token") &&
     !request.nextUrl?.pathname.startsWith("/login")
   )
