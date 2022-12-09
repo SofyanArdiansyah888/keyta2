@@ -58,12 +58,10 @@ export default function Sidebar() {
               {/* <Link href="/home"> */}
               <a
                 onClick={() => {
-                  if (inputChange) {
-                    setIsLogout(true);
-                  }else{
-                    router.push("/home");
-                  }
-                  
+                  // if (inputChange) {
+                  //   setIsLogout(true);
+                  // }else
+                    router.push("/home");  
                 }}
               >
                 {expand && (

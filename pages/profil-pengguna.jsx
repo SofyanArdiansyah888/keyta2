@@ -19,6 +19,7 @@ import {
 } from "../services/profile.service";
 import { setUser } from "../services/user.slice";
 import { InputChangeContext } from "./_app";
+import { setCookie, getCookie, deleteCookie, hasCookie } from "cookies-next";
 
 onlyAlphabet(yup);
 noWhiteSpace(yup);
@@ -38,7 +39,7 @@ const schema = yup.object({
 export default function ProfilPengguna() {
   const [isReset, setIsReset] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
-  let {inputChange, setInputChange} = useContext(InputChangeContext)
+  let { inputChange, setInputChange } = useContext(InputChangeContext);
 
   const [updateProfile, updateData] = useUpdateProfileMutation();
   const [updateSuccess, setUpdateSuccess] = useState(false);
@@ -48,21 +49,19 @@ export default function ProfilPengguna() {
   const router = useRouter();
 
   useEffect(() => {
-    const handleRouteChange = (url) => {
-      setInputChange(false)
+    if(router.query?.inputChange === 'true'){
+      setIsLogout(true)
+    }else{
+      setValue("name", user?.name);
     }
-    router.events.on('routeChangeStart', handleRouteChange)
-    return () => {
-      router.events.off('routeChangeStart', handleRouteChange)
-    }
-  }, [])
+    
+  },[router.query])
 
- 
 
   useEffect(() => {
     setValue("name", user?.name);
     setValue("phone", user?.phone);
-    
+
     return () => {};
   }, [user]);
 
@@ -74,9 +73,8 @@ export default function ProfilPengguna() {
       let temp = {
         name: updateData?.data?.data?.name,
       };
-    
-      dispatch(setUser({ ...user, ...temp }));
 
+      dispatch(setUser({ ...user, ...temp }));
     }
 
     return () => {};
@@ -96,27 +94,30 @@ export default function ProfilPengguna() {
   });
 
   const userName = watch("name");
+
   useEffect(() => {
     userName === "" && setIsReset(false);
     !isReset && setIsReset(true);
-    if(userName !== user?.name){
-      setInputChange(true)
-    }else{
-      setInputChange(false)
+    if (userName !== user?.name) {
+      setInputChange(true);
+      setCookie("input-pengguna", true);
+    } else {
+      setInputChange(false);
+      setCookie("input-pengguna", false);
     }
     return () => {};
   }, [userName]);
 
   const handleForm = async ({ name }) => {
     await updateProfile({ name: name.trim() });
-    setInputChange(false)
+    setInputChange(false);
   };
 
   const handleLogout = () => {
     clearTokenCookie();
     dispatch(setUser({}));
-    dispatch(setAuthenticate({}))
-    dispatch(profileApi.util.resetApiState())
+    dispatch(setAuthenticate({}));
+    dispatch(profileApi.util.resetApiState());
     setTimeout(() => router.replace("/"), 300);
   };
 

@@ -132,9 +132,10 @@ export default function Navbar() {
                       )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       onClick={() => {
                         setIsMenuOpen(false);
-                        if (inputChange) {
-                          setIsLogout(true);
-                        } else router.push("/profil-pengguna");
+                        // if (inputChange) {
+                        //   setIsLogout(true);
+                        // } else 
+                        router.push("/profil-pengguna");
                       }}
                     >
                       <div className="mr-5">
@@ -155,9 +156,10 @@ export default function Navbar() {
                       )} transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       onClick={() => {
                         setIsMenuOpen(false);
-                        if (inputChange) {
-                          setIsLogout(true);
-                        } else router.push("/toko/profil-toko");
+                        // if (inputChange) {
+                        //   setIsLogout(true);
+                        // } else 
+                        router.push("/toko/profil-toko");
                       }}
                     >
                       <div className="mr-5">
@@ -181,9 +183,10 @@ export default function Navbar() {
                         )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                         onClick={() => {
                           setIsMenuOpen(false);
-                          if (inputChange) {
-                            setIsLogout(true);
-                          } else router.push("/ajak-teman-pakai-keyta");
+                          // if (inputChange) {
+                          //   setIsLogout(true);
+                          // } else 
+                          router.push("/ajak-teman-pakai-keyta");
                         }}
                       >
                         <div className="mr-5">
@@ -202,10 +205,11 @@ export default function Navbar() {
                         "/gabung-komunitas"
                       )} cursor-pointer my-6 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       onClick={() => {
-                        setIsMenuOpen(false);
-                        if (inputChange) {
-                          setIsLogout(true);
-                        } else router.push("/gabung-komunitas");
+                        // setIsMenuOpen(false);
+                        // if (inputChange) {
+                        //   setIsLogout(true);
+                        // } else 
+                        // router.push("gabung-komunitas");
                       }}
                     >
                       <div className="mr-5">
