@@ -136,7 +136,7 @@ export default function Navbar() {
                         // if (inputChange) {
                         //   setIsLogout(true);
                         // } else 
-                        setCookie('visited-link',"/profil-pengguna")
+                        setCookie('visitedlink',"/profil-pengguna")
                         router.push("/profil-pengguna");
                       }}
                     >
@@ -161,7 +161,7 @@ export default function Navbar() {
                         // if (inputChange) {
                         //   setIsLogout(true);
                         // } else 
-                        setCookie('visited-link',"/toko/profil-toko")
+                        setCookie('visitedlink',"/toko/profil-toko")
                         router.push("/toko/profil-toko");
                       }}
                     >
@@ -189,7 +189,7 @@ export default function Navbar() {
                           // if (inputChange) {
                           //   setIsLogout(true);
                           // } else 
-                          setCookie('visited-link',"/ajak-teman-pakai-keyta")
+                          setCookie('visitedlink',"/ajak-teman-pakai-keyta")
                           router.push("/ajak-teman-pakai-keyta");
                         }}
                       >

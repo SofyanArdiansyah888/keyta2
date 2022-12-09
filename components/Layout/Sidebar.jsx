@@ -61,7 +61,7 @@ export default function Sidebar() {
                   // if (inputChange) {
                   //   setIsLogout(true);
                   // }else
-                  setCookie("visited-link", "/home");
+                  setCookie("visitedlink", "/home");
                   router.push("/home");
                 }}
               >

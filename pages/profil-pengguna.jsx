@@ -68,7 +68,7 @@ export default function ProfilPengguna() {
   useEffect(() => {
     setUpdateSuccess(updateData.isSuccess);
     setValue("user", user?.name);
-    setCookie("input-pengguna", false);
+    setCookie("inputpengguna", false);
     if (updateData.data) {
       let temp = {
         name: updateData?.data?.data?.name,
@@ -100,10 +100,10 @@ export default function ProfilPengguna() {
     !isReset && setIsReset(true);
     if (userName !== user?.name) {
       setInputChange(true);
-      setCookie("input-pengguna", true);
+      setCookie("inputpengguna", true);
     } else {
       setInputChange(false);
-      setCookie("input-pengguna", false);
+      setCookie("inputpengguna", false);
     }
     return () => {};
   }, [userName]);
@@ -119,8 +119,8 @@ export default function ProfilPengguna() {
     // dispatch(setAuthenticate({}));
     // dispatch(profileApi.util.resetApiState());
     // setTimeout(() => router.replace("/"), 300);
-    router.push(getCookie('visited-link'))
-    setCookie("input-pengguna", false);
+    router.push(getCookie('visitedlink'))
+    setCookie("inputpengguna", false);
   };
 
   return (
