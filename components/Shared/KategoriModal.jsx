@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-import * as yup from "yup";
 import { useShopCategoryQuery } from "../../services/shop.service";
 import InputSearch from "./InputSearch";
 let myindex = 0;
@@ -15,7 +14,7 @@ export default function KategoriModal({
   const { data, isLoading, isSuccess, isFetching } = useShopCategoryQuery();
   const [isSearch, setIsSearch] = useState(false);
   const [search, setSearch] = useState("");
-  const [profileCategory, setProfileCategory] = useState([])
+  const [profileCategory, setProfileCategory] = useState([]);
 
   const {
     control,
@@ -29,7 +28,7 @@ export default function KategoriModal({
     trigger,
   } = useForm();
   let mywatch = watch("category");
-
+  
   const { fields, append, remove, prepend, replace, handleChange } =
     useFieldArray({
       control,
@@ -38,13 +37,13 @@ export default function KategoriModal({
 
   useEffect(() => {
     if (data && isSuccess) {
-      let tempProfil = getProfilValue('category')
-      if(tempProfil){
-         setProfileCategory(JSON.parse(tempProfil))
-      }else{
-        setProfileCategory([])
+      let tempProfil = getProfilValue("category");
+      if (tempProfil) {
+        setProfileCategory(JSON.parse(tempProfil));
+      } else {
+        setProfileCategory([]);
       }
-      
+
       let temp = data?.category?.map((cat) => {
         let subcat = cat?.subcategories?.map((subcat) => {
           let tempSubcat = {
@@ -53,7 +52,7 @@ export default function KategoriModal({
           };
           return tempSubcat;
         });
-        
+
         subcat.push({
           name: "checkbox",
           selected: false,
@@ -66,39 +65,26 @@ export default function KategoriModal({
           subcategories: [...subcat],
         };
       });
-      
-
       setAccordions(temp);
     }
     return () => {};
-  }, [isFetching,getProfilValue('category'), mywatch]);
+  }, [isFetching, getProfilValue("category"), mywatch]);
 
-  const filterData = () => {
-    const temp = [...fields];
+  const isCategoryExist = (categoryName) => {
     let result = fields?.filter((item) => {
       let temp = item?.subcategories?.some((subcategory) => {
-        return subcategory.name.toLowerCase().includes(search.toLowerCase());
+        return subcategory?.name?.toLowerCase().includes(search.toLowerCase());
       });
       return temp;
     });
-
-    result = result.map((item) => {
-      let tempSub = item?.subcategories.filter((subcategory) => {
-        return subcategory.name
-          .toLowerCase()
-          .includes(search.toLocaleLowerCase());
-      });
-      return {
-        ...item,
-        subcategories: tempSub,
-      };
-    });
-
-    return result;
+    let exist = result.find((item) => item.name === categoryName);
+    return { exist, result };
   };
+
 
   const onSubmit = (data) => {
     let isError = false;
+
     let result = data.category.filter((item) => {
       let temp = item?.subcategories?.some((subcategory) => {
         return subcategory.selected;
@@ -121,13 +107,11 @@ export default function KategoriModal({
       };
     });
 
-    if(!isError){
-      setProfilValue(
-        "category",
-        JSON.stringify(result) 
-      );
+    if (!isError) {
+      setProfilValue("category", JSON.stringify(result));
       setProfilValue("subcategory", subcategories.join(", "));
       setShowModal(false);
+      setSearch('')
     }
   };
 
@@ -188,9 +172,9 @@ export default function KategoriModal({
                         }}
                       >
                         <AccordionCustom
-                          filterData={filterData}
                           profileCategory={profileCategory}
                           search={search}
+                          isCategoryExist={isCategoryExist}
                           {...{
                             control,
                             register,
@@ -226,7 +210,6 @@ export default function KategoriModal({
 }
 
 function AccordionCustom({
-  filterData,
   search,
   control,
   register,
@@ -235,39 +218,40 @@ function AccordionCustom({
   reset,
   fields,
   append,
-  profileCategory
+  profileCategory,
+  isCategoryExist,
 }) {
   const [open, setOpen] = useState(0);
   const { accordions } = useContext(KategoriContext);
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
-  
+
   useEffect(() => {
     reset();
 
     accordions.map(({ subcategories, category }) => {
-      const tempSubcategories = subcategories.map(sub => sub.subcategory)
+      const tempSubcategories = subcategories.map((sub) => sub.subcategory);
       const subcat = subcategories.map((sub) => {
         let selected = false;
-        let name = sub.subcategory
+        let name = sub.subcategory;
         profileCategory.map((profCat) => {
-          
-          if(profCat.category === category ){
-            if(profCat.subcategory.includes(sub.subcategory)){ 
-              selected = true
+          if (profCat.category === category) {
+            if (profCat.subcategory.includes(sub.subcategory)) {
+              selected = true;
             }
             profCat.subcategory.map((profSubcat) => {
-              if(!tempSubcategories.includes(profSubcat) && sub.subcategory === ""){
-                selected = true
-                name = profSubcat
+              if (
+                !tempSubcategories.includes(profSubcat) &&
+                sub.subcategory === ""
+              ) {
+                selected = true;
+                name = profSubcat;
               }
-            })
-            
+            });
           }
-        })
-        
-      
+        });
+
         return { name, selected, id: sub.id };
       });
       append({
@@ -280,82 +264,91 @@ function AccordionCustom({
 
   return (
     <>
-      {filterData()?.map((category, index) => (
+      {fields?.map((category, index) => {
+        let {exist,result} = isCategoryExist(category.name);
+        return (
         <>
           <input
             className="border-2 border-gray-600"
-            key={index}
+            key={category.id}
             {...register(`category.${index}.name`)}
             type="hidden"
           />
-          {filterData()?.length > 1 && (
+          {(result.length > 1 && exist)  && (
             <h2 onClick={() => handleOpen(index)}>
               <button
                 type="button"
                 className="flex items-center justify-between w-full px-2 py-3 font-medium text-left  rounded-t-xl"
               >
                 <span className="text-md font-semibold">{category?.name}</span>
-                {search === '' && <Icon id={index} open={open}  />}
+                {search === "" && <Icon id={index} open={open} />}
               </button>
             </h2>
           )}
           <div
             className={`${
-              open === index || search !== "" ? "relative" : "hidden"
+              ((open === index || search !== "") && (exist) ) ? "relative" : "hidden"
             } py-3 `}
           >
             <div className="flex flex-col ">
               {category?.subcategories?.map((subcategory, subcatIndex) => {
                 myindex++;
-                if (subcategory.id)
-                  return (
-                    <div
-                      className="flex items-center mb-6 ml-4 font-roboto"
-                      key={`${index}${subcatIndex}`}
-                    >
-                      <input
-                        {...register(
-                          `category.${index}.subcategories.${subcatIndex}.selected`
-                        )}
-                        type="checkbox"
-                        // checked={subcategory.selected}
-                        className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-100 accent-keytaPrimary "
-                      />
-                      <label
-                        htmlFor={subcategory.name}
-                        className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                if (
+                  subcategory?.name
+                    ?.toLowerCase()
+                    .includes(search.toLocaleLowerCase())
+                ) {
+                  if (subcategory.id)
+                    return (
+                      <div
+                        className="flex items-center mb-6 ml-4 font-roboto"
+                        key={`${index}${subcatIndex}`}
                       >
-                        <Compo
-                          key={`${index}${subcatIndex}`}
-                          value={subcategory?.name}
-                          higlight={search}
+                        <input
+                          {...register(
+                            `category.${index}.subcategories.${subcatIndex}.selected`
+                          )}
+                          type="checkbox"
+                          // checked={subcategory.selected}
+
+                          className="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-100 accent-keytaPrimary "
                         />
-                      </label>
-                    </div>
-                  );
-                else
-                  return (
-                    <div
-                      key={`xxxx${myindex}${subcatIndex}`}
-                      className="flex ml-4 font-roboto"
-                    >
-                      <KategoriLain
-                        name={`category.${index}.subcategories.${subcatIndex}.selected`}
-                        name2={`category.${index}.subcategories.${subcatIndex}.name`}
-                        catName={category.name}
-                        {...{
-                          register,
-                        }}
-                      />
-                    </div>
-                  );
+                        <label
+                          htmlFor={subcategory.name}
+                          className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          <Compo
+                            key={`${index}${subcatIndex}`}
+                            value={subcategory?.name}
+                            higlight={search}
+                          />
+                        </label>
+                      </div>
+                    );
+                  else
+                    return (
+                      <div
+                        key={`xxxx${myindex}${subcatIndex}`}
+                        className="flex ml-4 font-roboto"
+                      >
+                        <KategoriLain
+                          name={`category.${index}.subcategories.${subcatIndex}.selected`}
+                          name2={`category.${index}.subcategories.${subcatIndex}.name`}
+                          catName={category.name}
+                          {...{
+                            register,
+                          }}
+                        />
+                      </div>
+                    );
+                }
               })}
             </div>
           </div>
         </>
-      ))}
+      )})}
 
-      {filterData()?.length === 0 && (
+      {((isCategoryExist("").result.length) === 0) && (
         <div className="box font-semibold text-[#42454D] border-md h-[300px] text-center pt-[40%] ">
           Kategori Tidak Ditemukan
         </div>
