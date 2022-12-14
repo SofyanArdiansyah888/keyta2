@@ -365,11 +365,14 @@ export default function OTP() {
                     Tidak punya Whatsapp?{" "}
                   </div>
                   <div
-                    className="text-[16px] mt-2 cursor-pointer text-keytaDarkBlue font-[600]"
+                    className="text-[16px] mt-2   text-keytaDarkBlue font-[600]"
                     onClick={handleSendSMS}
                     disabled={countdown > 0}
                   >
+                    <h1 className="cursor-pointer inline-block">
                     Kirim melalui SMS
+                    </h1>
+                    
                   </div>
                 </>
               )}

@@ -17,7 +17,7 @@ import { updateShop, useShopQuery } from "../../services/shop.service";
 import { setUser } from "../../services/user.slice";
 // import { setShop } from "../services/shop.slice";
 const schema = yup.object({
-  phone: yup
+  inv_phone: yup
     .number()
     .positive("Nomor Telepon tidak valid")
     .required("Nomor Telepon harus diisi")
@@ -77,12 +77,14 @@ export default function ProfilToko() {
       let temp = data?.data;
       setValue("name", temp?.name);
       setValue("inv_address", temp?.inv_address);
-      let phone = temp?.phone;
-      if (phone)
+      let phone = temp?.inv_phone;
+      if (phone){
         if (phone[0] === "0") {
           phone = phone?.substring(1);
         }
-      setValue("phone", phone);
+      }
+
+      setValue("inv_phone", phone);
 
       let temps = JSON.parse(temp?.category);
       let tempe = temps ? [...temps] : [];
@@ -94,7 +96,7 @@ export default function ProfilToko() {
       setValue("category", temp?.category);
       setValue("instalation_source", temp?.instalation_source);
       setImageTokoPreview(temp?.image_file_name);
-      if (!(temp?.address || temp?.phone || temp?.subcategory))
+      if (!(temp?.address || temp?.inv_phone || temp?.subcategory))
         setShowModal(true);
     }
     return () => {};
@@ -199,13 +201,14 @@ export default function ProfilToko() {
                 <InputPhone
                   isReset={isPhoneReset}
                   setIsReset={setIsPhoneReset}
-                  register={register("phone")}
+                  register={register("inv_phone")}
                   errors={errors}
                   reset={reset}
                   disabled={false}
                   setValue={setValue}
                   watch={watch}
                   setError={setError}
+                  name="inv_phone"
                 />
               </div>
 

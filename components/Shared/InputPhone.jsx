@@ -12,20 +12,21 @@ export default function InputPhone({
   watch,
   setError,
   label = "Nomor Telepon",
+  name="phone"
 }) {
-  const phone = watch("phone");
+  const phone = watch(name);
 
   useEffect(() => {
     if (phone) {
       if (phone[0] === "0") {
-        setValue("phone", `${phone.substring(1)}`);
+        setValue(name, `${phone.substring(1)}`);
       }
       if (phone[0] !== "8") {
-        setError("phone", {
+        setError(name, {
           message: "Nomor tidak valid",
         });
       }
-    }
+    } 
     if (phone === "") {
       reset({ phone: "" });
     }
@@ -50,7 +51,7 @@ export default function InputPhone({
           <div
             className="absolute top-3 right-0"
             onClick={() => {
-              reset({ phone: "" });
+              reset({ [name]: "" });
               setIsReset(false);
             }}
           >
@@ -66,6 +67,12 @@ export default function InputPhone({
         {errors.phone?.message && (
           <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-8">
             {errors.phone?.message}
+          </a>
+        )}
+
+{errors.inv_phone?.message && (
+          <a className="text-keytaCarnelian font-[600] block text-xs mt-1 ml-8">
+            {errors.inv_phone?.message}
           </a>
         )}
       </div>
