@@ -30,9 +30,7 @@ export default function InputText({
           <div
             className="absolute top-2 right-0"
             onClick={() => {
-              reset({
-                [`${name}`]: "",
-              });
+              setValue(name,'')
               setIsReset(false);
             }}
           >

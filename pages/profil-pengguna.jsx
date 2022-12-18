@@ -61,6 +61,7 @@ export default function ProfilPengguna() {
 
   useEffect(() => {
     setUpdateSuccess(updateData.isSuccess);
+    setTimeout(() => setUpdateSuccess(false),3000)
     setValue("user", user?.name);
     setCookie("inputpengguna", false);
     if (updateData.data) {
@@ -73,6 +74,8 @@ export default function ProfilPengguna() {
 
     return () => {};
   }, [updateData.isSuccess]);
+
+
 
   const {
     register,
@@ -138,7 +141,7 @@ export default function ProfilPengguna() {
                 <div
                   className="absolute top-2 right-0"
                   onClick={() => {
-                    reset({ name: "" });
+                    setValue('name','')
                     setIsReset(false);
                   }}
                 >

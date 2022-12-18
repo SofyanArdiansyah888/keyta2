@@ -15,7 +15,7 @@ export default function InputPhone({
   name="phone"
 }) {
   const phone = watch(name);
-
+  
   useEffect(() => {
     if (phone) {
       if (phone[0] === "0") {
@@ -25,13 +25,13 @@ export default function InputPhone({
         setError(name, {
           message: "Nomor tidak valid",
         });
+      }else{
+        setError(name,{message:""})
       }
     } 
-    if (phone === "") {
-      reset({ phone: "" });
-    }
-    phone === "" && setIsReset(false);
-    !isReset && setIsReset(true);
+    
+    phone !== "" && setIsReset(true);
+    // (!isReset) && setIsReset(true);
   }, [phone]);
   return (
     <>
@@ -51,7 +51,7 @@ export default function InputPhone({
           <div
             className="absolute top-3 right-0"
             onClick={() => {
-              reset({ [name]: "" });
+              setValue(name, '')
               setIsReset(false);
             }}
           >

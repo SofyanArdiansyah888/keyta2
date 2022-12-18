@@ -27,7 +27,7 @@ const schema = yup.object({
     .min(4)
     .required("Nama Toko harus diisi")
     .typeError("Nama Toko minimal empat karakter"),
-  address: yup.string().nullable(true),
+  inv_address: yup.string().nullable(true),
   subcategory: yup
     .string()
     .required("Subkategori harus diisi")
@@ -57,7 +57,7 @@ export default function ProfilToko() {
   const [imageTokoPreview, setImageTokoPreview] = useState();
 
   const { refetch: refetchProfile } = useProfileQuery();
-  
+
   const {
     register,
     handleSubmit,
@@ -70,7 +70,7 @@ export default function ProfilToko() {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
+  
 
   useEffect(() => {
     if (data && isSuccess) {
@@ -78,7 +78,7 @@ export default function ProfilToko() {
       setValue("name", temp?.name);
       setValue("inv_address", temp?.inv_address);
       let phone = temp?.inv_phone;
-      if (phone){
+      if (phone) {
         if (phone[0] === "0") {
           phone = phone?.substring(1);
         }
@@ -110,6 +110,9 @@ export default function ProfilToko() {
     await updateShop(data);
     await refetch();
     await refetchProfile();
+
+    setUpdateSuccess(true);
+    setTimeout(() => setUpdateSuccess(false), 3000);
     setIsUpdate(false);
   };
 
@@ -179,6 +182,7 @@ export default function ProfilToko() {
                   placeholder="Masukkan Nama Toko"
                   isReset={isNameReset}
                   setIsReset={setIsNameReset}
+                  setValue={setValue}
                 />
               </div>
 

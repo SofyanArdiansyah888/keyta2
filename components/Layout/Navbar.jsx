@@ -180,7 +180,7 @@ export default function Navbar() {
                   <li className="font-medium">
                     <h6 className="my-5 text-xs">Komunitas</h6>
                     {/* <Link href="/ajak-teman-pakai-keyta"> */}
-                      <a
+                      {/* <a
                         href="#"
                         className={`flex items-center ${isActive(
                           "/ajak-teman-pakai-keyta"
@@ -199,7 +199,7 @@ export default function Navbar() {
                           <GroupPersonIcon />
                         </div>
                         Ajak Temanmu Pakai Keyta
-                      </a>
+                      </a> */}
                     {/* </Link> */}
                   </li>
 
