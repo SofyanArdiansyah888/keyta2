@@ -366,10 +366,10 @@ export default function OTP() {
                   </div>
                   <div
                     className="text-[16px] mt-2   text-keytaDarkBlue font-[600]"
-                    onClick={handleSendSMS}
+                    
                     disabled={countdown > 0}
                   >
-                    <h1 className="cursor-pointer inline-block">
+                    <h1 className="cursor-pointer inline-block" onClick={handleSendSMS}>
                     Kirim melalui SMS
                     </h1>
                     
