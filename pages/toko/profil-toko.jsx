@@ -125,7 +125,7 @@ export default function ProfilToko() {
             onSubmit={handleSubmit(handleUpdateToko)}
             encType="multipart/form-data"
           >
-            <div className="flex-1 flex flex-col gap-4 text-left max-w-md">
+            <div className="flex-1 flex flex-col gap-4 text-left max-w-md relative">
               <div className="flex justify-between">
                 {/* PHOTO PROFIL */}
                 {imageTokoPreview ? (
@@ -197,6 +197,7 @@ export default function ProfilToko() {
                   placeholder="Masukkan Alamat Toko"
                   isReset={isAdressReset}
                   setIsReset={setIsAdressReset}
+                  setValue={setValue}
                 />
               </div>
 
@@ -259,7 +260,7 @@ export default function ProfilToko() {
 
               {updateSuccess && (
                 <div
-                  className="keyta-button rounded-xl w-12 text-xs opacity-80 mt-6 mx-auto"
+                  className="keyta-button rounded-xl w-12 text-xs opacity-80 mt-3 mx-auto cursor-pointer absolute bottom-16 left-0 right-0 m-auto"
                   onClick={() => setUpdateSuccess(false)}
                 >
                   Berhasil disimpan

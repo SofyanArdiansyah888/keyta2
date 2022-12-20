@@ -52,6 +52,7 @@ export default function Sidebar() {
               </div>
               {/* <Link href="/home"> */}
               <a
+              className="cursor-pointer"
                 onClick={() => {
                   if(getCookie('inputpengguna')){
                     setIsLogout(true);

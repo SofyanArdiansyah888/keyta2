@@ -57,8 +57,8 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`pl-8 flex flex-row items-center justify-evenly bg-white  w-full h-16  m-0  shadow-lg mx-auto ${
-          expand ? "lg:ml-[255px]" : "lg:ml-[100px]"
+        className={`pl-8 fixed z-30 flex flex-row items-center justify-evenly bg-white   h-16  m-0  shadow-lg mx-auto ${
+          expand ? "lg:ml-[255px] lg:w-[calc(100%-255px)]" : "lg:ml-[100px] lg:w-[calc(100%-100px)]"
         }  `}
       >
         <div className=" container flex flex-wrap justify-between items-center mx-auto">

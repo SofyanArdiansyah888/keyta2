@@ -10,7 +10,7 @@ export default function ComingSoonLayout() {
         <Sidebar />
         <div className={`w-full   ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"} `}>
           <Navbar />
-          <div className={` mx-auto ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"}`}>
+          <div className={` mx-auto mt-[100px] ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"}`}>
             <div className={`w-full   text-center ${expand? "lg:ml-[255px]" : "lg:ml-[100px]"} `}>
               <img
                 className="mx-auto mt-12"
