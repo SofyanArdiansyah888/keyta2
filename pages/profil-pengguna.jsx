@@ -48,14 +48,11 @@ export default function ProfilPengguna() {
     }else{
       setValue("name", user?.name);
     }
-    
   },[router.query])
-
 
   useEffect(() => {
     setValue("name", user?.name);
     setValue("phone", user?.phone);
-
     return () => {};
   }, [user]);
 

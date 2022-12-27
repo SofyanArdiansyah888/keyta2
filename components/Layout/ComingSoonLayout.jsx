@@ -3,15 +3,27 @@ import { SidebarContext } from "../../pages/_app";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 export default function ComingSoonLayout() {
-  let {expand, setExpand} = useContext(SidebarContext);
+  let { expand, setExpand } = useContext(SidebarContext);
   return (
     <>
       <div className="flex">
         <Sidebar />
-        <div className={`w-full   ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"} `}>
+        <div
+          className={`w-full   ${
+            expand ? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"
+          } `}
+        >
           <Navbar />
-          <div className={` mx-auto mt-[100px] ${expand? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"}`}>
-            <div className={`w-full   text-center ${expand? "lg:ml-[255px]" : "lg:ml-[100px]"} `}>
+          <div
+            className={` mx-auto mt-[100px] ${
+              expand ? "lg:w-[calc(100%-255px)]" : "lg:w-[calc(100%-100px)]"
+            }`}
+          >
+            <div
+              className={`w-full   text-center ${
+                expand ? "lg:ml-[255px]" : "lg:ml-[100px]"
+              } `}
+            >
               <img
                 className="mx-auto mt-12"
                 src="/images/keyta.svg"
@@ -26,11 +38,11 @@ export default function ComingSoonLayout() {
               <h4 className="mt-8 text-sm">
                 Pantau Instagram kami untuk informasi berikutnya!
               </h4>
-              <div className=" mx-auto text-center">
+              <div className=" mx-auto text-center w-56">
                 <a
                   href="https://www.instagram.com/keyta.id/"
                   target="blank"
-                  className="z-50 "
+                  className="z-50"
                 >
                   <img
                     className="mx-auto mt-4"
@@ -39,15 +51,14 @@ export default function ComingSoonLayout() {
                   />
                 </a>
               </div>
-           
             </div>
             <div className="absolute bottom-0 -z-50 ">
-                <img
-                  src="/images/dashboard_background.svg"
-                  alt="Gambar Dashboard"
-                  className="h-[300px]  w-screen  bg-center object-center"
-                />
-              </div>
+              <img
+                src="/images/dashboard_background.svg"
+                alt="Gambar Dashboard"
+                className="h-[300px]  w-screen  bg-center object-center"
+              />
+            </div>
           </div>
         </div>
       </div>

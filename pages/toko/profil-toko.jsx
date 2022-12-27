@@ -17,16 +17,16 @@ import { updateShop, useShopQuery } from "../../services/shop.service";
 import { setUser } from "../../services/user.slice";
 // import { setShop } from "../services/shop.slice";
 const schema = yup.object({
-  inv_phone: yup
-    .number()
-    .positive("Nomor Telepon tidak valid")
-    .required("Nomor Telepon harus diisi")
-    .typeError("Nomor Telepon tidak valid"),
+  // inv_phone: yup
+  //   .number()
+  //   .positive("Nomor Telepon tidak valid")
+  //   .required("Nomor Telepon harus diisi")
+  //   .typeError("Nomor Telepon tidak valid"),
   name: yup
     .string()
-    .min(4)
+    .min(4,"Nama Toko minimal 4 karakter")
     .required("Nama Toko harus diisi")
-    .typeError("Nama Toko minimal empat karakter"),
+    .typeError("Nama Toko minimal 4 karakter"),
   inv_address: yup.string().nullable(true),
   subcategory: yup
     .string()
@@ -152,8 +152,8 @@ export default function ProfilToko() {
                   <h2 className="font-semibold">Logo Toko</h2>
                   <p className="text-xs">Upload degan formar JPG, JPEG, PNG</p>
                   <div className="mt-24 text-[#023E8A] font-semibold">
-                    <label for="files" className="btn">
-                      Select Image
+                    <label for="files" className="btn cursor-pointer">
+                      Ubah Logo
                     </label>
                     <input
                       id="files"
