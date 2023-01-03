@@ -26,14 +26,14 @@ export default function Navbar() {
   const router = useRouter();
   const { pathname } = useRouter();
   const dispatch = useDispatch();
-  const { data, isFetching, isSuccess } = useProfileQuery();
+  const { data, isFetching, isSuccess, isLoading } = useProfileQuery();
   const navigate = useEffect(() => {
     if (data && isSuccess) {
       dispatch(setUser({ ...data.user }));
     }
 
     return () => {};
-  }, [isFetching]);
+  }, [isLoading]);
 
   const getMenuName = () => {
     const result = pathname.split("/");
@@ -95,13 +95,13 @@ export default function Navbar() {
             {isMenuOpen && (
               <div
                 id="profileMenu"
-                className="absolute w-[270px] px-5 py-3 z-[9999] text-[#A1A9B3]  font-inter bg-white rounded-lg shadow border top-[53px] right-1 cursor-pointer"
+                className="absolute w-[270px] px-5 py-3 z-[9999] text-[#A1A9B3]  font-inter bg-white rounded-lg shadow border top-[53px] right-1"
               >
                 {/* PROFILE NAME & AVATAR */}
-                <Link href="/profil-pengguna">
+                {/* <Link href="/profil-pengguna"> */}
                   <div
                     className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg "
-                    onClick={() => setIsMenuOpen(false)}
+                    // onClick={() => setIsMenuOpen(false)}
                   >
                     <div className="w-10 h-10 bg-gray-50 rounded-full overflow-hidden ">
                       {data?.user?.shop?.image_file_name && (
@@ -119,7 +119,7 @@ export default function Navbar() {
                       {data?.user?.shop?.name}
                     </h2>
                   </div>
-                </Link>
+                {/* </Link> */}
 
                 <ul className="space-y-3 text-[13px]">
                   {/* PENGGUNA */}

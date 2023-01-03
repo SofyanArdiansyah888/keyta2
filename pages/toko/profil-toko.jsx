@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
+import { noWhiteSpace, onlyAlphabet } from "../../app/utlis";
 import Layout from "../../components/Layout/Layout";
 import InputPhone from "../../components/Shared/InputPhone";
 import InputSelect from "../../components/Shared/InputSelect";
@@ -16,6 +17,9 @@ import { useProfileQuery } from "../../services/profile.service";
 import { updateShop, useShopQuery } from "../../services/shop.service";
 import { setUser } from "../../services/user.slice";
 // import { setShop } from "../services/shop.slice";
+
+onlyAlphabet(yup);
+noWhiteSpace(yup);
 const schema = yup.object({
   // inv_phone: yup
   //   .number()
@@ -25,6 +29,8 @@ const schema = yup.object({
   name: yup
     .string()
     .min(4,"Nama Toko minimal 4 karakter")
+    .noWhiteSpace("Nama Toko Harus Diisi")
+    // .onlyAlphabet("Nama Toko Hanya Boleh Dalam Alfabet")
     .required("Nama Toko harus diisi")
     .typeError("Nama Toko minimal 4 karakter"),
   inv_address: yup.string().nullable(true),

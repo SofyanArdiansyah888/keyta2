@@ -10,6 +10,7 @@ import { noWhiteSpace, onlyAlphabet } from "../app/utlis";
 import Layout from "../components/Layout/Layout";
 import InputPhone from "../components/Shared/InputPhone";
 import {
+  useProfileQuery,
   useUpdateProfileMutation
 } from "../services/profile.service";
 import { setUser } from "../services/user.slice";
@@ -37,24 +38,29 @@ export default function ProfilPengguna() {
 
   const [updateProfile, updateData] = useUpdateProfileMutation();
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  const [isChanged, setIsChanged] = useState(false);
+  const {data:profil,isFetching,refetch} = useProfileQuery()
+  
   let { user } = useSelector((state) => state?.userSlice);
   const dispatch = useDispatch();
   const router = useRouter();
+
+  useEffect(()=>{
+    refetch()
+  },[])
 
   useEffect(() => {
     if(router.query?.inputChange === 'true'){
       setIsLogout(true)
     }else{
-      setValue("name", user?.name);
+      setValue("name",profil?.user?.name);
     }
   },[router.query])
 
   useEffect(() => {
-    setValue("name", user?.name);
-    setValue("phone", user?.phone);
+    setValue("name", profil?.user?.name);
+    setValue("phone", profil?.user?.phone);
     return () => {};
-  }, [user]);
+  }, [isFetching]);
 
   useEffect(() => {
     setUpdateSuccess(updateData.isSuccess);
@@ -88,7 +94,7 @@ export default function ProfilPengguna() {
   });
 
   const userName = watch("name");
-
+  
   useEffect(() => {
     userName === "" && setIsReset(false);
     !isReset && setIsReset(true);
