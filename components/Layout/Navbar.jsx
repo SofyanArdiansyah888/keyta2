@@ -17,9 +17,10 @@ import { profileApi, useProfileQuery } from "../../services/profile.service";
 import { setAuthenticate } from "../../services/auth.slice";
 import { InputChangeContext, SidebarContext } from "../../pages/_app";
 import { getCookie, setCookie } from "cookies-next";
-
+import Hamburger from "../../public/icons/hamburger.svg";
 export default function Navbar() {
   let { expand, setExpand } = useContext(SidebarContext);
+  
   let { inputChange, setInputChange } = useContext(InputChangeContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
@@ -57,15 +58,27 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`pl-8 fixed z-30 flex flex-row items-center justify-evenly bg-white   h-16  m-0  shadow-lg mx-auto ${
-          expand ? "lg:ml-[255px] lg:w-[calc(100%-255px)]" : "lg:ml-[100px] lg:w-[calc(100%-100px)]"
+        className={`pl-8 fixed z-30 flex flex-row items-center justify-evenly bg-white   h-16  m-0  shadow-lg mx-auto w-full ${
+          expand
+            ? "lg:ml-[255px] lg:w-[calc(100%-255px)]"
+            : "lg:ml-[100px] lg:w-[calc(100%-100px)]"
         }  `}
       >
         <div className=" container flex flex-wrap justify-between items-center mx-auto">
-          {/* DASHBOARD NAME */}
-          <span className="text-md lg:text-xl font-semibold capitalize ">
-            {getMenuName()}
-          </span>
+          <div className="flex gap-4">
+            <div
+              onClick={() => {
+                setExpand((expand) => !expand);
+              }}
+              className="cursor-pointer lg:hidden"
+            >
+              <Hamburger data="/icons/hamburger.svg" width="20" height="20" />
+            </div>
+            {/* DASHBOARD NAME */}
+            <span className="text-xl font-semibold capitalize ">
+              {getMenuName()}
+            </span>
+          </div>
 
           <div className=" relative  mr-8 lg:mr-12">
             {/* AVATAR ICON */}
@@ -99,26 +112,26 @@ export default function Navbar() {
               >
                 {/* PROFILE NAME & AVATAR */}
                 {/* <Link href="/profil-pengguna"> */}
-                  <div
-                    className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg "
-                    // onClick={() => setIsMenuOpen(false)}
-                  >
-                    <div className="w-10 h-10 bg-gray-50 rounded-full overflow-hidden ">
-                      {data?.user?.shop?.image_file_name && (
-                        <Image
-                          src={data?.user?.shop?.image_file_name}
-                          height={40}
-                          width={40}
-                          alt="profil"
-                          placeholder="blur"
-                          blurDataURL="/images/keyta.svg"
-                        />
-                      )}
-                    </div>
-                    <h2 className="font-semibold text-[13px]">
-                      {data?.user?.shop?.name}
-                    </h2>
+                <div
+                  className="border-2 border-gray-300 flex gap-2 items-center py-3 px-2 rounded-lg "
+                  // onClick={() => setIsMenuOpen(false)}
+                >
+                  <div className="w-10 h-10 bg-gray-50 rounded-full overflow-hidden ">
+                    {data?.user?.shop?.image_file_name && (
+                      <Image
+                        src={data?.user?.shop?.image_file_name}
+                        height={40}
+                        width={40}
+                        alt="profil"
+                        placeholder="blur"
+                        blurDataURL="/images/keyta.svg"
+                      />
+                    )}
                   </div>
+                  <h2 className="font-semibold text-[13px]">
+                    {data?.user?.shop?.name}
+                  </h2>
+                </div>
                 {/* </Link> */}
 
                 <ul className="space-y-3 text-[13px]">
@@ -133,8 +146,8 @@ export default function Navbar() {
                       )} mt-1 transform transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       onClick={() => {
                         setIsMenuOpen(false);
-                       
-                        setCookie('visitedlink',"/profil-pengguna")
+
+                        setCookie("visitedlink", "/profil-pengguna");
                         router.push("/profil-pengguna");
                       }}
                     >
@@ -156,14 +169,12 @@ export default function Navbar() {
                       )} transition-colors duration-200 border-r-4 border-transparent hover:text-keytaSecondary`}
                       onClick={() => {
                         setIsMenuOpen(false);
-                        if(getCookie('inputpengguna')){
+                        if (getCookie("inputpengguna")) {
                           setIsLogout(true);
-                          setCookie('visitedlink',"/toko/profil-toko")
-                        }else{
+                          setCookie("visitedlink", "/toko/profil-toko");
+                        } else {
                           router.push("/toko/profil-toko");
                         }
-                  
-                        
                       }}
                     >
                       <div className="mr-5">
@@ -180,7 +191,7 @@ export default function Navbar() {
                   <li className="font-medium">
                     <h6 className="my-5 text-xs">Komunitas</h6>
                     {/* <Link href="/ajak-teman-pakai-keyta"> */}
-                      {/* <a
+                    {/* <a
                         href="#"
                         className={`flex items-center ${isActive(
                           "/ajak-teman-pakai-keyta"
@@ -214,7 +225,7 @@ export default function Navbar() {
                         // setIsMenuOpen(false);
                         // if (inputChange) {
                         //   setIsLogout(true);
-                        // } else 
+                        // } else
                         // router.push("gabung-komunitas");
                       }}
                     >
@@ -257,11 +268,15 @@ export default function Navbar() {
         setShowModal={setIsLogout}
         showModal={isLogout}
         buttonText={""}
-        handleConfirm={(getCookie('inputpengguna')) ? () => {
-          router.push(getCookie('visitedlink'))
-          setIsLogout(false)
-          setCookie('inputpengguna',false)
-        } : handleLogout}
+        handleConfirm={
+          getCookie("inputpengguna")
+            ? () => {
+                router.push(getCookie("visitedlink"));
+                setIsLogout(false);
+                setCookie("inputpengguna", false);
+              }
+            : handleLogout
+        }
       />
     </>
   );

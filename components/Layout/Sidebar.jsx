@@ -21,6 +21,8 @@ import { profileApi } from "../../services/profile.service";
 import { setCookie, getCookie, deleteCookie, hasCookie } from "cookies-next";
 import { clearTokenCookie } from "../../app/cookies";
 import { useDispatch } from "react-redux";
+import {isMobile} from 'react-device-detect';
+
 export default function Sidebar() {
   const { pathname } = useRouter();
   const router = useRouter();
@@ -35,9 +37,9 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className="hidden lg:flex fixed shadow-xl h-screen bg-white">
+      <div className={`${isMobile && !expand ? 'hidden ' : 'absolute z-40'} lg:flex fixed shadow-xl h-screen bg-white`}>
         {/* SIDEBAR */}
-        <aside className={`${expand ? "w-64 px-4" : "w-[100px] px-4"} `}>
+        <aside className={`${expand ? "w-56 lg:w-64 px-4" : "w-[100px] px-4"} `}>
           <div className="overflow-y-auto py-4 px-3 ">
             {/* KEYTA LOGO */}
 
@@ -46,7 +48,7 @@ export default function Sidebar() {
                 onClick={() => {
                   setExpand((expand) => !expand);
                 }}
-                className="cursor-pointer"
+                className="cursor-pointer "
               >
                 <Hamburger data="/icons/hamburger.svg" width="20" height="20" />
               </div>

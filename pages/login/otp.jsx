@@ -14,6 +14,7 @@ import {
 } from "../../services/auth.service";
 import { setAuthenticate } from "../../services/auth.slice";
 import styles from "../../styles/Login.module.css";
+import {isDesktop} from 'react-device-detect';
 const schema = yup.object({
   number1: yup.number().required().typeError(),
   number2: yup.number().required().typeError(),
@@ -48,7 +49,7 @@ export default function OTP() {
 
   const handlePaste = (event) => {
     const text = event.clipboardData.getData("text");
-    if (text.length === 7) {
+    if (text.length === 7 && isDesktop) {
       setValue("number1", text[0]);
       setValue("number2", text[1]);
       setValue("number3", text[2]);
@@ -70,7 +71,7 @@ export default function OTP() {
 
     return () => {};
   }, []);
-
+  console.log(countdown)
   useEffect(() => {
     if (countdown > 0) {
       let interval = setTimeout(() => setCountdown(countdown - 1), 1000);
@@ -140,12 +141,15 @@ export default function OTP() {
 
   const handleSendWhatsapp = async () => {
     const user = authenticate?.user;
-    sendMessage({
-      type: "whatsapp",
-      country_code: COUNTRY_CODE,
-      phone: user.phone,
-    });
-    setCountdown(timer);
+    if(countdown === 0){
+      sendMessage({
+        type: "whatsapp",
+        country_code: COUNTRY_CODE,
+        phone: user.phone,
+      });
+      setCountdown(timer);
+    }
+    
   };
 
   const handleSendSMS = async () => {
@@ -186,16 +190,18 @@ export default function OTP() {
     }
   };
 
+  
   const Timer = () => {
+    
     let minutes = Math.floor(countdown / 60);
     let seconds = countdown - minutes * 60;
     function strPadLeft(string, pad, length) {
       return (new Array(length + 1).join(pad) + string).slice(-length);
     }
     return (
-      <span>
+      <div disabled>
         {strPadLeft(minutes, "0", 2) + ":" + strPadLeft(seconds, "0", 2)}
-      </span>
+      </div>
     );
   };
 
@@ -344,9 +350,9 @@ export default function OTP() {
                   </a>
                 )}
 
-              <div className="text-[13px] mt-8">
+              <div className="text-[13px] mt-8 flex">
                 Belum dapat kode ?{" "}
-                <span onClick={isSMS ? handleSendSMS : handleSendWhatsapp}>
+                <span onClick={isSMS ? handleSendSMS : handleSendWhatsapp} className="ml-1">
                   <button
                     type="button"
                     className={`underline  mr-1 ${
