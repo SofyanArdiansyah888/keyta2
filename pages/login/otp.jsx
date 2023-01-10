@@ -14,15 +14,15 @@ import {
 } from "../../services/auth.service";
 import { setAuthenticate } from "../../services/auth.slice";
 import styles from "../../styles/Login.module.css";
-import {isDesktop} from 'react-device-detect';
+import { isDesktop, isMobile } from "react-device-detect";
 const schema = yup.object({
-  number1: yup.number().required().typeError(),
-  number2: yup.number().required().typeError(),
-  number3: yup.number().required().typeError(),
-  number4: yup.number().required().typeError(),
-  number5: yup.number().required().typeError(),
-  number6: yup.number().required().typeError(),
-  number7: yup.number().required().typeError(),
+  number1: yup.number().required(),
+  number2: yup.number().required(),
+  number3: yup.number().required(),
+  number4: yup.number().required(),
+  number5: yup.number().required(),
+  number6: yup.number().required(),
+  number7: yup.number().required(),
 });
 const timer = 60;
 export default function OTP() {
@@ -71,7 +71,7 @@ export default function OTP() {
 
     return () => {};
   }, []);
-  console.log(countdown)
+
   useEffect(() => {
     if (countdown > 0) {
       let interval = setTimeout(() => setCountdown(countdown - 1), 1000);
@@ -141,7 +141,7 @@ export default function OTP() {
 
   const handleSendWhatsapp = async () => {
     const user = authenticate?.user;
-    if(countdown === 0){
+    if (countdown === 0) {
       sendMessage({
         type: "whatsapp",
         country_code: COUNTRY_CODE,
@@ -149,7 +149,6 @@ export default function OTP() {
       });
       setCountdown(timer);
     }
-    
   };
 
   const handleSendSMS = async () => {
@@ -190,9 +189,7 @@ export default function OTP() {
     }
   };
 
-  
   const Timer = () => {
-    
     let minutes = Math.floor(countdown / 60);
     let seconds = countdown - minutes * 60;
     function strPadLeft(string, pad, length) {
@@ -226,7 +223,7 @@ export default function OTP() {
             <form onSubmit={handleSubmit(handleVerify)}>
               <div className="mt-12 flex flex-row gap-1">
                 <input
-                  type="text"
+                  type={isMobile ? "number" : "text"}
                   onPaste={handlePaste}
                   maxLength="1"
                   {...register("number1")}
@@ -240,7 +237,7 @@ export default function OTP() {
                   onKeyUp={(e) => inputfocus(e)}
                 />
                 <input
-                  type="text"
+                  type={isMobile ? "number" : "text"}
                   maxLength={1}
                   {...register("number2")}
                   className={`text-center w-[30px] ${
@@ -253,7 +250,7 @@ export default function OTP() {
                   onKeyUp={(e) => inputfocus(e)}
                 />
                 <input
-                  type="text"
+                  type={isMobile ? "number" : "text"}
                   maxLength={1}
                   {...register("number3")}
                   className={`text-center w-[30px] ${
@@ -266,7 +263,7 @@ export default function OTP() {
                   onKeyUp={(e) => inputfocus(e)}
                 />
                 <input
-                  type="text"
+                  type={isMobile ? "number" : "text"}
                   maxLength={1}
                   {...register("number4")}
                   className={`text-center w-[30px] ${
@@ -279,7 +276,7 @@ export default function OTP() {
                   onKeyUp={(e) => inputfocus(e)}
                 />
                 <input
-                  type="text"
+                  type={isMobile ? "number" : "text"}
                   maxLength={1}
                   {...register("number5")}
                   className={`text-center w-[30px] ${
@@ -292,7 +289,7 @@ export default function OTP() {
                   onKeyUp={(e) => inputfocus(e)}
                 />
                 <input
-                  type="text"
+                  type={isMobile ? "number" : "text"}
                   maxLength={1}
                   {...register("number6")}
                   className={`text-center w-[30px] ${
@@ -305,7 +302,7 @@ export default function OTP() {
                   onKeyUp={(e) => inputfocus(e)}
                 />
                 <input
-                  type="text"
+                  type={isMobile ? "number" : "text"}
                   maxLength={1}
                   {...register("number7")}
                   className={`text-center w-[30px] ${
@@ -352,7 +349,10 @@ export default function OTP() {
 
               <div className="text-[13px] mt-8 flex">
                 Belum dapat kode ?{" "}
-                <span onClick={isSMS ? handleSendSMS : handleSendWhatsapp} className="ml-1">
+                <span
+                  onClick={isSMS ? handleSendSMS : handleSendWhatsapp}
+                  className="ml-1"
+                >
                   <button
                     type="button"
                     className={`underline  mr-1 ${
@@ -372,13 +372,14 @@ export default function OTP() {
                   </div>
                   <div
                     className="text-[16px] mt-2   text-keytaDarkBlue font-[600]"
-                    
                     disabled={countdown > 0}
                   >
-                    <h1 className="cursor-pointer inline-block" onClick={handleSendSMS}>
-                    Kirim melalui SMS
+                    <h1
+                      className="cursor-pointer inline-block"
+                      onClick={handleSendSMS}
+                    >
+                      Kirim melalui SMS
                     </h1>
-                    
                   </div>
                 </>
               )}

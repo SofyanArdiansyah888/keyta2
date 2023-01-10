@@ -45,7 +45,8 @@ export default function ProfilPengguna() {
   const router = useRouter();
 
   useEffect(()=>{
-    refetch()
+    refetch();
+ 
   },[])
 
   useEffect(() => {
