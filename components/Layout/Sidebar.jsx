@@ -37,7 +37,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className={`${isMobile && !expand ? 'hidden ' : 'absolute z-40'} lg:flex fixed shadow-xl h-screen bg-white`}>
+      <div className={`${isMobile && !expand ? 'hidden ' : 'z-40'} lg:flex fixed shadow-xl h-screen bg-white`}>
         {/* SIDEBAR */}
         <aside className={`${expand ? "w-56 lg:w-64 px-4" : "w-[100px] px-4"} `}>
           <div className="overflow-y-auto py-4 px-3 ">

@@ -5,24 +5,35 @@ export default function SumberModal({
   setShowModal,
   showModal,
   setProfilValue,
-  getValues
+  getValues,
 }) {
   const [value, setValue] = useState();
   const [otherValue, setOtherValue] = useState();
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    let source = getValues('instalation_source');
-    setValue(source)
-  },[getValues('instalation_source')])
+    let source = getValues("instalation_source");
+    setValue(source);
+  }, [getValues("instalation_source")]);
 
   const handleButton = () => {
-    setShowModal(false);
-    if (value === "Other") setProfilValue('instalation_source',otherValue);
-    else setProfilValue('instalation_source',value);
+    if (value === "Other"){
+      if(otherValue === ''){
+        setErrorMessage('Harus Diisi')
+      }else{
+        setProfilValue("instalation_source", otherValue);
+        setShowModal(false);
+      }
+    } 
+    else {
+      setProfilValue("instalation_source", value);
+      setShowModal(false);
+    }
   };
 
   const handleChange = (event) => {
     setValue(event.currentTarget.value);
+    setErrorMessage('')
     if (event.currentTarget.value !== "Other") {
       setOtherValue("");
     }
@@ -127,7 +138,7 @@ export default function SumberModal({
                       </label>
                     </div>
 
-                    <div className="flex items-center mb-4">
+                    <div className="flex items-center ">
                       <input
                         id="instalation_source-5"
                         type="radio"
@@ -165,6 +176,11 @@ export default function SumberModal({
                         )}
                       </div>
                     </div>
+                    {errorMessage !== "" && (
+                      <a className="text-keytaCarnelian font-[600] block text-xs mb-4 mt-1 ml-6 ">
+                        {errorMessage}
+                      </a>
+                    )}
                   </div>
                 </div>
                 {/*footer*/}
@@ -174,7 +190,7 @@ export default function SumberModal({
                     type="button"
                     onClick={handleButton}
                   >
-                    Confirm
+                    Pilih
                   </button>
                 </div>
               </div>

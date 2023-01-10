@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setCookie } from "cookies-next";
+import { getCookie, setCookie } from "cookies-next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { noWhiteSpace, onlyAlphabet } from "../app/utlis";
 import Layout from "../components/Layout/Layout";
+import ConfirmModal from "../components/Shared/ConfirmModal";
 import InputPhone from "../components/Shared/InputPhone";
 import {
   useProfileQuery,
@@ -43,14 +44,16 @@ export default function ProfilPengguna() {
   let { user } = useSelector((state) => state?.userSlice);
   const dispatch = useDispatch();
   const router = useRouter();
+  const pengguna = getCookie('pengguna');
 
   useEffect(()=>{
     refetch();
- 
   },[])
 
   useEffect(() => {
+    
     if(router.query?.inputChange === 'true'){
+      if(pengguna) setValue("name", pengguna);
       setIsLogout(true)
     }else{
       setValue("name",profil?.user?.name);
@@ -58,6 +61,7 @@ export default function ProfilPengguna() {
   },[router.query])
 
   useEffect(() => {
+    if(pengguna) setValue("name", pengguna);
     setValue("name", profil?.user?.name);
     setValue("phone", profil?.user?.phone);
     return () => {};
@@ -66,7 +70,7 @@ export default function ProfilPengguna() {
   useEffect(() => {
     setUpdateSuccess(updateData.isSuccess);
     setTimeout(() => setUpdateSuccess(false),3000)
-    setValue("user", user?.name);
+    // setValue("user", user?.name);
     setCookie("inputpengguna", false);
     if (updateData.data) {
       let temp = {
@@ -99,6 +103,8 @@ export default function ProfilPengguna() {
   useEffect(() => {
     userName === "" && setIsReset(false);
     !isReset && setIsReset(true);
+    
+    setCookie('pengguna',userName)
     if (userName !== user?.name) {
       setInputChange(true);
       setCookie("inputpengguna", true);
@@ -114,11 +120,7 @@ export default function ProfilPengguna() {
     setInputChange(false);
   };
 
-  // const handleLogout = () => {
-
-  //   router.push(getCookie('visitedlink'))
-  //   setCookie("inputpengguna", false);
-  // };
+  
 
   return (
     <>
@@ -207,7 +209,7 @@ export default function ProfilPengguna() {
           </button>
         </div>
       </form>
-      {/* <ConfirmModal
+      <ConfirmModal
         header={"Konfirmasi Keluar?"}
         message={
           "Anda memiliki perubahan yang belum disimpan. Apakah Anda ingin membatalkan perubahan?"
@@ -215,8 +217,20 @@ export default function ProfilPengguna() {
         setShowModal={setIsLogout}
         showModal={isLogout}
         buttonText={""}
-        handleConfirm={handleLogout}
-      /> */}
+        handleConfirm={
+          getCookie("inputpengguna")
+            ? () => {
+                router.push(getCookie("visitedlink"));
+                setIsLogout(false);
+                setCookie("inputpengguna", false);
+              }
+            : () => {
+
+              router.push(getCookie('visitedlink'))
+              setCookie("inputpengguna", false);
+            }
+        }
+      />
     </>
   );
 }

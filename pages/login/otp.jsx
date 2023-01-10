@@ -173,7 +173,7 @@ export default function OTP() {
   const inputfocus = (elmnt) => {
     if (elmnt.key === "Delete" || elmnt.key === "Backspace") {
       const next = elmnt.target.tabIndex - 2;
-      if (next > -1) {
+      if (next > -1 && isDesktop) {
         elmnt.target.form.elements[next].focus();
       }
       setValue(elmnt.target.name, "");
@@ -181,8 +181,12 @@ export default function OTP() {
       if (/\d/.test(elmnt.key)) {
         if (elmnt.target.name !== "number7" && getValues("number7") !== "")
           setValue(elmnt.target.name, elmnt.key);
+        if (elmnt.target.name === "number7"){
+          setValue(elmnt.target.name, elmnt.key);
+        }
+
         const next = elmnt.target.tabIndex;
-        if (next < 7) {
+        if (next < 7 && isDesktop) {
           elmnt.target.form.elements[next].focus();
         }
       }
