@@ -1,12 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import { yupResolver } from "@hookform/resolvers/yup";
+import { getCookie, setCookie } from "cookies-next";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { useContext } from "react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
 import { noWhiteSpace, onlyAlphabet } from "../../app/utlis";
 import Layout from "../../components/Layout/Layout";
+import ConfirmModal from "../../components/Shared/ConfirmModal";
 import InputPhone from "../../components/Shared/InputPhone";
 import InputSelect from "../../components/Shared/InputSelect";
 import InputText from "../../components/Shared/InputText";
@@ -16,6 +20,7 @@ import SumberModal from "../../components/Shared/SumberModal";
 import { useProfileQuery } from "../../services/profile.service";
 import { updateShop, useShopQuery } from "../../services/shop.service";
 import { setUser } from "../../services/user.slice";
+import { InputChangeContext } from "../_app";
 // import { setShop } from "../services/shop.slice";
 
 onlyAlphabet(yup);
@@ -28,7 +33,7 @@ const schema = yup.object({
   //   .typeError("Nomor Telepon tidak valid"),
   name: yup
     .string()
-    .min(4,"Nama Toko minimal 4 karakter")
+    .min(4, "Nama Toko minimal 4 karakter")
     .noWhiteSpace("Nama Toko Harus Diisi")
     // .onlyAlphabet("Nama Toko Hanya Boleh Dalam Alfabet")
     .required("Nama Toko harus diisi")
@@ -50,7 +55,7 @@ export default function ProfilToko() {
   const [showModal, setShowModal] = useState(false);
   const [showSumberModal, setShowSumberModal] = useState(false);
   const [showCategoryModal, setShowCategoryModal] = useState(false);
-
+  const [isLogout, setIsLogout] = useState(false);
   // API STATE
   const { data, isFetching, isSuccess, refetch } = useShopQuery();
   const [isUpdate, setIsUpdate] = useState(false);
@@ -59,7 +64,8 @@ export default function ProfilToko() {
   const [isNameReset, setIsNameReset] = useState(false);
   const [isAdressReset, setIsAdressReset] = useState(false);
   const [isPhoneReset, setIsPhoneReset] = useState(false);
-
+  let { inputChange, setInputChange } = useContext(InputChangeContext);
+  const router = useRouter();
   const [imageTokoPreview, setImageTokoPreview] = useState();
 
   const { refetch: refetchProfile } = useProfileQuery();
@@ -76,7 +82,47 @@ export default function ProfilToko() {
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    router.beforePopState(({ url }) => {
+      setCookie("visitedlink", url);
+      if (inputChange) {
+        setIsLogout(true);
+      } else return true;
+    });
+  }, [inputChange]);
+
+  const watchAll = watch(['inv_address','inv_phone','instalation_source','category','name']);
   
+  useEffect(() => {
+    const {
+      category,
+      instalation_source,
+      inv_address,
+      inv_phone,
+      name,
+      shop_image,
+    } = watchAll;
+    let temp = data?.data;
+    
+    if (name !== temp?.name) {
+      setInputChange(true);
+    } else if (inv_address !== temp?.inv_address) {
+      setInputChange(true);
+    } else if (inv_phone !== temp?.inv_phone) {
+      setInputChange(true);
+    } else if(instalation_source !== temp?.instalation_source){
+      setInputChange(true)
+    } else if(category !== temp?.category){
+      setInputChange(true)
+    } else {
+      setInputChange(false);
+    }
+
+    
+
+   
+  }, [watchAll]);
 
   useEffect(() => {
     if (data && isSuccess) {
@@ -172,6 +218,7 @@ export default function ProfilToko() {
                         const file = e.target.files[0];
                         // setValue("shop_image", file);
                         setImageTokoPreview(URL.createObjectURL(file));
+                        setInputChange(true)
                       }}
                     />
                   </div>
@@ -190,6 +237,8 @@ export default function ProfilToko() {
                   setIsReset={setIsNameReset}
                   setValue={setValue}
                 />
+
+              
               </div>
 
               {/* ALAMAT TOKO  */}
@@ -355,6 +404,27 @@ export default function ProfilToko() {
         showModal={showModal}
         buttonText="Lanjut"
         handleButton={() => setShowModal(false)}
+      />
+      <ConfirmModal
+        header={"Konfirmasi Keluar?"}
+        message={
+          "Anda memiliki perubahan yang belum disimpan. Apakah Anda ingin membatalkan perubahan?"
+        }
+        setShowModal={setIsLogout}
+        showModal={isLogout}
+        buttonText={""}
+        handleConfirm={
+          getCookie("inputpengguna")
+            ? () => {
+                router.push(getCookie("visitedlink"));
+                setIsLogout(false);
+                setCookie("inputpengguna", false);
+              }
+            : () => {
+                router.push(getCookie("visitedlink"));
+                setCookie("inputpengguna", false);
+              }
+        }
       />
     </>
   );

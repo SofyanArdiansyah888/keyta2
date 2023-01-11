@@ -12,7 +12,7 @@ import ConfirmModal from "../components/Shared/ConfirmModal";
 import InputPhone from "../components/Shared/InputPhone";
 import {
   useProfileQuery,
-  useUpdateProfileMutation
+  useUpdateProfileMutation,
 } from "../services/profile.service";
 import { setUser } from "../services/user.slice";
 import { InputChangeContext } from "./_app";
@@ -39,29 +39,19 @@ export default function ProfilPengguna() {
 
   const [updateProfile, updateData] = useUpdateProfileMutation();
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  const {data:profil,isFetching,refetch} = useProfileQuery()
-  
+  const { data: profil, isFetching, refetch } = useProfileQuery();
+
   let { user } = useSelector((state) => state?.userSlice);
   const dispatch = useDispatch();
   const router = useRouter();
-  const pengguna = getCookie('pengguna');
+  const pengguna = getCookie("pengguna");
 
-  useEffect(()=>{
+  useEffect(() => {
     refetch();
-  },[])
+  }, []);
 
   useEffect(() => {
-    
-    if(router.query?.inputChange === 'true'){
-      if(pengguna) setValue("name", pengguna);
-      setIsLogout(true)
-    }else{
-      setValue("name",profil?.user?.name);
-    }
-  },[router.query])
-
-  useEffect(() => {
-    if(pengguna) setValue("name", pengguna);
+    if (pengguna) setValue("name", pengguna);
     setValue("name", profil?.user?.name);
     setValue("phone", profil?.user?.phone);
     return () => {};
@@ -69,21 +59,28 @@ export default function ProfilPengguna() {
 
   useEffect(() => {
     setUpdateSuccess(updateData.isSuccess);
-    setTimeout(() => setUpdateSuccess(false),3000)
+    setTimeout(() => setUpdateSuccess(false), 3000);
     // setValue("user", user?.name);
     setCookie("inputpengguna", false);
     if (updateData.data) {
       let temp = {
         name: updateData?.data?.data?.name,
       };
-      
+
       dispatch(setUser({ ...user, ...temp }));
     }
 
     return () => {};
   }, [updateData.isSuccess]);
 
-
+  useEffect(() => {
+    router.beforePopState(({ url }) => {
+      setCookie('visitedlink',url)
+      if (inputChange) {
+        setIsLogout(true)
+      }else return true;
+    });
+  }, [inputChange]);
 
   const {
     register,
@@ -99,12 +96,12 @@ export default function ProfilPengguna() {
   });
 
   const userName = watch("name");
-  
+
   useEffect(() => {
     userName === "" && setIsReset(false);
     !isReset && setIsReset(true);
-    
-    setCookie('pengguna',userName)
+
+    setCookie("pengguna", userName);
     if (userName !== user?.name) {
       setInputChange(true);
       setCookie("inputpengguna", true);
@@ -119,8 +116,6 @@ export default function ProfilPengguna() {
     await updateProfile({ name: name.trim() });
     setInputChange(false);
   };
-
-  
 
   return (
     <>
@@ -147,7 +142,7 @@ export default function ProfilPengguna() {
                 <div
                   className="absolute top-2 right-0"
                   onClick={() => {
-                    setValue('name','')
+                    setValue("name", "");
                     setIsReset(false);
                   }}
                 >
@@ -225,10 +220,9 @@ export default function ProfilPengguna() {
                 setCookie("inputpengguna", false);
               }
             : () => {
-
-              router.push(getCookie('visitedlink'))
-              setCookie("inputpengguna", false);
-            }
+                router.push(getCookie("visitedlink"));
+                setCookie("inputpengguna", false);
+              }
         }
       />
     </>

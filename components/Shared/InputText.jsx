@@ -19,7 +19,7 @@ export default function InputText({
         <input
           type="text"
           {...register}
-          onChange={(event) => {
+          onFocus={(event) => {
             event.target.value === "" && setIsReset(false);
             !isReset && setIsReset(true);
           }}
