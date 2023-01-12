@@ -52,6 +52,7 @@ export default function Navbar() {
     clearTokenCookie();
     dispatch(setUser({}));
     dispatch(setAuthenticate({}));
+    setCookie("inputpengguna", false);
     dispatch(profileApi.util.resetApiState());
     setTimeout(() => router.replace("/"), 300);
   };

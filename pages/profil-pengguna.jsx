@@ -113,7 +113,10 @@ export default function ProfilPengguna() {
       setInputChange(false);
       setCookie("inputpengguna", false);
     }
-    return () => {};
+    return () => {
+      userName
+      setCookie("inputpengguna", false);
+    }
   }, [userName]);
 
   const handleForm = async ({ name }) => {

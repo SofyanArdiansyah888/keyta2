@@ -8,13 +8,22 @@ export default function SumberModal({
   getValues,
 }) {
   const [value, setValue] = useState();
-  const [otherValue, setOtherValue] = useState();
+  const [otherValue, setOtherValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     let source = getValues("instalation_source");
     setValue(source);
-  }, [getValues("instalation_source")]);
+    if(!['Iklan / Website',
+         'Referal',
+         'Media Sosial',
+         'Google Playstore'
+        ].includes(source) && source){
+          setValue('Other')
+          setOtherValue(source)
+    }
+    return () => getValues
+  }, [getValues, showModal]);
 
   const handleButton = () => {
     
@@ -48,6 +57,7 @@ export default function SumberModal({
       setOtherValue(event?.target?.value);
     }
   };
+
   return (
     <>
       {showModal && (

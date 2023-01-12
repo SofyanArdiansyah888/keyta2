@@ -124,6 +124,10 @@ export default function ProfilToko() {
       setInputChange(false);
       setCookie("inputpengguna", false);
     }
+    return () => {
+      watchAll
+      setCookie("inputpengguna", false);
+    }
   }, [watchAll]);
 
   useEffect(() => {
