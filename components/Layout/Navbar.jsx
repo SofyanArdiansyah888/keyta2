@@ -147,8 +147,12 @@ export default function Navbar() {
                       onClick={() => {
                         setIsMenuOpen(false);
 
-                        setCookie("visitedlink", "/profil-pengguna");
-                        router.push("/profil-pengguna");
+                        if (getCookie("inputpengguna")) {
+                          setIsLogout(true);
+                          setCookie("visitedlink", "/profil-pengguna");
+                        } else {
+                          router.push("/profil-pengguna");
+                        }
                       }}
                     >
                       <div className="mr-5">

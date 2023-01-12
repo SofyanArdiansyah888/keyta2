@@ -78,8 +78,12 @@ export default function ProfilPengguna() {
       setCookie('visitedlink',url)
       if (inputChange) {
         setIsLogout(true)
+        return false;
       }else return true;
     });
+    return ()=> {
+      router.beforePopState(() => true)
+    }
   }, [inputChange]);
 
   const {
@@ -115,6 +119,7 @@ export default function ProfilPengguna() {
   const handleForm = async ({ name }) => {
     await updateProfile({ name: name.trim() });
     setInputChange(false);
+    setCookie('inputpengguna',false)
   };
 
   return (

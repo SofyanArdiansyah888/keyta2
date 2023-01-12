@@ -17,18 +17,23 @@ export default function SumberModal({
   }, [getValues("instalation_source")]);
 
   const handleButton = () => {
+    
     if (value === "Other"){
       if(otherValue === ''){
         setErrorMessage('Harus Diisi')
       }else{
         setProfilValue("instalation_source", otherValue);
         setShowModal(false);
+        setErrorMessage('')
       }
     } 
     else {
       setProfilValue("instalation_source", value);
       setShowModal(false);
+      setErrorMessage('')
     }
+
+    
   };
 
   const handleChange = (event) => {
@@ -146,7 +151,7 @@ export default function SumberModal({
                         className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 accent-keytaPrimary"
                         value="Other"
                         onChange={handleChange}
-                        checked={value === "Other"}
+                        checked={value === "Other" || otherValue !== ''}
                       />
                       <div className="relative w-full ml-3  ">
                         <input
@@ -162,8 +167,7 @@ export default function SumberModal({
                             className="absolute top-2 right-0"
                             onClick={() => {
                               setOtherValue("");
-                              // reset({ sumber_lain: "" });
-                              // setIsReset(false);
+                              setValue('Other')
                             }}
                           >
                             <Image

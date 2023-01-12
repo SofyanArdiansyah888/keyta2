@@ -173,20 +173,26 @@ export default function OTP() {
   const inputfocus = (elmnt) => {
     if (elmnt.key === "Delete" || elmnt.key === "Backspace") {
       const next = elmnt.target.tabIndex - 2;
-      if (next > -1 && isDesktop) {
+      if (next > -1) {
         elmnt.target.form.elements[next].focus();
       }
       setValue(elmnt.target.name, "");
     } else {
       if (/\d/.test(elmnt.key)) {
+        if(isMobile){  
+          setValue(elmnt.target.name, "")
+          setValue(elmnt.target.name, elmnt.key)
+        };
         if (elmnt.target.name !== "number7" && getValues("number7") !== "")
           setValue(elmnt.target.name, elmnt.key);
         if (elmnt.target.name === "number7"){
           setValue(elmnt.target.name, elmnt.key);
         }
 
+       
+
         const next = elmnt.target.tabIndex;
-        if (next < 7 && isDesktop) {
+        if (next < 7) {
           elmnt.target.form.elements[next].focus();
         }
       }
@@ -229,7 +235,7 @@ export default function OTP() {
                 <input
                   type={isMobile ? "number" : "text"}
                   onPaste={handlePaste}
-                  maxLength="1"
+                  maxLength={1}
                   {...register("number1")}
                   className={`text-center w-[30px] ${
                     errors.number1 || verifyError

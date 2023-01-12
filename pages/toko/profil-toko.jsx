@@ -88,40 +88,42 @@ export default function ProfilToko() {
       setCookie("visitedlink", url);
       if (inputChange) {
         setIsLogout(true);
+        return false;
       } else return true;
     });
+    return ()=> {
+      router.beforePopState(() => true)
+    }
   }, [inputChange]);
 
   const watchAll = watch(['inv_address','inv_phone','instalation_source','category','name']);
   
   useEffect(() => {
-    const {
-      category,
-      instalation_source,
-      inv_address,
-      inv_phone,
-      name,
-      shop_image,
-    } = watchAll;
     let temp = data?.data;
-    
-    if (name !== temp?.name) {
+    if (watchAll['4'] !== temp?.name) {
+      setCookie("inputpengguna", true);
       setInputChange(true);
-    } else if (inv_address !== temp?.inv_address) {
+    } 
+    else if (watchAll['0'] !== temp?.inv_address) {
+      setCookie("inputpengguna", true);
       setInputChange(true);
-    } else if (inv_phone !== temp?.inv_phone) {
+    } 
+    else if (watchAll['1'] !== temp?.inv_phone) {
+      setCookie("inputpengguna", true);
       setInputChange(true);
-    } else if(instalation_source !== temp?.instalation_source){
+    } 
+    else if(watchAll['2'] !== temp?.instalation_source){
+      setCookie("inputpengguna", true);
       setInputChange(true)
-    } else if(category !== temp?.category){
+    } 
+    else if(watchAll['3'] !== temp?.category){
+      setCookie("inputpengguna", true);
       setInputChange(true)
-    } else {
+    } 
+    else {
       setInputChange(false);
+      setCookie("inputpengguna", false);
     }
-
-    
-
-   
   }, [watchAll]);
 
   useEffect(() => {
@@ -166,6 +168,9 @@ export default function ProfilToko() {
     setUpdateSuccess(true);
     setTimeout(() => setUpdateSuccess(false), 3000);
     setIsUpdate(false);
+
+    setInputChange(false);
+    setCookie('inputpengguna',false)
   };
 
   return (
