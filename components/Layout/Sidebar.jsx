@@ -22,6 +22,7 @@ import { setCookie, getCookie, deleteCookie, hasCookie } from "cookies-next";
 import { clearTokenCookie } from "../../app/cookies";
 import { useDispatch } from "react-redux";
 import {isMobile} from 'react-device-detect';
+import { useEffect } from "react";
 
 export default function Sidebar() {
   const { pathname } = useRouter();
@@ -33,6 +34,10 @@ export default function Sidebar() {
   const isActive = (condition) => {
     // return pathname === condition ? styles.activeList : "";
   };
+  useEffect(() => {
+    if(isMobile)
+    setExpand(false)
+  },[])
 
 
   return (

@@ -76,7 +76,7 @@ export default function Navbar() {
               <Hamburger data="/icons/hamburger.svg" width="20" height="20" />
             </div>
             {/* DASHBOARD NAME */}
-            <span className="text-xl font-semibold capitalize ">
+            <span className="md:text-xl sm:text-xs font-semibold capitalize ">
               {getMenuName()}
             </span>
           </div>

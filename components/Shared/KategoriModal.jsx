@@ -230,16 +230,13 @@ function AccordionCustom({
   useEffect(() => {
     reset();
 
-    accordions.map(({ subcategories, category }) => {
+    accordions.map(({ subcategories, category },index) => {
       const tempSubcategories = subcategories.map((sub) => sub.subcategory);
       const subcat = subcategories.map((sub) => {
         let selected = false;
         let name = sub.subcategory;
         profileCategory.map((profCat) => {
           if (profCat.category === category) {
-            if (profCat.subcategory.includes(sub.subcategory)) {
-              selected = true;
-            }
             profCat.subcategory.map((profSubcat) => {
               if (
                 !tempSubcategories.includes(profSubcat) &&
@@ -247,8 +244,14 @@ function AccordionCustom({
               ) {
                 selected = true;
                 name = profSubcat;
+                setOpen(index)
               }
             });
+            if (profCat.subcategory.includes(sub.subcategory)) {
+              selected = true;
+              setOpen(index)
+            }
+         
           }
         });
 
