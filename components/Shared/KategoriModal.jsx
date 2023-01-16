@@ -15,7 +15,7 @@ export default function KategoriModal({
   const [isSearch, setIsSearch] = useState(false);
   const [search, setSearch] = useState("");
   const [profileCategory, setProfileCategory] = useState([]);
-
+  
   const {
     control,
     register,
@@ -114,12 +114,12 @@ export default function KategoriModal({
       setSearch('')
     }
   };
-
+  
   return (
     <>
       {showModal && (
         <>
-          <div className="justify-center  items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+          <div  className="justify-center  items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="relative w-[400px] my-6 mx-auto min-w-md ">
               {/*content*/}
               <div className="border-0 rounded-2xl shadow-lg relative flex flex-col bg-white outline-none focus:outline-none ">
@@ -161,7 +161,7 @@ export default function KategoriModal({
                 )}
                 <form onSubmit={handleSubmit(onSubmit)}>
                   {/*body*/}
-                  <div className="relative px-6 pb-4 overflow-y-scroll max-h-[350px] min-h-[350px]">
+                  <div   className="relative px-6 pb-4 overflow-y-scroll max-h-[350px] min-h-[350px]">
                     <>
                       <KategoriContext.Provider
                         value={{
@@ -200,9 +200,12 @@ export default function KategoriModal({
                   </div>
                 </form>
               </div>
+             
             </div>
+         
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black" ></div>
+          
         </>
       )}
     </>
@@ -223,9 +226,17 @@ function AccordionCustom({
 }) {
   const [open, setOpen] = useState(0);
   const { accordions } = useContext(KategoriContext);
+  
   const handleOpen = (value) => {
     setOpen(open === value ? 0 : value);
   };
+
+  useEffect(() => {
+    
+    if(open > 3){
+      document.getElementById('tes').scrollIntoView({ behavior: "smooth" })
+    }
+  },[open])
 
   useEffect(() => {
     reset();
@@ -356,6 +367,7 @@ function AccordionCustom({
           Kategori Tidak Ditemukan
         </div>
       )}
+         <div id="tes" />
     </>
   );
 }
