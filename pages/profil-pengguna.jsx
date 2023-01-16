@@ -35,6 +35,7 @@ const schema = yup.object({
 export default function ProfilPengguna() {
   const [isReset, setIsReset] = useState(false);
   const [isLogout, setIsLogout] = useState(false);
+  const [visitedLink, setVisitedLink] = useState();
   let { inputChange, setInputChange } = useContext(InputChangeContext);
 
   const [updateProfile, updateData] = useUpdateProfileMutation();
@@ -76,6 +77,7 @@ export default function ProfilPengguna() {
   useEffect(() => {
     router.beforePopState(({ url }) => {
       setCookie('visitedlink',url)
+      setVisitedLink(url);
       if (inputChange) {
         setIsLogout(true)
         return false;
@@ -223,12 +225,12 @@ export default function ProfilPengguna() {
         handleConfirm={
           getCookie("inputpengguna")
             ? () => {
-                router.push(getCookie("visitedlink"));
+                router.push(visitedLink);
                 setIsLogout(false);
                 setCookie("inputpengguna", false);
               }
             : () => {
-                router.push(getCookie("visitedlink"));
+                router.push(visitedLink);
                 setCookie("inputpengguna", false);
               }
         }
