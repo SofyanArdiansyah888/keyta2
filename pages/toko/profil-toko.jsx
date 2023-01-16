@@ -85,7 +85,8 @@ export default function ProfilToko() {
 
   useEffect(() => {
     router.beforePopState(({ url }) => {
-      setCookie("visitedlink", url);
+      if(!url.includes('toko/profil-toko')) setCookie('visitedlink',url)
+      
       if (inputChange) {
         setIsLogout(true);
         return false;
