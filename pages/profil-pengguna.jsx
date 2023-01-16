@@ -73,7 +73,7 @@ export default function ProfilPengguna() {
 
     return () => {};
   }, [updateData.isSuccess]);
-
+  console.log(visitedLink,'visitedLink')
   useEffect(() => {
     router.beforePopState(({ url }) => {
       setCookie('visitedlink',url)
