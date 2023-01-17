@@ -225,6 +225,7 @@ function AccordionCustom({
   isCategoryExist,
 }) {
   const [open, setOpen] = useState(0);
+  const [selectedCategories, setSelectedCategories] = useState([])
   const { accordions } = useContext(KategoriContext);
   
   const handleOpen = (value) => {
@@ -237,7 +238,7 @@ function AccordionCustom({
       document.getElementById('tes').scrollIntoView({ behavior: "smooth" })
     }
   },[open])
-
+  
   useEffect(() => {
     reset();
 
@@ -256,11 +257,13 @@ function AccordionCustom({
                 selected = true;
                 name = profSubcat;
                 setOpen(index)
+                setSelectedCategories(cat => [...cat, category])
               }
             });
             if (profCat.subcategory.includes(sub.subcategory)) {
               selected = true;
               setOpen(index)
+              setSelectedCategories(cat => [...cat, category])
             }
          
           }
@@ -289,7 +292,10 @@ function AccordionCustom({
             type="hidden"
           />
           {(result.length > 1 && exist)  && (
-            <h2 onClick={() => handleOpen(index)}>
+            <h2 onClick={() => {
+              handleOpen(index)
+              setSelectedCategories([])
+            }}>
               <button
                 type="button"
                 className="flex items-center justify-between w-full px-2 py-3 font-medium text-left  rounded-t-xl"
@@ -301,7 +307,7 @@ function AccordionCustom({
           )}
           <div
             className={`${
-              ((open === index || search !== "") && (exist) ) ? "relative" : "hidden"
+              (((open === index || selectedCategories.includes(category.name)) || search !== "" ) && (exist) ) ? "relative" : "hidden"
             } py-3 `}
           >
             <div className="flex flex-col ">
