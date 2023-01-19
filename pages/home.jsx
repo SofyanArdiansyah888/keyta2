@@ -9,6 +9,7 @@ export default function Dashboard() {
   let { inputChange, setInputChange } = useContext(InputChangeContext);
   useEffect(() => {
     setInputChange(false);
+    setCookie("inputpengguna", false);
   },[])
   return (
     <>
