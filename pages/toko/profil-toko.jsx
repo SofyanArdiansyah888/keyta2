@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import * as yup from "yup";
+import { COUNTRY_CODE } from "../../app/constant";
 import { noWhiteSpace, onlyAlphabet } from "../../app/utlis";
 import Layout from "../../components/Layout/Layout";
 import ConfirmModal from "../../components/Shared/ConfirmModal";
@@ -85,50 +86,51 @@ export default function ProfilToko() {
 
   useEffect(() => {
     router.beforePopState(({ url }) => {
-      if(!url.includes('toko/profil-toko')) setCookie('visitedlink',url)
-      
+      if (!url.includes("toko/profil-toko")) setCookie("visitedlink", url);
+
       if (inputChange) {
         setIsLogout(true);
         return false;
       } else return true;
     });
-    return ()=> {
-      router.beforePopState(() => true)
-    }
+    return () => {
+      router.beforePopState(() => true);
+    };
   }, [inputChange]);
 
-  const watchAll = watch(['inv_address','inv_phone','instalation_source','category','name']);
-  
+  const watchAll = watch([
+    "inv_address",
+    "inv_phone",
+    "instalation_source",
+    "category",
+    "name",
+  ]);
+
   useEffect(() => {
     let temp = data?.data;
-    if (watchAll['4'] !== temp?.name) {
+    if (watchAll["4"] !== temp?.name) {
       setCookie("inputpengguna", true);
       setInputChange(true);
-    } 
-    else if (watchAll['0'] !== temp?.inv_address) {
+    } else if (watchAll["0"] !== temp?.inv_address) {
       setCookie("inputpengguna", true);
       setInputChange(true);
-    } 
-    else if (watchAll['1'] !== temp?.inv_phone) {
+    } else if (watchAll["1"] !== temp?.inv_phone) {
       setCookie("inputpengguna", true);
       setInputChange(true);
-    } 
-    else if(watchAll['2'] !== temp?.instalation_source){
+    } else if (watchAll["2"] !== temp?.instalation_source) {
       setCookie("inputpengguna", true);
-      setInputChange(true)
-    } 
-    else if(watchAll['3'] !== temp?.category){
+      setInputChange(true);
+    } else if (watchAll["3"] !== temp?.category) {
       setCookie("inputpengguna", true);
-      setInputChange(true)
-    } 
-    else {
+      setInputChange(true);
+    } else {
       setInputChange(false);
       setCookie("inputpengguna", false);
     }
     return () => {
-      watchAll
+      watchAll;
       setCookie("inputpengguna", false);
-    }
+    };
   }, [watchAll]);
 
   useEffect(() => {
@@ -144,18 +146,22 @@ export default function ProfilToko() {
       }
 
       setValue("inv_phone", phone);
-
-      let temps = JSON.parse(temp?.category);
-      let tempe = temps ? [...temps] : [];
-
-      tempe = tempe.map((item) => item.subcategory);
-
+      let temps = []
+      let tempe = [];
+      try {
+        temps = JSON.parse(temp?.category);  
+        tempe = temps ? [...temps] : [];
+        tempe = tempe.map((item) => item.subcategory);
+      } catch {
+        tempe = []
+      }
+      
       // setValue("subcategory", temps);
       setValue("subcategory", tempe.flat(1).join(", "));
       setValue("category", temp?.category);
       setValue("instalation_source", temp?.instalation_source);
       setImageTokoPreview(temp?.image_file_name);
-      if (!(temp?.address || temp?.inv_phone || temp?.subcategory))
+      if (!(temp?.instalation_source || temp?.category) && !isUpdate)
         setShowModal(true);
     }
     return () => {};
@@ -171,11 +177,13 @@ export default function ProfilToko() {
     await refetchProfile();
 
     setUpdateSuccess(true);
-    setTimeout(() => setUpdateSuccess(false), 3000);
+    setTimeout(async() => {
+      setUpdateSuccess(false)
+    }, 3000);
     setIsUpdate(false);
 
     setInputChange(false);
-    setCookie('inputpengguna',false)
+    setCookie("inputpengguna", false);
   };
 
   return (
@@ -228,7 +236,7 @@ export default function ProfilToko() {
                         const file = e.target.files[0];
                         // setValue("shop_image", file);
                         setImageTokoPreview(URL.createObjectURL(file));
-                        setInputChange(true)
+                        setInputChange(true);
                       }}
                     />
                   </div>
@@ -247,8 +255,6 @@ export default function ProfilToko() {
                   setIsReset={setIsNameReset}
                   setValue={setValue}
                 />
-
-              
               </div>
 
               {/* ALAMAT TOKO  */}
@@ -268,18 +274,34 @@ export default function ProfilToko() {
 
               {/* NOMOR TELEPON  */}
               <div>
-                <InputPhone
-                  isReset={isPhoneReset}
-                  setIsReset={setIsPhoneReset}
-                  register={register("inv_phone")}
-                  errors={errors}
-                  reset={reset}
-                  disabled={false}
-                  setValue={setValue}
-                  watch={watch}
-                  setError={setError}
-                  name="inv_phone"
-                />
+                <label className="font-[600] text-[14px] ">Nomor Telepon</label>
+                <div className="relative">
+                  <span className="text-[11px] bg-[#F1F2F5] border-[#CED2D9] rounded-[4px]  absolute left-0 top-3 p-1  ">
+                    +{COUNTRY_CODE}
+                  </span>
+                  <input
+                    type="number"
+                    {...register("inv_phone")}
+                    className={`p-2 mt-2  ml-8 text-xs w-[93%] material-input  `}
+                    placeholder="Masukkan Nomor Telepon"
+                  />
+                  {isPhoneReset && (
+                    <div
+                      className="absolute top-3 right-0"
+                      onClick={() => {
+                        setValue("inv_phone", "");
+                        setIsPhoneReset(false);
+                      }}
+                    >
+                      <Image
+                        src="/icons/icon_close.svg"
+                        height="18"
+                        width="18"
+                        alt="Logo"
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* YELLOW BOX  */}
