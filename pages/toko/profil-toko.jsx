@@ -104,6 +104,7 @@ export default function ProfilToko() {
     "instalation_source",
     "category",
     "name",
+    'shop_image'
   ]);
 
   useEffect(() => {
@@ -123,7 +124,10 @@ export default function ProfilToko() {
     } else if (watchAll["3"] !== temp?.category) {
       setCookie("inputpengguna", true);
       setInputChange(true);
-    } else {
+    } else if(watchAll['4'] !== temp?.category){
+      setCookie("inputpengguna", true);
+      setInputChange(true);
+    }else {
       setInputChange(false);
       setCookie("inputpengguna", false);
     }
@@ -236,7 +240,7 @@ export default function ProfilToko() {
                         const file = e.target.files[0];
                         // setValue("shop_image", file);
                         setImageTokoPreview(URL.createObjectURL(file));
-                        setInputChange(true);
+                       
                       }}
                     />
                   </div>
