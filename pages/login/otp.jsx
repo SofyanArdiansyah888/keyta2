@@ -375,7 +375,7 @@ export default function OTP() {
                 </span>
                 <Timer />
               </div>
-              {!isSMS && (
+              {/* {!isSMS && (
                 <>
                   <div className="text-[12px] text-keytaPrimary mt-8">
                     Tidak punya Whatsapp?{" "}
@@ -392,7 +392,7 @@ export default function OTP() {
                     </h1>
                   </div>
                 </>
-              )}
+              )} */}
 
               <button
                 className="keyta-button mt-14  relative"

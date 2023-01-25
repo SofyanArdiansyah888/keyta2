@@ -26,7 +26,7 @@ export function onlyAlphabet(yup) {
   yup.addMethod(yup.string, "onlyAlphabet", function (errorMessage) {
     return this.test(`test-onlyAlphabet`, errorMessage, function (value) {
       const { path, createError } = this;
-      return  /^[A-Za-z]+$/.test(value) || createError({ path, message: errorMessage });
+      return  /^[A-Za-z ]+$/.test(value) || createError({ path, message: errorMessage });
     });
   });
 }
