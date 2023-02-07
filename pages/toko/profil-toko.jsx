@@ -109,6 +109,7 @@ export default function ProfilToko() {
 
   useEffect(() => {
     let temp = data?.data;
+
     if (watchAll["4"] !== temp?.name) {
       setCookie("inputpengguna", true);
       setInputChange(true);
@@ -122,9 +123,6 @@ export default function ProfilToko() {
       setCookie("inputpengguna", true);
       setInputChange(true);
     } else if (watchAll["3"] !== temp?.category) {
-      setCookie("inputpengguna", true);
-      setInputChange(true);
-    } else if(watchAll['4'] !== temp?.category){
       setCookie("inputpengguna", true);
       setInputChange(true);
     }else {

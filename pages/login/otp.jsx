@@ -31,6 +31,7 @@ export default function OTP() {
   const [sendMessage, messageData] = useSendMessageMutation();
   const [sendVerify, verifyData] = useVerifyMessageMutation();
   const [verifyError, setVerifyError] = useState("");
+  const {query} = useRouter();
   const [otpState, setOtpState] = useState({
     value: "",
     number1: "",
@@ -145,7 +146,7 @@ export default function OTP() {
       sendMessage({
         type: "whatsapp",
         country_code: COUNTRY_CODE,
-        phone: user.phone,
+        phone: user?.phone ? user?.phone : query?.phone,
       });
       setCountdown(timer);
     }
@@ -156,7 +157,7 @@ export default function OTP() {
     sendMessage({
       type: "sms",
       country_code: COUNTRY_CODE,
-      phone: user.phone,
+      phone: user?.phone ? user?.phone : query?.phone,
     });
     setCountdown(timer);
     setIsSMS(true);
